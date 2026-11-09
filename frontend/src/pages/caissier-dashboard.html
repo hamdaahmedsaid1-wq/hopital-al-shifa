@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Espace caissier - Al-Shifa
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="../css/style.css"
+  >
+
+</head>
+
+
+<body>
+
+  <div class="app">
+
+    <div id="sidebar"></div>
+
+
+    <main class="main">
+
+      <div id="topbar"></div>
+
+
+      <section class="doctor-dashboard">
+
+
+        <!-- =================================================
+             BIENVENUE
+        ================================================== -->
+
+        <div class="doctor-hero">
+
+          <small>
+            ESPACE CAISSIER • HÔPITAL AL-SHIFA
+          </small>
+
+          <h1 id="caissierWelcome">
+            Bonjour Caissier 👋
+          </h1>
+
+          <p>
+            Gérez les factures et les paiements des patients.
+          </p>
+
+        </div>
+
+
+
+        <!-- =================================================
+             STATISTIQUES
+        ================================================== -->
+
+        <section class="doctor-kpis">
+
+
+          <!-- FACTURES -->
+
+          <div class="doctor-kpi">
+
+            <div class="doctor-kpi-icon">
+              🧾
+            </div>
+
+            <div>
+
+              <span>
+                Factures
+              </span>
+
+              <strong id="facturesCount">
+                0
+              </strong>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- FACTURES PAYEES -->
+
+          <div class="doctor-kpi">
+
+            <div class="doctor-kpi-icon">
+              ✅
+            </div>
+
+            <div>
+
+              <span>
+                Factures payées
+              </span>
+
+              <strong id="facturesPayeesCount">
+                0
+              </strong>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- PAIEMENTS -->
+
+          <div class="doctor-kpi">
+
+            <div class="doctor-kpi-icon">
+              💳
+            </div>
+
+            <div>
+
+              <span>
+                Paiements
+              </span>
+
+              <strong id="paiementsCount">
+                0
+              </strong>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- MONTANT ENCAISSE -->
+
+          <div class="doctor-kpi">
+
+            <div class="doctor-kpi-icon">
+              💰
+            </div>
+
+            <div>
+
+              <span>
+                Montant encaissé
+              </span>
+
+              <strong id="montantTotal">
+                0 FDJ
+              </strong>
+
+            </div>
+
+          </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             CONTENU
+        ================================================== -->
+
+        <section class="doctor-grid">
+
+
+          <!-- PAIEMENTS RECENTS -->
+
+          <div class="doctor-panel">
+
+            <h2>
+              💳 Paiements récents
+            </h2>
+
+
+            <div id="paiementsList">
+
+              <p>
+                Chargement des paiements...
+              </p>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- ACTIONS RAPIDES -->
+
+          <div class="doctor-panel">
+
+            <h2>
+              ⚡ Actions rapides
+            </h2>
+
+
+            <div class="doctor-actions">
+
+
+              <a
+                href="facture.html"
+                class="doctor-action"
+              >
+                🧾 Voir les factures
+              </a>
+
+
+              <a
+                href="facture.html"
+                class="doctor-action"
+              >
+                ➕ Nouvelle facture
+              </a>
+
+
+              <a
+                href="paiement.html"
+                class="doctor-action"
+              >
+                💳 Voir les paiements
+              </a>
+
+
+              <a
+                href="paiement.html"
+                class="doctor-action"
+              >
+                ➕ Nouveau paiement
+              </a>
+
+
+              <a
+                href="profil.html"
+                class="doctor-action"
+              >
+                👤 Mon profil
+              </a>
+
+
+            </div>
+
+          </div>
+
+
+        </section>
+
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       JAVASCRIPT
+  ====================================================== -->
+
+  <script type="module">
+
+
+    /* =====================================================
+       IMPORTS
+    ===================================================== */
+
+    import {
+      afficherLayout
+    } from "../js/layout.js";
+
+
+    import {
+      secureFetch,
+      getUtilisateurConnecte
+    } from "../js/secure-api.js";
+
+
+    afficherLayout(
+      "Espace caissier"
+    );
+
+
+
+    /* =====================================================
+       API
+    ===================================================== */
+
+    const API_URL =
+      "http://localhost:3000/api";
+
+
+
+    /* =====================================================
+       UTILISATEUR CONNECTE
+    ===================================================== */
+
+    const utilisateur =
+      getUtilisateurConnecte();
+
+
+    if (!utilisateur) {
+
+      window.location.replace(
+        "/"
+      );
+
+    }
+
+
+
+    /* =====================================================
+       NOM COMPLET CAISSIER
+    ===================================================== */
+
+    const caissierWelcome =
+      document.getElementById(
+        "caissierWelcome"
+      );
+
+
+    if (
+      utilisateur?.prenom
+      ||
+      utilisateur?.nom
+    ) {
+
+      const nomComplet =
+        `${utilisateur.prenom || ""} ${utilisateur.nom || ""}`
+          .trim();
+
+
+      caissierWelcome.textContent =
+        `Bonjour ${nomComplet} 👋`;
+
+    }
+
+    else {
+
+      caissierWelcome.textContent =
+        "Bonjour Caissier 👋";
+
+    }
+
+
+
+    /* =====================================================
+       ROLE
+    ===================================================== */
+
+    const role =
+      String(
+        utilisateur?.role || ""
+      )
+        .toLowerCase()
+        .trim();
+
+
+
+    /* =====================================================
+       PROTECTION DU DASHBOARD
+    ===================================================== */
+
+    if (
+      !role.includes("caissier")
+    ) {
+
+      window.location.replace(
+        "dashboard.html"
+      );
+
+    }
+
+
+
+    /* =====================================================
+       ELEMENTS HTML
+    ===================================================== */
+
+    const facturesCount =
+      document.getElementById(
+        "facturesCount"
+      );
+
+
+    const facturesPayeesCount =
+      document.getElementById(
+        "facturesPayeesCount"
+      );
+
+
+    const paiementsCount =
+      document.getElementById(
+        "paiementsCount"
+      );
+
+
+    const montantTotal =
+      document.getElementById(
+        "montantTotal"
+      );
+
+
+    const paiementsList =
+      document.getElementById(
+        "paiementsList"
+      );
+
+
+
+    /* =====================================================
+       DASHBOARD CAISSIER
+    ===================================================== */
+
+    async function chargerDashboardCaissier() {
+
+      try {
+
+
+        /* =================================================
+           FACTURES
+        ================================================= */
+
+        const facturesResponse =
+          await secureFetch(
+            `${API_URL}/factures`
+          );
+
+
+        const facturesData =
+          await facturesResponse
+            .json()
+            .catch(
+              () => []
+            );
+
+
+        if (!facturesResponse.ok) {
+
+          throw new Error(
+            facturesData.message
+            ||
+            "Impossible de charger les factures."
+          );
+
+        }
+
+
+        const factures =
+          Array.isArray(
+            facturesData
+          )
+            ? facturesData
+            : facturesData.factures || [];
+
+
+        facturesCount.textContent =
+          factures.length;
+
+
+
+        /* =================================================
+           FACTURES PAYEES
+        ================================================= */
+
+        const facturesPayees =
+          factures.filter(
+            facture => {
+
+              const statut =
+                String(
+                  facture.statut
+                  ||
+                  facture.etat
+                  ||
+                  ""
+                )
+                  .toLowerCase()
+                  .trim();
+
+
+              return (
+                statut.includes("pay")
+                ||
+                statut.includes("régl")
+                ||
+                statut.includes("regl")
+              );
+
+            }
+          );
+
+
+        facturesPayeesCount.textContent =
+          facturesPayees.length;
+
+
+
+        /* =================================================
+           PAIEMENTS
+        ================================================= */
+
+        const paiementsResponse =
+          await secureFetch(
+            `${API_URL}/paiements`
+          );
+
+
+        const paiementsData =
+          await paiementsResponse
+            .json()
+            .catch(
+              () => []
+            );
+
+
+        if (!paiementsResponse.ok) {
+
+          throw new Error(
+            paiementsData.message
+            ||
+            "Impossible de charger les paiements."
+          );
+
+        }
+
+
+        const paiements =
+          Array.isArray(
+            paiementsData
+          )
+            ? paiementsData
+            : paiementsData.paiements || [];
+
+
+        paiementsCount.textContent =
+          paiements.length;
+
+
+
+        /* =================================================
+           MONTANT TOTAL
+        ================================================= */
+
+        const total =
+          paiements.reduce(
+            (somme, paiement) => {
+
+              const montant =
+                Number(
+                  paiement.montant
+                  ||
+                  paiement.montant_paye
+                  ||
+                  paiement.montant_paiement
+                  ||
+                  0
+                );
+
+
+              return somme + montant;
+
+            },
+            0
+          );
+
+
+        montantTotal.textContent =
+          `${total.toLocaleString("fr-FR")} FDJ`;
+
+
+
+        /* =================================================
+           AUCUN PAIEMENT
+        ================================================= */
+
+        if (
+          paiements.length === 0
+        ) {
+
+          paiementsList.innerHTML =
+            `
+
+              <div
+                style="
+                  text-align:center;
+                  padding:40px 20px;
+                  color:#94a3b8;
+                "
+              >
+
+                <div
+                  style="
+                    font-size:40px;
+                    margin-bottom:10px;
+                  "
+                >
+                  💳
+                </div>
+
+
+                <strong
+                  style="
+                    color:#475569;
+                  "
+                >
+                  Aucun paiement enregistré
+                </strong>
+
+              </div>
+
+            `;
+
+
+          return;
+
+        }
+
+
+
+        /* =================================================
+           AFFICHER LES PAIEMENTS
+        ================================================= */
+
+        paiementsList.innerHTML =
+
+          paiements
+            .slice(0, 8)
+            .map(
+
+              paiement => {
+
+
+                const patient =
+
+                  `${
+                    paiement.prenom_patient || ""
+                  } ${
+                    paiement.nom_patient || ""
+                  }`
+                    .trim()
+
+                  ||
+
+                  paiement.patient
+
+                  ||
+
+                  "Patient";
+
+
+                const montant =
+                  Number(
+                    paiement.montant
+                    ||
+                    paiement.montant_paye
+                    ||
+                    paiement.montant_paiement
+                    ||
+                    0
+                  );
+
+
+                const datePaiement =
+                  paiement.date_paiement
+                  ||
+                  paiement.date
+                  ||
+                  "-";
+
+
+                const mode =
+                  paiement.mode_paiement
+                  ||
+                  paiement.mode
+                  ||
+                  "Paiement";
+
+
+                return `
+
+                  <div class="doctor-appointment">
+
+
+                    <span class="doctor-time">
+
+                      💳
+
+                    </span>
+
+
+
+                    <div class="doctor-patient">
+
+
+                      <strong>
+
+                        ${patient}
+
+                      </strong>
+
+
+                      <small>
+
+                        ${mode}
+
+                        • ${String(datePaiement).substring(0, 10)}
+
+                      </small>
+
+
+                    </div>
+
+
+
+                    <span class="status confirmed">
+
+                      ${montant.toLocaleString("fr-FR")} FDJ
+
+                    </span>
+
+
+                  </div>
+
+                `;
+
+              }
+
+            )
+            .join("");
+
+
+
+      }
+
+      catch (error) {
+
+
+        console.error(
+          "Erreur dashboard caissier :",
+          error
+        );
+
+
+        facturesCount.textContent =
+          "0";
+
+
+        facturesPayeesCount.textContent =
+          "0";
+
+
+        paiementsCount.textContent =
+          "0";
+
+
+        montantTotal.textContent =
+          "0 FDJ";
+
+
+        paiementsList.innerHTML =
+          `
+
+            <div
+              style="
+                padding:25px;
+                color:#991b1b;
+                background:#fee2e2;
+                border-radius:12px;
+              "
+            >
+
+              Impossible de charger les données
+              depuis le serveur.
+
+              <br><br>
+
+              ${
+                error.message
+                ||
+                ""
+              }
+
+            </div>
+
+          `;
+
+      }
+
+    }
+
+
+
+    /* =====================================================
+       CHARGEMENT
+    ===================================================== */
+
+    chargerDashboardCaissier();
+
+
+  </script>
+
+
+</body>
+
+</html>

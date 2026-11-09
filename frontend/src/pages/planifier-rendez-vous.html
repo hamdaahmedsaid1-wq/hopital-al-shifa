@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Nouveau rendez-vous - Al-Shifa</title>
+
+  <link
+    rel="stylesheet"
+    href="../css/style.css"
+  >
+</head>
+
+
+<body>
+
+  <div class="app">
+
+    <div id="sidebar"></div>
+
+
+    <main class="main">
+
+      <div id="topbar"></div>
+
+
+      <section class="content">
+
+        <div class="appointment-page">
+
+
+          <!-- RETOUR -->
+
+          <a
+            href="rendez-vous.html"
+            class="patient-back-link"
+          >
+            ← Retour aux rendez-vous
+          </a>
+
+
+          <!-- EN-TETE -->
+
+          <div class="appointment-header">
+
+            <div class="appointment-header-left">
+
+              <p class="small-title">
+                Gestion des rendez-vous
+              </p>
+
+              <h1>
+                Nouveau rendez-vous
+              </h1>
+
+              <p>
+                Planifier un rendez-vous pour un patient
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <!-- CARTE FORMULAIRE -->
+
+          <div class="appointment-form-card">
+
+
+            <div class="appointment-form-top">
+
+              <div class="appointment-form-icon">
+                📅
+              </div>
+
+              <div>
+
+                <h2>
+                  Informations du rendez-vous
+                </h2>
+
+                <p>
+                  Complétez les informations ci-dessous
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <!-- PATIENT SELECTIONNE -->
+
+            <div
+              class="selected-patient-box"
+              id="selectedPatientBox"
+              style="display: none;"
+            >
+
+              <div
+                class="selected-patient-avatar"
+                id="selectedPatientAvatar"
+              >
+                P
+              </div>
+
+              <div>
+
+                <strong id="selectedPatientName">
+                  Patient
+                </strong>
+
+                <span id="selectedPatientInfo">
+                  Patient sélectionné
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <!-- FORMULAIRE -->
+
+            <form id="appointmentForm">
+
+
+              <!-- PATIENT / MEDECIN -->
+
+              <div class="appointment-section-title">
+                Patient et médecin
+              </div>
+
+
+              <div class="appointment-form-grid">
+
+
+                <div class="form-group">
+
+                  <label for="patientSelect">
+                    Patient *
+                  </label>
+
+                  <select
+                    id="patientSelect"
+                    required
+                  >
+
+                    <option value="">
+                      Sélectionner un patient
+                    </option>
+
+                  </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                  <label for="medecinSelect">
+                    Médecin *
+                  </label>
+
+                  <select
+                    id="medecinSelect"
+                    required
+                  >
+
+                    <option value="">
+                      Sélectionner un médecin
+                    </option>
+
+                  </select>
+
+                </div>
+
+              </div>
+
+
+              <!-- DATE / HEURE -->
+
+              <div class="appointment-section-title">
+                Date et horaire
+              </div>
+
+
+              <div class="appointment-form-grid">
+
+
+                <div class="form-group">
+
+                  <label for="dateRendezVous">
+                    Date *
+                  </label>
+
+                  <input
+                    type="date"
+                    id="dateRendezVous"
+                    required
+                  >
+
+                </div>
+
+
+                <div class="form-group">
+
+                  <label for="heureRendezVous">
+                    Heure *
+                  </label>
+
+                  <input
+                    type="time"
+                    id="heureRendezVous"
+                    required
+                  >
+
+                </div>
+
+              </div>
+
+
+              <!-- SERVICE -->
+
+              <div class="appointment-section-title">
+                Service et motif
+              </div>
+
+
+              <div class="appointment-form-grid">
+
+
+                <div class="form-group full-width">
+
+                  <label for="serviceSelect">
+                    Service *
+                  </label>
+
+                  <select
+                    id="serviceSelect"
+                    required
+                  >
+
+                    <option value="">
+                      Sélectionner un service
+                    </option>
+
+                  </select>
+
+                </div>
+
+
+                <!-- MOTIF -->
+
+                <div class="form-group full-width">
+
+                  <label for="motif">
+                    Motif de la consultation *
+                  </label>
+
+                  <textarea
+                    id="motif"
+                    rows="4"
+                    placeholder="Exemple : douleur, contrôle, suivi médical..."
+                    required
+                  ></textarea>
+
+                </div>
+
+              </div>
+
+
+              <!-- STATUT -->
+
+              <div class="appointment-form-grid">
+
+                <div class="form-group">
+
+                  <label for="statut">
+                    Statut
+                  </label>
+
+                  <select id="statut">
+
+                    <option value="planifie">
+                      Planifié
+                    </option>
+
+                    <option value="confirme">
+                      Confirmé
+                    </option>
+
+                    <option value="attente">
+                      En attente
+                    </option>
+
+                  </select>
+
+                </div>
+
+              </div>
+
+
+              <!-- MESSAGE -->
+
+              <div
+                id="appointmentMessage"
+                style="display: none;"
+              >
+              </div>
+
+
+              <!-- BOUTONS -->
+
+              <div class="appointment-form-actions">
+
+                <button
+                  type="button"
+                  class="appointment-cancel-button"
+                  id="cancelButton"
+                >
+                  Annuler
+                </button>
+
+                <button
+                  type="submit"
+                  class="appointment-save-button"
+                  id="saveButton"
+                >
+                  Enregistrer le rendez-vous
+                </button>
+
+              </div>
+
+            </form>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <script type="module">
+
+    import {
+      afficherLayout
+    } from "../js/layout.js";
+
+
+    afficherLayout(
+      "Nouveau rendez-vous"
+    );
+
+
+    /* =====================================================
+       API
+    ===================================================== */
+
+    const PATIENTS_API =
+      "http://localhost:3000/api/patients";
+
+
+    const MEDECINS_API =
+      "http://localhost:3000/api/medecins";
+
+
+    const SERVICES_API =
+      "http://localhost:3000/api/services";
+
+
+    const RENDEZ_VOUS_API =
+      "http://localhost:3000/api/rendez-vous";
+
+
+    /* =====================================================
+       PARAMETRE URL
+    ===================================================== */
+
+    const params =
+      new URLSearchParams(
+        window.location.search
+      );
+
+
+    const patientUrlId =
+      params.get(
+        "patient"
+      );
+
+
+    /* =====================================================
+       ELEMENTS
+    ===================================================== */
+
+    const appointmentForm =
+      document.getElementById(
+        "appointmentForm"
+      );
+
+
+    const patientSelect =
+      document.getElementById(
+        "patientSelect"
+      );
+
+
+    const medecinSelect =
+      document.getElementById(
+        "medecinSelect"
+      );
+
+
+    const serviceSelect =
+      document.getElementById(
+        "serviceSelect"
+      );
+
+
+    const dateInput =
+      document.getElementById(
+        "dateRendezVous"
+      );
+
+
+    const heureInput =
+      document.getElementById(
+        "heureRendezVous"
+      );
+
+
+    const motifInput =
+      document.getElementById(
+        "motif"
+      );
+
+
+    const statutInput =
+      document.getElementById(
+        "statut"
+      );
+
+
+    const saveButton =
+      document.getElementById(
+        "saveButton"
+      );
+
+
+    const messageBox =
+      document.getElementById(
+        "appointmentMessage"
+      );
+
+
+    const selectedPatientBox =
+      document.getElementById(
+        "selectedPatientBox"
+      );
+
+
+    const selectedPatientAvatar =
+      document.getElementById(
+        "selectedPatientAvatar"
+      );
+
+
+    const selectedPatientName =
+      document.getElementById(
+        "selectedPatientName"
+      );
+
+
+    const selectedPatientInfo =
+      document.getElementById(
+        "selectedPatientInfo"
+      );
+
+
+    let patientsData =
+      [];
+
+
+    /* =====================================================
+       DATE MINIMUM
+    ===================================================== */
+
+    const aujourdHui =
+      new Date();
+
+
+    const annee =
+      aujourdHui.getFullYear();
+
+
+    const mois =
+      String(
+        aujourdHui.getMonth() + 1
+      ).padStart(
+        2,
+        "0"
+      );
+
+
+    const jour =
+      String(
+        aujourdHui.getDate()
+      ).padStart(
+        2,
+        "0"
+      );
+
+
+    dateInput.min =
+      annee
+      + "-"
+      + mois
+      + "-"
+      + jour;
+
+
+    /* =====================================================
+       CHARGER PATIENTS
+    ===================================================== */
+
+    async function chargerPatients() {
+
+      try {
+
+        const response =
+          await fetch(
+            PATIENTS_API
+          );
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            "Impossible de charger les patients."
+          );
+
+        }
+
+
+        patientsData =
+          await response.json();
+
+
+        patientSelect.innerHTML =
+          '<option value="">Sélectionner un patient</option>';
+
+
+        patientsData.forEach(
+          function(patient) {
+
+            const option =
+              document.createElement(
+                "option"
+              );
+
+
+            option.value =
+              patient.id_patient;
+
+
+            option.textContent =
+              (
+                (patient.prenom || "")
+                + " "
+                + (patient.nom || "")
+              ).trim();
+
+
+            patientSelect.appendChild(
+              option
+            );
+
+          }
+        );
+
+
+        if (patientUrlId) {
+
+          patientSelect.value =
+            String(
+              patientUrlId
+            );
+
+
+          afficherPatientSelectionne(
+            patientUrlId
+          );
+
+        }
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "Erreur patients :",
+          error
+        );
+
+
+        afficherMessage(
+          "Impossible de charger les patients.",
+          "error"
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       PATIENT SELECTIONNE
+    ===================================================== */
+
+    function afficherPatientSelectionne(id) {
+
+      const patient =
+        patientsData.find(
+          function(patient) {
+
+            return String(
+              patient.id_patient
+            ) === String(
+              id
+            );
+
+          }
+        );
+
+
+      if (!patient) {
+
+        selectedPatientBox.style.display =
+          "none";
+
+        return;
+
+      }
+
+
+      const nom =
+        patient.nom ||
+        "";
+
+
+      const prenom =
+        patient.prenom ||
+        "";
+
+
+      const initiales =
+        (
+          prenom.charAt(0)
+          +
+          nom.charAt(0)
+        ).toUpperCase();
+
+
+      selectedPatientAvatar.textContent =
+        initiales ||
+        "P";
+
+
+      selectedPatientName.textContent =
+        (
+          prenom
+          + " "
+          + nom
+        ).trim();
+
+
+      selectedPatientInfo.textContent =
+        "Patient #"
+        + patient.id_patient;
+
+
+      selectedPatientBox.style.display =
+        "flex";
+
+    }
+
+
+    patientSelect.addEventListener(
+      "change",
+      function() {
+
+        afficherPatientSelectionne(
+          patientSelect.value
+        );
+
+      }
+    );
+
+
+    /* =====================================================
+       CHARGER MEDECINS
+    ===================================================== */
+
+    async function chargerMedecins() {
+
+      try {
+
+        const response =
+          await fetch(
+            MEDECINS_API
+          );
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            "Impossible de charger les médecins."
+          );
+
+        }
+
+
+        const data =
+          await response.json();
+
+
+        const medecins =
+          Array.isArray(data)
+            ? data
+            : data.medecins || [];
+
+
+        medecinSelect.innerHTML =
+          '<option value="">Sélectionner un médecin</option>';
+
+
+        medecins.forEach(
+          function(medecin) {
+
+            const id =
+              medecin.id_medecin ??
+              medecin.id ??
+              medecin.num_medecin;
+
+
+            const nom =
+              medecin.nom ||
+              "";
+
+
+            const prenom =
+              medecin.prenom ||
+              "";
+
+
+            const option =
+              document.createElement(
+                "option"
+              );
+
+
+            option.value =
+              id;
+
+
+            option.textContent =
+              "Dr. "
+              + (
+                prenom
+                + " "
+                + nom
+              ).trim();
+
+
+            medecinSelect.appendChild(
+              option
+            );
+
+          }
+        );
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "Erreur médecins :",
+          error
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       CHARGER SERVICES
+    ===================================================== */
+
+    async function chargerServices() {
+
+      try {
+
+        const response =
+          await fetch(
+            SERVICES_API
+          );
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            "Impossible de charger les services."
+          );
+
+        }
+
+
+        const data =
+          await response.json();
+
+
+        const services =
+          Array.isArray(data)
+            ? data
+            : data.services || [];
+
+
+        serviceSelect.innerHTML =
+          '<option value="">Sélectionner un service</option>';
+
+
+        services.forEach(
+          function(service) {
+
+            const id =
+              service.id_service ??
+              service.id ??
+              service.num_service;
+
+
+            const nom =
+              service.nom ??
+              service.nom_service ??
+              service.libelle ??
+              "Service";
+
+
+            const option =
+              document.createElement(
+                "option"
+              );
+
+
+            option.value =
+              id;
+
+
+            option.textContent =
+              nom;
+
+
+            serviceSelect.appendChild(
+              option
+            );
+
+          }
+        );
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "Erreur services :",
+          error
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       ENREGISTRER RENDEZ-VOUS
+    ===================================================== */
+
+    appointmentForm.addEventListener(
+      "submit",
+      async function(event) {
+
+        event.preventDefault();
+
+
+        const rendezVous = {
+
+          id_patient:
+            patientSelect.value,
+
+          id_medecin:
+            medecinSelect.value,
+
+          id_service:
+            serviceSelect.value,
+
+          date_rendez_vous:
+            dateInput.value,
+
+          heure_rendez_vous:
+            heureInput.value,
+
+          motif:
+            motifInput.value.trim(),
+
+          statut:
+            statutInput.value
+
+        };
+
+
+        if (
+          !rendezVous.id_patient ||
+          !rendezVous.id_medecin ||
+          !rendezVous.id_service ||
+          !rendezVous.date_rendez_vous ||
+          !rendezVous.heure_rendez_vous ||
+          !rendezVous.motif
+        ) {
+
+          afficherMessage(
+            "Veuillez remplir tous les champs obligatoires.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        try {
+
+          saveButton.disabled =
+            true;
+
+
+          saveButton.textContent =
+            "Enregistrement...";
+
+
+          const response =
+            await fetch(
+              RENDEZ_VOUS_API,
+              {
+
+                method:
+                  "POST",
+
+                headers: {
+
+                  "Content-Type":
+                    "application/json"
+
+                },
+
+                body:
+                  JSON.stringify(
+                    rendezVous
+                  )
+
+              }
+            );
+
+
+          let data =
+            {};
+
+
+          try {
+
+            data =
+              await response.json();
+
+          }
+
+          catch {
+
+            data =
+              {};
+
+          }
+
+
+          if (!response.ok) {
+
+            throw new Error(
+              data.message ||
+              "Impossible d'enregistrer le rendez-vous."
+            );
+
+          }
+
+
+          afficherMessage(
+            "Rendez-vous enregistré avec succès.",
+            "success"
+          );
+
+
+          setTimeout(
+            function() {
+
+              window.location.href =
+                "rendez-vous.html";
+
+            },
+            1000
+          );
+
+        }
+
+        catch (error) {
+
+          console.error(
+            error
+          );
+
+
+          afficherMessage(
+            error.message,
+            "error"
+          );
+
+        }
+
+        finally {
+
+          saveButton.disabled =
+            false;
+
+
+          saveButton.textContent =
+            "Enregistrer le rendez-vous";
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       MESSAGE
+    ===================================================== */
+
+    function afficherMessage(
+      texte,
+      type
+    ) {
+
+      messageBox.className =
+        "appointment-message "
+        + type;
+
+
+      messageBox.textContent =
+        texte;
+
+
+      messageBox.style.display =
+        "block";
+
+    }
+
+
+    /* =====================================================
+       ANNULER
+    ===================================================== */
+
+    document
+      .getElementById(
+        "cancelButton"
+      )
+      .addEventListener(
+        "click",
+        function() {
+
+          if (patientUrlId) {
+
+            window.location.href =
+              "patient-detail.html?id="
+              + encodeURIComponent(
+                patientUrlId
+              );
+
+          }
+
+          else {
+
+            window.location.href =
+              "rendez-vous.html";
+
+          }
+
+        }
+      );
+
+
+    /* =====================================================
+       DEMARRAGE
+    ===================================================== */
+
+    chargerPatients();
+
+    chargerMedecins();
+
+    chargerServices();
+
+  </script>
+
+</body>
+
+</html>

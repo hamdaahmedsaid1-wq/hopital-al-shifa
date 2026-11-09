@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Sortie patient - Al-Shifa</title>
+
+  <link
+    rel="stylesheet"
+    href="../css/style.css"
+  >
+</head>
+
+<body>
+
+  <div class="app">
+
+    <div id="sidebar"></div>
+
+    <main class="main">
+
+      <div id="topbar"></div>
+
+      <section class="content">
+
+        <div class="sortie-page">
+
+
+          <div class="sortie-header">
+
+            <div>
+
+              <p class="sortie-small-title">
+                Hospitalisation
+              </p>
+
+              <h1>
+                Sortie du patient
+              </h1>
+
+              <p>
+                Enregistrer la sortie d'un patient hospitalisé
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="sortie-card">
+
+            <div class="sortie-card-header">
+
+              <div class="sortie-icon">
+                🚪
+              </div>
+
+              <div>
+
+                <h2>
+                  Informations de sortie
+                </h2>
+
+                <p>
+                  Sélectionnez une hospitalisation en cours
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <div class="sortie-section-title">
+              Patient hospitalisé
+            </div>
+
+
+            <div class="sortie-grid">
+
+              <div class="form-group full-width">
+
+                <label for="hospitalisationSelect">
+                  Hospitalisation *
+                </label>
+
+                <select
+                  id="hospitalisationSelect"
+                  required
+                >
+
+                  <option value="">
+                    Sélectionner une hospitalisation
+                  </option>
+
+                </select>
+
+              </div>
+
+            </div>
+
+
+            <div
+              class="sortie-patient-box"
+              id="patientBox"
+              style="display: none;"
+            >
+
+              <div class="sortie-patient-item">
+
+                <span>
+                  Patient
+                </span>
+
+                <strong id="patientNom">
+                  -
+                </strong>
+
+              </div>
+
+
+              <div class="sortie-patient-item">
+
+                <span>
+                  Chambre
+                </span>
+
+                <strong id="patientChambre">
+                  -
+                </strong>
+
+              </div>
+
+
+              <div class="sortie-patient-item">
+
+                <span>
+                  Lit
+                </span>
+
+                <strong id="patientLit">
+                  -
+                </strong>
+
+              </div>
+
+
+              <div class="sortie-patient-item">
+
+                <span>
+                  Date d'entrée
+                </span>
+
+                <strong id="patientDateEntree">
+                  -
+                </strong>
+
+              </div>
+
+
+              <div class="sortie-patient-item important">
+
+                <span>
+                  Durée
+                </span>
+
+                <strong id="patientDuree">
+                  -
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <form id="sortieForm">
+
+              <div class="sortie-section-title">
+                Détails de la sortie
+              </div>
+
+
+              <div class="sortie-grid">
+
+                <div class="form-group">
+
+                  <label for="dateSortie">
+                    Date de sortie *
+                  </label>
+
+                  <input
+                    type="date"
+                    id="dateSortie"
+                    required
+                  >
+
+                </div>
+
+
+                <div class="form-group">
+
+                  <label for="heureSortie">
+                    Heure de sortie
+                  </label>
+
+                  <input
+                    type="time"
+                    id="heureSortie"
+                  >
+
+                </div>
+
+
+                <div class="form-group full-width">
+
+                  <label for="motifSortie">
+                    Motif de sortie *
+                  </label>
+
+                  <select
+                    id="motifSortie"
+                    required
+                  >
+
+                    <option value="">
+                      Sélectionner
+                    </option>
+
+                    <option value="guerison">
+                      Guérison
+                    </option>
+
+                    <option value="amelioration">
+                      Amélioration
+                    </option>
+
+                    <option value="transfert">
+                      Transfert vers un autre établissement
+                    </option>
+
+                    <option value="sortie_volontaire">
+                      Sortie volontaire
+                    </option>
+
+                    <option value="autre">
+                      Autre
+                    </option>
+
+                  </select>
+
+                </div>
+
+
+                <div class="form-group full-width">
+
+                  <label for="diagnosticSortie">
+                    Diagnostic de sortie *
+                  </label>
+
+                  <textarea
+                    id="diagnosticSortie"
+                    rows="4"
+                    placeholder="Diagnostic final du patient..."
+                    required
+                  ></textarea>
+
+                </div>
+
+
+                <div class="form-group full-width">
+
+                  <label for="traitementSortie">
+                    Traitement à poursuivre
+                  </label>
+
+                  <textarea
+                    id="traitementSortie"
+                    rows="4"
+                    placeholder="Médicaments ou traitement à poursuivre..."
+                  ></textarea>
+
+                </div>
+
+
+                <div class="form-group full-width">
+
+                  <label for="recommandations">
+                    Recommandations
+                  </label>
+
+                  <textarea
+                    id="recommandations"
+                    rows="4"
+                    placeholder="Repos, contrôle médical, régime, rendez-vous..."
+                  ></textarea>
+
+                </div>
+
+
+                <div class="form-group">
+
+                  <label for="prochainControle">
+                    Prochain contrôle
+                  </label>
+
+                  <input
+                    type="date"
+                    id="prochainControle"
+                  >
+
+                </div>
+
+
+                <div class="form-group">
+
+                  <label for="statutSortie">
+                    Statut
+                  </label>
+
+                  <select id="statutSortie">
+
+                    <option value="sorti">
+                      Sorti
+                    </option>
+
+                    <option value="transfere">
+                      Transféré
+                    </option>
+
+                  </select>
+
+                </div>
+
+              </div>
+
+
+              <div
+                id="sortieMessage"
+                style="display: none;"
+              >
+              </div>
+
+
+              <div class="sortie-actions">
+
+                <button
+                  type="button"
+                  class="sortie-cancel-button"
+                  id="annulerBtn"
+                >
+                  Annuler
+                </button>
+
+
+                <button
+                  type="submit"
+                  class="sortie-save-button"
+                  id="enregistrerBtn"
+                >
+                  Enregistrer la sortie
+                </button>
+
+              </div>
+
+            </form>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+  <script type="module">
+
+  import { afficherLayout } from "../js/layout.js";
+
+  afficherLayout("Sortie patient");
+
+
+  const HOSPITALISATIONS_API =
+    "http://localhost:3000/api/hospitalisations";
+
+
+  const SORTIES_API =
+    "http://localhost:3000/api/sorties-patient";
+
+
+  const hospitalisationSelect =
+    document.getElementById(
+      "hospitalisationSelect"
+    );
+
+
+  const patientBox =
+    document.getElementById(
+      "patientBox"
+    );
+
+
+  const patientNom =
+    document.getElementById(
+      "patientNom"
+    );
+
+
+  const patientChambre =
+    document.getElementById(
+      "patientChambre"
+    );
+
+
+  const patientLit =
+    document.getElementById(
+      "patientLit"
+    );
+
+
+  const patientDateEntree =
+    document.getElementById(
+      "patientDateEntree"
+    );
+
+
+  const patientDuree =
+    document.getElementById(
+      "patientDuree"
+    );
+
+
+  const sortieForm =
+    document.getElementById(
+      "sortieForm"
+    );
+
+
+  const dateSortie =
+    document.getElementById(
+      "dateSortie"
+    );
+
+
+  const heureSortie =
+    document.getElementById(
+      "heureSortie"
+    );
+
+
+  const motifSortie =
+    document.getElementById(
+      "motifSortie"
+    );
+
+
+  const diagnosticSortie =
+    document.getElementById(
+      "diagnosticSortie"
+    );
+
+
+  const traitementSortie =
+    document.getElementById(
+      "traitementSortie"
+    );
+
+
+  const recommandations =
+    document.getElementById(
+      "recommandations"
+    );
+
+
+  const prochainControle =
+    document.getElementById(
+      "prochainControle"
+    );
+
+
+  const statutSortie =
+    document.getElementById(
+      "statutSortie"
+    );
+
+
+  const messageBox =
+    document.getElementById(
+      "sortieMessage"
+    );
+
+
+  const enregistrerBtn =
+    document.getElementById(
+      "enregistrerBtn"
+    );
+
+
+  let hospitalisationsData = [];
+
+  let hospitalisationCourante = null;
+
+
+  /* DATE ET HEURE */
+
+  const maintenant =
+    new Date();
+
+
+  dateSortie.value =
+    maintenant
+      .toISOString()
+      .split("T")[0];
+
+
+  heureSortie.value =
+    String(
+      maintenant.getHours()
+    ).padStart(2, "0")
+    + ":"
+    + String(
+      maintenant.getMinutes()
+    ).padStart(2, "0");
+
+
+  /* CHARGER HOSPITALISATIONS */
+
+  async function chargerHospitalisations() {
+
+    try {
+
+      const response =
+        await fetch(
+          HOSPITALISATIONS_API
+        );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Impossible de charger les hospitalisations."
+        );
+
+      }
+
+
+      const data =
+        await response.json();
+
+
+      hospitalisationsData =
+        Array.isArray(data)
+          ? data
+          : data.hospitalisations || [];
+
+
+      hospitalisationSelect.innerHTML =
+        '<option value="">Sélectionner une hospitalisation</option>';
+
+
+      hospitalisationsData.forEach(
+        function(hospitalisation) {
+
+          const id =
+            hospitalisation.id_hospitalisation ??
+            hospitalisation.id;
+
+
+          const patient =
+            (
+              (
+                hospitalisation.prenom_patient ||
+                hospitalisation.prenom ||
+                ""
+              )
+              + " "
+              +
+              (
+                hospitalisation.nom_patient ||
+                hospitalisation.nom ||
+                ""
+              )
+            ).trim();
+
+
+          const option =
+            document.createElement(
+              "option"
+            );
+
+
+          option.value =
+            id;
+
+
+          option.textContent =
+            patient
+              ? patient
+              : "Hospitalisation #" + id;
+
+
+          hospitalisationSelect.appendChild(
+            option
+          );
+
+        }
+      );
+
+    }
+
+    catch (error) {
+
+      console.error(
+        error
+      );
+
+
+      afficherMessage(
+        error.message,
+        "error"
+      );
+
+    }
+
+  }
+
+
+  /* AFFICHER HOSPITALISATION */
+
+  function afficherHospitalisation(id) {
+
+    hospitalisationCourante =
+      hospitalisationsData.find(
+        function(hospitalisation) {
+
+          const currentId =
+            hospitalisation.id_hospitalisation ??
+            hospitalisation.id;
+
+
+          return String(
+            currentId
+          ) === String(
+            id
+          );
+
+        }
+      );
+
+
+    if (!hospitalisationCourante) {
+
+      patientBox.style.display =
+        "none";
+
+      return;
+
+    }
+
+
+    const nomComplet =
+      (
+        (
+          hospitalisationCourante.prenom_patient ||
+          hospitalisationCourante.prenom ||
+          ""
+        )
+        + " "
+        +
+        (
+          hospitalisationCourante.nom_patient ||
+          hospitalisationCourante.nom ||
+          ""
+        )
+      ).trim();
+
+
+    patientNom.textContent =
+      nomComplet ||
+      "Patient";
+
+
+    patientChambre.textContent =
+      hospitalisationCourante.numero_chambre ??
+      hospitalisationCourante.chambre ??
+      "-";
+
+
+    patientLit.textContent =
+      hospitalisationCourante.numero_lit ??
+      hospitalisationCourante.lit ??
+      "-";
+
+
+    const dateEntree =
+      hospitalisationCourante.date_entree;
+
+
+    if (dateEntree) {
+
+      const date =
+        new Date(
+          dateEntree
+        );
+
+
+      patientDateEntree.textContent =
+        date.toLocaleDateString(
+          "fr-FR"
+        );
+
+
+      const aujourdHui =
+        new Date();
+
+
+      const difference =
+        aujourdHui - date;
+
+
+      const jours =
+        Math.max(
+          Math.ceil(
+            difference /
+            (1000 * 60 * 60 * 24)
+          ),
+          1
+        );
+
+
+      patientDuree.textContent =
+        jours
+        + (
+          jours > 1
+            ? " jours"
+            : " jour"
+        );
+
+    }
+
+    else {
+
+      patientDateEntree.textContent =
+        "-";
+
+
+      patientDuree.textContent =
+        "-";
+
+    }
+
+
+    patientBox.style.display =
+      "grid";
+
+  }
+
+
+  hospitalisationSelect.addEventListener(
+    "change",
+    function() {
+
+      afficherHospitalisation(
+        hospitalisationSelect.value
+      );
+
+    }
+  );
+
+
+  /* ENREGISTRER LA SORTIE */
+
+  sortieForm.addEventListener(
+    "submit",
+    async function(event) {
+
+      event.preventDefault();
+
+
+      if (!hospitalisationCourante) {
+
+        afficherMessage(
+          "Veuillez sélectionner une hospitalisation.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      const sortie = {
+
+        id_hospitalisation:
+          hospitalisationCourante.id_hospitalisation ??
+          hospitalisationCourante.id,
+
+        date_sortie:
+          dateSortie.value,
+
+        heure_sortie:
+          heureSortie.value,
+
+        motif_sortie:
+          motifSortie.value,
+
+        diagnostic_sortie:
+          diagnosticSortie.value.trim(),
+
+        traitement_sortie:
+          traitementSortie.value.trim(),
+
+        recommandations:
+          recommandations.value.trim(),
+
+        prochain_controle:
+          prochainControle.value || null,
+
+        statut:
+          statutSortie.value
+
+      };
+
+
+      try {
+
+        enregistrerBtn.disabled =
+          true;
+
+
+        enregistrerBtn.textContent =
+          "Enregistrement...";
+
+
+        const response =
+          await fetch(
+            SORTIES_API,
+            {
+
+              method:
+                "POST",
+
+              headers: {
+
+                "Content-Type":
+                  "application/json"
+
+              },
+
+              body:
+                JSON.stringify(
+                  sortie
+                )
+
+            }
+          );
+
+
+        let data = {};
+
+
+        try {
+
+          data =
+            await response.json();
+
+        }
+
+        catch {
+
+          data = {};
+
+        }
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            data.message ||
+            "Impossible d'enregistrer la sortie."
+          );
+
+        }
+
+
+        afficherMessage(
+          "Sortie du patient enregistrée avec succès.",
+          "success"
+        );
+
+
+        setTimeout(
+          function() {
+
+            window.location.href =
+              "hospitalisation.html";
+
+          },
+          1000
+        );
+
+      }
+
+      catch (error) {
+
+        console.error(
+          error
+        );
+
+
+        afficherMessage(
+          error.message,
+          "error"
+        );
+
+      }
+
+      finally {
+
+        enregistrerBtn.disabled =
+          false;
+
+
+        enregistrerBtn.textContent =
+          "Enregistrer la sortie";
+
+      }
+
+    }
+  );
+
+
+  /* MESSAGE */
+
+  function afficherMessage(
+    texte,
+    type
+  ) {
+
+    messageBox.textContent =
+      texte;
+
+
+    messageBox.className =
+      "sortie-message "
+      + type;
+
+
+    messageBox.style.display =
+      "block";
+
+  }
+
+
+  /* ANNULER */
+
+  document
+    .getElementById(
+      "annulerBtn"
+    )
+    .addEventListener(
+      "click",
+      function() {
+
+        window.location.href =
+          "hospitalisation.html";
+
+      }
+    );
+
+
+  /* DEMARRAGE */
+
+  chargerHospitalisations();
+
+</script>
+
+</body>
+
+</html>

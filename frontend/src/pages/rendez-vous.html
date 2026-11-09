@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestion des rendez-vous - Hôpital Al-Shifa</title>
+  <link rel="stylesheet" href="../css/style.css">
+
+  <style>
+    .appointments-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+
+    .appointments-toolbar-left {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .appointment-new-btn {
+      border: 0;
+      border-radius: 12px;
+      padding: 13px 20px;
+      background: #f4511e;
+      color: white;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(244,81,30,.18);
+    }
+
+    .appointment-today-btn {
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px 17px;
+      background: white;
+      color: #334155;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .appointments-main-grid {
+      display: grid;
+      grid-template-columns: 1fr !important;
+    }
+
+    .appointment-list-card {
+      width: 100%;
+    }
+
+    .rdv-modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+      background: rgba(15,23,42,.56);
+      backdrop-filter: blur(3px);
+    }
+
+    .rdv-modal-overlay.active {
+      display: flex;
+    }
+
+    .rdv-modal-dialog {
+      position: relative;
+      width: min(760px,100%);
+      max-height: 92vh;
+      overflow-y: auto;
+      border-radius: 22px;
+      background: white;
+      box-shadow: 0 30px 80px rgba(15,23,42,.26);
+    }
+
+    .rdv-modal-dialog .appointment-form-card {
+      width: 100%;
+      margin: 0;
+      border: 0;
+      box-shadow: none;
+    }
+
+    .rdv-modal-close {
+      position: absolute;
+      top: 15px;
+      right: 16px;
+      z-index: 3;
+      width: 38px;
+      height: 38px;
+      border: 0;
+      border-radius: 10px;
+      background: #f8fafc;
+      color: #64748b;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    body.rdv-modal-open {
+      overflow: hidden;
+    }
+
+    .appointment-filter-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin: 18px 0 22px;
+      padding: 12px;
+      background: white;
+      border: 1px solid #e8edf3;
+      border-radius: 16px;
+      flex-wrap: wrap;
+    }
+
+    .appointment-filter-left,
+    .appointment-filter-right {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      flex-wrap: wrap;
+    }
+
+    .appointment-filter-btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 16px;
+      background: #f8fafc;
+      color: #64748b;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .appointment-filter-btn.active {
+      background: #f4511e;
+      color: white;
+    }
+
+    .appointment-date-input {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 14px;
+    }
+
+    .appointments-list-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    .appointment-period-label {
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: #fff3ed;
+      color: #c2410c;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .appointment-more {
+      cursor: pointer;
+    }
+
+    @media(max-width:720px) {
+      .rdv-modal-overlay { padding: 10px; }
+      .rdv-modal-dialog { max-height: 96vh; }
+      .appointment-filter-right { width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+<div class="app">
+
+  <div id="sidebar"></div>
+
+  <main class="main">
+    <div id="topbar"></div>
+
+    <div class="appointments-page">
+
+      <section class="appointments-heading">
+        <div class="appointments-title-icon">📅</div>
+        <div>
+          <h1>Gestion des rendez-vous</h1>
+          <p>Planifiez et gérez les rendez-vous des patients.</p>
+        </div>
+      </section>
+
+      <section class="appointments-toolbar">
+        <div class="appointments-toolbar-left">
+
+          <button
+            type="button"
+            class="appointment-new-btn"
+            id="btnNouveauRendezVous">
+            + Nouveau rendez-vous
+          </button>
+
+          <button
+            type="button"
+            class="appointment-today-btn"
+            id="btnRendezVousAujourdhui">
+            📅 Rendez-vous du jour
+          </button>
+
+        </div>
+      </section>
+
+      <!-- FENETRE DE CREATION -->
+      <div
+        class="rdv-modal-overlay"
+        id="modalRendezVous"
+        aria-hidden="true">
+
+        <div
+          class="rdv-modal-dialog"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="rdvModalTitle">
+
+          <button
+            type="button"
+            class="rdv-modal-close"
+            id="fermerModalRdv">
+            ×
+          </button>
+
+          <div class="appointment-card appointment-form-card">
+
+            <div class="appointment-card-header">
+              <div>
+                <h2 id="rdvModalTitle">📅 Nouveau rendez-vous</h2>
+                <p>Planifier un nouveau rendez-vous</p>
+              </div>
+            </div>
+
+            <form class="appointment-form" id="rdvForm">
+
+              <div class="appointment-form-group full">
+                <label for="rdvPatient">Patient <span>*</span></label>
+                <select id="rdvPatient" required>
+                  <option value="">Chargement des patients...</option>
+                </select>
+              </div>
+
+              <div class="appointment-form-row">
+
+                <div class="appointment-form-group">
+                  <label for="rdvDate">Date <span>*</span></label>
+                  <input type="date" id="rdvDate" required>
+                </div>
+
+                <div class="appointment-form-group">
+                  <label for="rdvHeure">Heure <span>*</span></label>
+                  <select id="rdvHeure" required>
+                    <option value="">Choisir</option>
+                    <option value="08:00">08:00</option>
+                    <option value="08:30">08:30</option>
+                    <option value="09:00">09:00</option>
+                    <option value="09:30">09:30</option>
+                    <option value="10:00">10:00</option>
+                    <option value="10:30">10:30</option>
+                    <option value="11:00">11:00</option>
+                    <option value="11:30">11:30</option>
+                    <option value="14:00">14:00</option>
+                    <option value="14:30">14:30</option>
+                    <option value="15:00">15:00</option>
+                    <option value="15:30">15:30</option>
+                    <option value="16:00">16:00</option>
+                  </select>
+                </div>
+
+              </div>
+
+              <div class="appointment-form-row">
+
+                <div class="appointment-form-group">
+                  <label for="rdvService">Service <span>*</span></label>
+                  <select id="rdvService" required>
+                    <option value="">Choisir un service</option>
+                    <option>Médecine générale</option>
+                    <option>Cardiologie</option>
+                    <option>Pédiatrie</option>
+                    <option>Orthopédie</option>
+                    <option>Chirurgie</option>
+                    <option>Gynécologie</option>
+                    <option>Urologie</option>
+                    <option>Urgences</option>
+                  </select>
+                </div>
+
+                <div class="appointment-form-group">
+                  <label for="rdvMedecin">Médecin <span>*</span></label>
+                  <select id="rdvMedecin" required>
+                    <option value="">Chargement des médecins...</option>
+                  </select>
+                </div>
+
+              </div>
+
+              <div class="appointment-form-group full">
+                <label for="rdvType">Type de rendez-vous</label>
+                <select id="rdvType">
+                  <option>Consultation</option>
+                  <option>Contrôle</option>
+                  <option>Suivi</option>
+                  <option>Examen</option>
+                </select>
+              </div>
+
+              <div class="appointment-form-group full">
+                <label for="rdvMotif">Motif</label>
+                <textarea
+                  id="rdvMotif"
+                  placeholder="Motif de la consultation...">
+                </textarea>
+              </div>
+
+              <div class="appointment-form-actions">
+
+                <button
+                  type="button"
+                  class="appointment-cancel-btn"
+                  id="rdvCancelBtn">
+                  Annuler
+                </button>
+
+                <button
+                  type="submit"
+                  class="appointment-save-btn"
+                  id="rdvSaveBtn">
+                  📅 Enregistrer le rendez-vous
+                </button>
+
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- LISTE DES RENDEZ-VOUS -->
+      <section class="appointments-main-grid">
+
+        <div class="appointment-card appointment-list-card">
+
+          <div class="appointment-card-header appointments-list-header">
+
+            <div class="appointments-list-title-row">
+              <div>
+                <h2 id="appointmentListTitle">
+                  📅 Liste des rendez-vous
+                </h2>
+                <p>Consultez le planning selon la période souhaitée.</p>
+              </div>
+
+              <span
+                class="appointment-period-label"
+                id="appointmentPeriodLabel">
+                Aujourd'hui
+              </span>
+            </div>
+
+          </div>
+
+          <div class="appointment-filter-bar">
+
+            <div class="appointment-filter-left">
+              <button
+                type="button"
+                class="appointment-filter-btn active"
+                id="filterToday">
+                Aujourd'hui
+              </button>
+
+              <button
+                type="button"
+                class="appointment-filter-btn"
+                id="filterTomorrow">
+                Demain
+              </button>
+
+              <button
+                type="button"
+                class="appointment-filter-btn"
+                id="filterWeek">
+                Cette semaine
+              </button>
+
+              <button
+                type="button"
+                class="appointment-filter-btn"
+                id="filterUpcoming">
+                À venir
+              </button>
+            </div>
+
+            <div class="appointment-filter-right">
+              <span>📅</span>
+              <input
+                type="date"
+                id="filterDate"
+                class="appointment-date-input">
+            </div>
+
+          </div>
+
+          <div
+            class="today-appointments-list"
+            id="todayAppointmentsList">
+            <div class="appointments-empty">
+              Chargement des rendez-vous...
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<script type="module">
+import { afficherLayout } from "../js/layout.js";
+
+import {
+  secureFetch,
+  getUtilisateurConnecte
+} from "../js/secure-api.js";
+
+afficherLayout();
+
+const API_URL = "http://localhost:3000/api";
+
+const $ = id => document.getElementById(id);
+
+const utilisateur = getUtilisateurConnecte();
+const role = String(utilisateur?.role || "")
+  .toLowerCase()
+  .trim();
+
+const estAdmin = role.includes("admin");
+const estReception =
+  role.includes("réception") ||
+  role.includes("reception");
+
+const estMedecin =
+  role.includes("médecin") ||
+  role.includes("medecin");
+
+const peutGererRendezVous = estAdmin || estReception;
+
+const form = $("rdvForm");
+const patientSelect = $("rdvPatient");
+const dateInput = $("rdvDate");
+const heureSelect = $("rdvHeure");
+const serviceSelect = $("rdvService");
+const medecinSelect = $("rdvMedecin");
+const typeSelect = $("rdvType");
+const motifInput = $("rdvMotif");
+const liste = $("todayAppointmentsList");
+const filterDate = $("filterDate");
+const modal = $("modalRendezVous");
+const saveBtn = $("rdvSaveBtn");
+
+let rendezVous = [];
+let filtreActif = "today";
+let dateAffichage = getToday();
+
+/* =====================================================
+   DATES
+===================================================== */
+
+function formatDateInput(date) {
+  const annee = date.getFullYear();
+  const mois = String(date.getMonth() + 1).padStart(2, "0");
+  const jour = String(date.getDate()).padStart(2, "0");
+
+  return `${annee}-${mois}-${jour}`;
+}
+
+function getToday() {
+  return formatDateInput(new Date());
+}
+
+function ajouterJours(dateTexte, jours) {
+  const date = new Date(`${dateTexte}T12:00:00`);
+  date.setDate(date.getDate() + jours);
+  return formatDateInput(date);
+}
+
+function getRdvDate(rdv) {
+  const valeur = rdv?.date_rdv;
+
+  if (!valeur) return "";
+
+  const texte = String(valeur);
+  const match = texte.match(/^(\d{4}-\d{2}-\d{2})/);
+
+  return match ? match[1] : "";
+}
+
+function getRdvHeure(rdv) {
+  return String(rdv?.heure_rdv || "--:--").slice(0, 5);
+}
+
+function dateCourte(dateTexte) {
+  if (!dateTexte) return "";
+
+  const date = new Date(`${dateTexte}T12:00:00`);
+
+  return date.toLocaleDateString("fr-FR", {
+    weekday: "short",
+    day: "2-digit",
+    month: "short"
+  });
+}
+
+function dateLongue(dateTexte) {
+  if (!dateTexte) return "";
+
+  const date = new Date(`${dateTexte}T12:00:00`);
+
+  return date.toLocaleDateString("fr-FR", {
+    weekday: "long",
+    day: "2-digit",
+    month: "long",
+    year: "numeric"
+  });
+}
+
+function semaineActuelle() {
+  const date = new Date(`${getToday()}T12:00:00`);
+  const jour = date.getDay();
+  const decalage = jour === 0 ? -6 : 1 - jour;
+
+  date.setDate(date.getDate() + decalage);
+
+  const debut = formatDateInput(date);
+  const fin = ajouterJours(debut, 6);
+
+  return { debut, fin };
+}
+
+/* =====================================================
+   REPONSES API
+===================================================== */
+
+async function lireJson(response) {
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(
+      data.message ||
+      `Erreur HTTP ${response.status}`
+    );
+  }
+
+  return data;
+}
+
+function extraireTableau(data, noms = []) {
+  if (Array.isArray(data)) return data;
+
+  for (const nom of noms) {
+    if (Array.isArray(data?.[nom])) {
+      return data[nom];
+    }
+  }
+
+  if (Array.isArray(data?.data)) {
+    return data.data;
+  }
+
+  return [];
+}
+
+/* =====================================================
+   PATIENTS
+===================================================== */
+
+async function chargerPatients() {
+  if (!peutGererRendezVous) return;
+
+  try {
+    const data = await lireJson(
+      await secureFetch(`${API_URL}/access/patients`)
+    );
+
+    const patients = extraireTableau(data, ["patients"]);
+
+    patientSelect.innerHTML =
+      '<option value="">Sélectionner un patient</option>';
+
+    patients.forEach(patient => {
+      const option = document.createElement("option");
+
+      option.value = patient.id_patient || patient.id;
+      option.textContent =
+        `${patient.prenom || ""} ${patient.nom || ""}`.trim();
+
+      patientSelect.appendChild(option);
+    });
+
+  } catch (error) {
+    console.error("Erreur patients :", error);
+
+    patientSelect.innerHTML =
+      '<option value="">Impossible de charger les patients</option>';
+  }
+}
+
+/* =====================================================
+   MEDECINS
+===================================================== */
+
+async function chargerMedecins() {
+  if (!peutGererRendezVous) return;
+
+  try {
+    const data = await lireJson(
+      await secureFetch(`${API_URL}/medecins`)
+    );
+
+    const medecins = extraireTableau(data, ["medecins"]);
+
+    medecinSelect.innerHTML =
+      '<option value="">Sélectionner un médecin</option>';
+
+    medecins.forEach(medecin => {
+      const option = document.createElement("option");
+
+      option.value = medecin.id_medecin || medecin.id;
+      option.textContent =
+        `Dr. ${medecin.prenom || ""} ${medecin.nom || ""}`.trim();
+
+      medecinSelect.appendChild(option);
+    });
+
+  } catch (error) {
+    console.error("Erreur médecins :", error);
+
+    medecinSelect.innerHTML =
+      '<option value="">Impossible de charger les médecins</option>';
+  }
+}
+
+/* =====================================================
+   STATUTS
+===================================================== */
+
+function statutClasse(statut) {
+  const valeur = String(statut || "").toUpperCase();
+
+  if (valeur === "CONFIRME" || valeur === "TERMINE") {
+    return "confirmed";
+  }
+
+  if (valeur === "ANNULE") {
+    return "cancelled";
+  }
+
+  return "pending";
+}
+
+function texteStatut(statut) {
+  const textes = {
+    EN_ATTENTE: "En attente",
+    CONFIRME: "Confirmé",
+    ANNULE: "Annulé",
+    TERMINE: "Terminé"
+  };
+
+  return textes[String(statut || "").toUpperCase()]
+    || "En attente";
+}
+
+/* =====================================================
+   FILTRES
+===================================================== */
+
+function choisirFiltre(type, date = null) {
+  filtreActif = type;
+
+  document.querySelectorAll(".appointment-filter-btn")
+    .forEach(btn => btn.classList.remove("active"));
+
+  const boutons = {
+    today: "filterToday",
+    tomorrow: "filterTomorrow",
+    week: "filterWeek",
+    upcoming: "filterUpcoming"
+  };
+
+  if (boutons[type]) {
+    $(boutons[type]).classList.add("active");
+  }
+
+  if (type === "today") {
+    dateAffichage = getToday();
+  } else if (type === "tomorrow") {
+    dateAffichage = ajouterJours(getToday(), 1);
+  } else if (type === "date" && date) {
+    dateAffichage = date;
+  }
+
+  filterDate.value = dateAffichage;
+
+  afficherRendezVous();
+}
+
+function filtrerRendezVous() {
+  const aujourdHui = getToday();
+
+  return rendezVous.filter(rdv => {
+    const dateRdv = getRdvDate(rdv);
+
+    if (!dateRdv) return false;
+
+    if (filtreActif === "week") {
+      const { debut, fin } = semaineActuelle();
+      return dateRdv >= debut && dateRdv <= fin;
+    }
+
+    if (filtreActif === "upcoming") {
+      return dateRdv >= aujourdHui;
+    }
+
+    return dateRdv === dateAffichage;
+  }).sort((a, b) => {
+    const cleA = `${getRdvDate(a)} ${getRdvHeure(a)}`;
+    const cleB = `${getRdvDate(b)} ${getRdvHeure(b)}`;
+
+    return cleA.localeCompare(cleB);
+  });
+}
+
+/* =====================================================
+   AFFICHAGE DES RENDEZ-VOUS
+===================================================== */
+
+function afficherRendezVous() {
+  const titres = {
+    today: "Aujourd'hui",
+    tomorrow: "Demain",
+    week: "Cette semaine",
+    upcoming: "À venir",
+    date: dateLongue(dateAffichage)
+  };
+
+  $("appointmentPeriodLabel").textContent =
+    titres[filtreActif] || "Rendez-vous";
+
+  const resultats = filtrerRendezVous();
+
+  liste.innerHTML = "";
+
+  if (resultats.length === 0) {
+    liste.innerHTML = `
+      <div class="appointments-empty">
+        Aucun rendez-vous pour cette période.
+      </div>
+    `;
+    return;
+  }
+
+  const couleurs = [
+    "blue", "cyan", "orange",
+    "turquoise", "red", "purple"
+  ];
+
+  resultats.forEach((rdv, index) => {
+    const prenom = rdv.prenom_patient || "";
+    const nom = rdv.nom_patient || "";
+
+    const nomComplet =
+      `${prenom} ${nom}`.trim() || "Patient";
+
+    const medecin =
+      `${rdv.prenom_medecin || ""} ${rdv.nom_medecin || ""}`.trim();
+
+    const initiales =
+      `${prenom.charAt(0)}${nom.charAt(0)}`.toUpperCase() || "P";
+
+    const dateRdv = getRdvDate(rdv);
+    const heure = getRdvHeure(rdv);
+
+    const afficherDate =
+      filtreActif === "week" ||
+      filtreActif === "upcoming";
+
+   const item = document.createElement("div");
+
+    item.className =
+      `today-appointment-item ${couleurs[index % couleurs.length]}`;
+
+    const heureDiv = document.createElement("div");
+    heureDiv.className = "appointment-time";
+
+    heureDiv.textContent = afficherDate
+      ? `${dateCourte(dateRdv)} · ${heure}`
+      : heure;
+
+    const avatar = document.createElement("div");
+    avatar.className = "appointment-avatar";
+    avatar.textContent = initiales;
+
+    const patientDiv = document.createElement("div");
+    patientDiv.className = "appointment-patient";
+
+    const nomStrong = document.createElement("strong");
+    nomStrong.textContent = nomComplet;
+
+    const motifSpan = document.createElement("span");
+    motifSpan.textContent =
+      rdv.nom_service || rdv.service ||
+      rdv.motif || "Consultation";
+
+    patientDiv.append(nomStrong, motifSpan);
+    const medecinDiv = document.createElement("div");
+    medecinDiv.className = "appointment-doctor";
+
+    medecinDiv.textContent = medecin
+      ? `Dr. ${medecin}`
+      : "Médecin non renseigné";
+
+    const statutDiv = document.createElement("div");
+
+    statutDiv.className =
+      `appointment-status ${statutClasse(rdv.statut)}`;
+
+    statutDiv.textContent = texteStatut(rdv.statut);
+
+    item.append(
+      heureDiv,
+      avatar,
+      patientDiv,
+      medecinDiv,
+      statutDiv
+    );
+
+    if (peutGererRendezVous) {
+      const bouton = document.createElement("button");
+
+      bouton.type = "button";
+      bouton.className = "appointment-more";
+      bouton.textContent = "⋯";
+      bouton.title = "Supprimer le rendez-vous";
+
+      bouton.addEventListener("click", () => {
+        supprimerRendezVous(rdv.id_rendez_vous);
+      });
+
+      item.appendChild(bouton);
+    }
+
+    liste.appendChild(item);
+  });
+}
+/* =====================================================
+   CHARGEMENT DES RENDEZ-VOUS
+===================================================== */
+
+async function chargerRendezVous() {
+
+  liste.innerHTML = `
+    <div class="appointments-empty">
+      Chargement des rendez-vous...
+    </div>
+  `;
+
+  try {
+
+    const response = await secureFetch(
+      `${API_URL}/access/rendez-vous`
+    );
+
+    const data = await lireJson(response);
+
+    rendezVous = extraireTableau(data, [
+      "rendezVous",
+      "rendez_vous",
+      "appointments"
+    ]);
+
+    console.log("Rendez-vous reçus :", rendezVous);
+
+    afficherRendezVous();
+
+  } catch (error) {
+
+    console.error(
+      "Erreur chargement rendez-vous :",
+      error
+    );
+
+    liste.innerHTML = "";
+
+    const message = document.createElement("div");
+    message.className = "appointments-empty";
+    message.textContent = error.message;
+
+    liste.appendChild(message);
+  }
+}
+/* =====================================================
+   ENREGISTRER UN RENDEZ-VOUS
+===================================================== */
+
+form.addEventListener("submit", async event => {
+
+  event.preventDefault();
+
+  if (!peutGererRendezVous) {
+    alert("Accès non autorisé.");
+    return;
+  }
+
+  const nouveauRdv = {
+    id_patient: Number(patientSelect.value),
+    id_medecin: Number(medecinSelect.value),
+    date_rdv: dateInput.value,
+    heure_rdv: heureSelect.value,
+    motif: motifInput.value.trim() || typeSelect.value,
+    statut: "EN_ATTENTE"
+  };
+
+  if (
+    !nouveauRdv.id_patient ||
+    !nouveauRdv.id_medecin ||
+    !nouveauRdv.date_rdv ||
+    !nouveauRdv.heure_rdv ||
+    !serviceSelect.value
+  ) {
+    alert("Veuillez remplir tous les champs obligatoires.");
+    return;
+  }
+
+  saveBtn.disabled = true;
+  saveBtn.textContent = "Enregistrement...";
+
+  try {
+
+    await lireJson(
+      await secureFetch(`${API_URL}/rendez-vous`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(nouveauRdv)
+      })
+    );
+
+    form.reset();
+    dateInput.value = getToday();
+
+    fermerModalRendezVous();
+
+    choisirFiltre("date", nouveauRdv.date_rdv);
+
+    await chargerRendezVous();
+
+    alert("Rendez-vous enregistré avec succès.");
+
+  } catch (error) {
+
+    console.error("Erreur création :", error);
+    alert(error.message);
+
+  } finally {
+
+    saveBtn.disabled = false;
+    saveBtn.textContent = "📅 Enregistrer le rendez-vous";
+
+  }
+});
+/* =====================================================
+   SUPPRESSION D'UN RENDEZ-VOUS
+===================================================== */
+
+async function supprimerRendezVous(id) {
+
+  if (!peutGererRendezVous) return;
+
+  if (!id) {
+    alert("Identifiant introuvable.");
+    return;
+  }
+
+  if (!confirm("Voulez-vous supprimer ce rendez-vous ?")) {
+    return;
+  }
+
+  try {
+
+    await lireJson(
+      await secureFetch(`${API_URL}/rendez-vous/${id}`, {
+        method: "DELETE"
+      })
+    );
+
+    await chargerRendezVous();
+
+  } catch (error) {
+
+    console.error("Erreur suppression :", error);
+    alert(error.message);
+
+  }
+}
+/* =====================================================
+   FENETRE MODALE
+===================================================== */
+
+function ouvrirModalRendezVous() {
+
+  if (!peutGererRendezVous) return;
+
+  form.reset();
+  dateInput.value = getToday();
+
+  modal.classList.add("active");
+  modal.setAttribute("aria-hidden", "false");
+
+  document.body.classList.add("rdv-modal-open");
+}
+
+function fermerModalRendezVous() {
+
+  modal.classList.remove("active");
+  modal.setAttribute("aria-hidden", "true");
+
+  document.body.classList.remove("rdv-modal-open");
+}
+
+$("btnNouveauRendezVous")
+  .addEventListener("click", ouvrirModalRendezVous);
+
+$("fermerModalRdv")
+  .addEventListener("click", fermerModalRendezVous);
+
+$("rdvCancelBtn")
+  .addEventListener("click", fermerModalRendezVous);
+
+modal.addEventListener("click", event => {
+  if (event.target === modal) {
+    fermerModalRendezVous();
+  }
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    fermerModalRendezVous();
+  }
+});
+/* =====================================================
+   FILTRES
+===================================================== */
+
+$("btnRendezVousAujourdhui")
+  .addEventListener("click", () => choisirFiltre("today"));
+
+$("filterToday")
+  .addEventListener("click", () => choisirFiltre("today"));
+
+$("filterTomorrow")
+  .addEventListener("click", () => choisirFiltre("tomorrow"));
+
+$("filterWeek")
+  .addEventListener("click", () => choisirFiltre("week"));
+
+$("filterUpcoming")
+  .addEventListener("click", () => choisirFiltre("upcoming"));
+
+filterDate.addEventListener("change", () => {
+
+  if (filterDate.value) {
+    choisirFiltre("date", filterDate.value);
+  }
+
+});
+/* =====================================================
+   PERMISSIONS
+===================================================== */
+
+if (!peutGererRendezVous) {
+  $("btnNouveauRendezVous").style.display = "none";
+}
+
+if (estMedecin) {
+
+  document.querySelector(".appointments-heading h1")
+    .textContent = "Mes rendez-vous";
+
+  document.querySelector(".appointments-heading p")
+    .textContent =
+      "Consultez votre planning et vos prochains rendez-vous.";
+
+  $("appointmentListTitle").textContent =
+    "📅 Mes rendez-vous";
+}
+
+/* =====================================================
+   INITIALISATION
+===================================================== */
+
+dateInput.value = getToday();
+filterDate.value = getToday();
+
+if (peutGererRendezVous) {
+  chargerPatients();
+  chargerMedecins();
+}
+
+chargerRendezVous();
+
+</script>
+</body>
+</html>

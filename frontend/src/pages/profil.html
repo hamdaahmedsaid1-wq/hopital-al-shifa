@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Mon profil - Al-Shifa
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="../css/style.css"
+  >
+
+</head>
+
+
+<body>
+
+  <div class="app">
+
+    <div id="sidebar"></div>
+
+
+    <main class="main">
+
+      <div id="topbar"></div>
+
+
+      <section class="doctor-dashboard">
+
+
+        <!-- =================================================
+             ENTETE
+        ================================================== -->
+
+        <div class="doctor-hero">
+
+          <small>
+            MON COMPTE • HÔPITAL AL-SHIFA
+          </small>
+
+          <h1>
+            Mon profil 👤
+          </h1>
+
+          <p>
+            Consultez les informations de votre compte utilisateur.
+          </p>
+
+        </div>
+
+
+
+        <!-- =================================================
+             PROFIL
+        ================================================== -->
+
+        <section
+          style="
+            display:grid;
+            grid-template-columns:320px 1fr;
+            gap:22px;
+            margin-top:20px;
+          "
+        >
+
+
+          <!-- =================================================
+               CARTE UTILISATEUR
+          ================================================== -->
+
+          <div class="doctor-panel">
+
+
+            <div
+              style="
+                text-align:center;
+                padding:20px 10px;
+              "
+            >
+
+
+              <!-- AVATAR -->
+
+              <div
+                id="profilAvatar"
+                style="
+                  width:100px;
+                  height:100px;
+                  margin:0 auto 18px;
+                  border-radius:50%;
+                  background:linear-gradient(
+                    135deg,
+                    #ff7a22,
+                    #d94708
+                  );
+                  color:white;
+                  display:flex;
+                  align-items:center;
+                  justify-content:center;
+                  font-size:34px;
+                  font-weight:800;
+                  box-shadow:
+                    0 10px 25px rgba(249,115,22,0.25);
+                "
+              >
+                U
+              </div>
+
+
+
+              <!-- NOM -->
+
+              <h2
+                id="profilNom"
+                style="
+                  margin:0;
+                  font-size:22px;
+                "
+              >
+                Utilisateur
+              </h2>
+
+
+
+              <!-- ROLE -->
+
+              <div
+                id="profilRole"
+                style="
+                  display:inline-block;
+                  margin-top:10px;
+                  padding:7px 14px;
+                  border-radius:20px;
+                  background:#fff7ed;
+                  color:#c2410c;
+                  font-size:13px;
+                  font-weight:700;
+                "
+              >
+                Rôle
+              </div>
+
+
+
+              <p
+                id="profilUsername"
+                style="
+                  margin-top:15px;
+                  color:#64748b;
+                "
+              >
+                @utilisateur
+              </p>
+
+
+            </div>
+
+
+          </div>
+
+
+
+          <!-- =================================================
+               INFORMATIONS
+          ================================================== -->
+
+          <div class="doctor-panel">
+
+
+            <h2>
+              👤 Informations personnelles
+            </h2>
+
+
+            <div
+              style="
+                display:grid;
+                grid-template-columns:repeat(2,1fr);
+                gap:18px;
+                margin-top:25px;
+              "
+            >
+
+
+              <!-- PRENOM -->
+
+              <div>
+
+                <label
+                  style="
+                    display:block;
+                    font-size:13px;
+                    color:#64748b;
+                    margin-bottom:7px;
+                  "
+                >
+                  Prénom
+                </label>
+
+                <div
+                  id="profilPrenom"
+                  style="
+                    background:#f8fafc;
+                    border:1px solid #e2e8f0;
+                    border-radius:12px;
+                    padding:13px 15px;
+                    font-weight:600;
+                  "
+                >
+                  -
+                </div>
+
+              </div>
+
+
+
+              <!-- NOM -->
+
+              <div>
+
+                <label
+                  style="
+                    display:block;
+                    font-size:13px;
+                    color:#64748b;
+                    margin-bottom:7px;
+                  "
+                >
+                  Nom
+                </label>
+
+                <div
+                  id="profilNomFamille"
+                  style="
+                    background:#f8fafc;
+                    border:1px solid #e2e8f0;
+                    border-radius:12px;
+                    padding:13px 15px;
+                    font-weight:600;
+                  "
+                >
+                  -
+                </div>
+
+              </div>
+
+
+
+              <!-- USERNAME -->
+
+              <div>
+
+                <label
+                  style="
+                    display:block;
+                    font-size:13px;
+                    color:#64748b;
+                    margin-bottom:7px;
+                  "
+                >
+                  Nom d'utilisateur
+                </label>
+
+                <div
+                  id="profilIdentifiant"
+                  style="
+                    background:#f8fafc;
+                    border:1px solid #e2e8f0;
+                    border-radius:12px;
+                    padding:13px 15px;
+                    font-weight:600;
+                  "
+                >
+                  -
+                </div>
+
+              </div>
+
+
+
+              <!-- ROLE -->
+
+              <div>
+
+                <label
+                  style="
+                    display:block;
+                    font-size:13px;
+                    color:#64748b;
+                    margin-bottom:7px;
+                  "
+                >
+                  Rôle
+                </label>
+
+                <div
+                  id="profilRoleInfo"
+                  style="
+                    background:#f8fafc;
+                    border:1px solid #e2e8f0;
+                    border-radius:12px;
+                    padding:13px 15px;
+                    font-weight:600;
+                  "
+                >
+                  -
+                </div>
+
+              </div>
+
+
+
+              <!-- ID -->
+
+              <div>
+
+                <label
+                  style="
+                    display:block;
+                    font-size:13px;
+                    color:#64748b;
+                    margin-bottom:7px;
+                  "
+                >
+                  Identifiant utilisateur
+                </label>
+
+                <div
+                  id="profilId"
+                  style="
+                    background:#f8fafc;
+                    border:1px solid #e2e8f0;
+                    border-radius:12px;
+                    padding:13px 15px;
+                    font-weight:600;
+                  "
+                >
+                  -
+                </div>
+
+              </div>
+
+
+
+              <!-- STATUT -->
+
+              <div>
+
+                <label
+                  style="
+                    display:block;
+                    font-size:13px;
+                    color:#64748b;
+                    margin-bottom:7px;
+                  "
+                >
+                  Statut du compte
+                </label>
+
+                <div
+                  style="
+                    background:#f0fdf4;
+                    border:1px solid #bbf7d0;
+                    border-radius:12px;
+                    padding:13px 15px;
+                    font-weight:700;
+                    color:#15803d;
+                  "
+                >
+                  ● Compte actif
+                </div>
+
+              </div>
+
+
+            </div>
+
+
+          </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             ESPACE ROLE
+        ================================================== -->
+
+        <section
+          class="doctor-panel"
+          style="margin-top:20px;"
+        >
+
+          <h2>
+            🔐 Mon espace et mes autorisations
+          </h2>
+
+
+          <div
+            id="roleDescription"
+            style="
+              margin-top:20px;
+            "
+          >
+          </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             SECURITE
+        ================================================== -->
+
+        <section
+          class="doctor-panel"
+          style="margin-top:20px;"
+        >
+
+          <h2>
+            🔒 Sécurité du compte
+          </h2>
+
+
+          <div
+            style="
+              display:flex;
+              justify-content:space-between;
+              align-items:center;
+              gap:20px;
+              padding:20px 0 5px;
+            "
+          >
+
+            <div>
+
+              <strong>
+                Mot de passe
+              </strong>
+
+              <p
+                style="
+                  margin:6px 0 0;
+                  color:#64748b;
+                "
+              >
+                Modifiez votre mot de passe pour protéger votre compte.
+              </p>
+
+            </div>
+
+
+            <button
+              id="changePasswordButton"
+              type="button"
+              style="
+                border:none;
+                padding:12px 18px;
+                border-radius:12px;
+                background:#f97316;
+                color:white;
+                font-weight:700;
+                cursor:pointer;
+              "
+            >
+              Modifier le mot de passe
+            </button>
+
+          </div>
+
+
+          <div
+            id="passwordMessage"
+            style="
+              margin-top:15px;
+              display:none;
+            "
+          >
+          </div>
+
+        </section>
+
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       JAVASCRIPT
+  ====================================================== -->
+
+  <script type="module">
+
+
+    import {
+      afficherLayout
+    } from "../js/layout.js";
+
+
+    import {
+      getUtilisateurConnecte
+    } from "../js/secure-api.js";
+
+
+
+    afficherLayout(
+      "Mon profil"
+    );
+
+
+
+    /* =====================================================
+       UTILISATEUR CONNECTE
+    ===================================================== */
+
+    const utilisateur =
+      getUtilisateurConnecte();
+
+
+    if (!utilisateur) {
+
+      window.location.replace(
+        "/"
+      );
+
+    }
+
+
+
+    /* =====================================================
+       INFORMATIONS
+    ===================================================== */
+
+    const prenom =
+      utilisateur?.prenom || "";
+
+
+    const nom =
+      utilisateur?.nom || "";
+
+
+    const username =
+      utilisateur?.nom_utilisateur
+      ||
+      "Utilisateur";
+
+
+    const role =
+      utilisateur?.role
+      ||
+      "Utilisateur";
+
+
+    const idUtilisateur =
+      utilisateur?.id_utilisateur
+      ??
+      "-";
+
+
+    const nomComplet =
+      `${prenom} ${nom}`
+        .trim()
+      ||
+      username;
+
+
+
+    /* =====================================================
+       INITIAL
+    ===================================================== */
+
+    const initialePrenom =
+      prenom
+        ? prenom.charAt(0)
+        : "";
+
+
+    const initialeNom =
+      nom
+        ? nom.charAt(0)
+        : "";
+
+
+    const initiales =
+      `${initialePrenom}${initialeNom}`
+        .toUpperCase()
+      ||
+      username
+        .charAt(0)
+        .toUpperCase();
+
+
+
+    /* =====================================================
+       AFFICHAGE
+    ===================================================== */
+
+    document.getElementById(
+      "profilAvatar"
+    ).textContent =
+      initiales;
+
+
+    document.getElementById(
+      "profilNom"
+    ).textContent =
+      nomComplet;
+
+
+    document.getElementById(
+      "profilRole"
+    ).textContent =
+      role;
+
+
+    document.getElementById(
+      "profilUsername"
+    ).textContent =
+      `@${username}`;
+
+
+    document.getElementById(
+      "profilPrenom"
+    ).textContent =
+      prenom || "Non renseigné";
+
+
+    document.getElementById(
+      "profilNomFamille"
+    ).textContent =
+      nom || "Non renseigné";
+
+
+    document.getElementById(
+      "profilIdentifiant"
+    ).textContent =
+      username;
+
+
+    document.getElementById(
+      "profilRoleInfo"
+    ).textContent =
+      role;
+
+
+    document.getElementById(
+      "profilId"
+    ).textContent =
+      idUtilisateur;
+
+
+
+    /* =====================================================
+       DESCRIPTION SELON ROLE
+    ===================================================== */
+
+    const roleDescription =
+      document.getElementById(
+        "roleDescription"
+      );
+
+
+    const roleNormalise =
+      String(
+        role
+      )
+        .toLowerCase()
+        .trim();
+
+
+
+    if (
+      roleNormalise.includes(
+        "admin"
+      )
+    ) {
+
+      roleDescription.innerHTML =
+        `
+
+          <div class="doctor-actions">
+
+            <div class="doctor-action">
+              👥 Gestion des patients
+            </div>
+
+            <div class="doctor-action">
+              🩺 Gestion des médecins
+            </div>
+
+            <div class="doctor-action">
+              📅 Gestion des rendez-vous
+            </div>
+
+            <div class="doctor-action">
+              🛏️ Gestion des hospitalisations
+            </div>
+
+            <div class="doctor-action">
+              💳 Gestion financière
+            </div>
+
+            <div class="doctor-action">
+              👤 Gestion des utilisateurs
+            </div>
+
+          </div>
+
+        `;
+
+    }
+
+
+
+    else if (
+      roleNormalise.includes(
+        "médecin"
+      )
+      ||
+      roleNormalise.includes(
+        "medecin"
+      )
+    ) {
+
+      roleDescription.innerHTML =
+        `
+
+          <div class="doctor-actions">
+
+            <div class="doctor-action">
+              👥 Mes patients
+            </div>
+
+            <div class="doctor-action">
+              📅 Mes rendez-vous
+            </div>
+
+            <div class="doctor-action">
+              🩺 Mes consultations
+            </div>
+
+            <div class="doctor-action">
+              💊 Mes ordonnances
+            </div>
+
+          </div>
+
+        `;
+
+    }
+
+
+
+    else if (
+      roleNormalise.includes(
+        "réception"
+      )
+      ||
+      roleNormalise.includes(
+        "reception"
+      )
+    ) {
+
+      roleDescription.innerHTML =
+        `
+
+          <div class="doctor-actions">
+
+            <div class="doctor-action">
+              👥 Gestion des patients
+            </div>
+
+            <div class="doctor-action">
+              📅 Gestion des rendez-vous
+            </div>
+
+            <div class="doctor-action">
+              ➕ Enregistrement des patients
+            </div>
+
+          </div>
+
+        `;
+
+    }
+
+
+
+    else if (
+      roleNormalise.includes(
+        "caissier"
+      )
+    ) {
+
+      roleDescription.innerHTML =
+        `
+
+          <div class="doctor-actions">
+
+            <div class="doctor-action">
+              🧾 Gestion des factures
+            </div>
+
+            <div class="doctor-action">
+              💳 Enregistrement des paiements
+            </div>
+
+            <div class="doctor-action">
+              💰 Suivi des encaissements
+            </div>
+
+          </div>
+
+        `;
+
+    }
+
+
+
+    else if (
+      roleNormalise.includes(
+        "infirmier"
+      )
+    ) {
+
+      roleDescription.innerHTML =
+        `
+
+          <div class="doctor-actions">
+
+            <div class="doctor-action">
+              👥 Patients hospitalisés
+            </div>
+
+            <div class="doctor-action">
+              🛏️ Hospitalisations
+            </div>
+
+            <div class="doctor-action">
+              🩺 Suivi hospitalier
+            </div>
+
+            <div class="doctor-action">
+              🚪 Sorties patients
+            </div>
+
+          </div>
+
+        `;
+
+    }
+
+
+
+    else {
+
+      roleDescription.innerHTML =
+        `
+
+          <p>
+            Aucun droit spécifique disponible.
+          </p>
+
+        `;
+
+    }
+
+
+
+    /* =====================================================
+       MOT DE PASSE
+    ===================================================== */
+
+    const changePasswordButton =
+      document.getElementById(
+        "changePasswordButton"
+      );
+
+
+    const passwordMessage =
+      document.getElementById(
+        "passwordMessage"
+      );
+
+
+    changePasswordButton.addEventListener(
+      "click",
+      () => {
+
+        passwordMessage.style.display =
+          "block";
+
+
+        passwordMessage.innerHTML =
+          `
+
+            <div
+              style="
+                padding:15px;
+                border-radius:12px;
+                background:#fff7ed;
+                color:#9a3412;
+                border:1px solid #fed7aa;
+              "
+            >
+
+              🔒 La modification du mot de passe
+              sera ajoutée dans la prochaine étape.
+
+            </div>
+
+          `;
+
+      }
+    );
+
+
+  </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Paiement - Al-Shifa</title>
+
+  <link
+    rel="stylesheet"
+    href="../css/style.css"
+  >
+
+</head>
+
+<body>
+
+  <div class="app">
+
+    <div id="sidebar"></div>
+
+
+    <main class="main">
+
+      <div id="topbar"></div>
+
+
+      <section class="content">
+
+        <div class="paiement-page paiement-page-v2">
+
+
+          <!-- =====================================================
+               EN-TETE
+          ====================================================== -->
+
+          <div class="paiement-modern-header">
+
+            <div>
+
+              <a
+                href="facture.html"
+                class="paiement-back"
+              >
+                ← Retour à la facturation
+              </a>
+
+              <p class="paiement-modern-label">
+                Gestion financière
+              </p>
+
+              <h1>
+                Enregistrer un paiement
+              </h1>
+
+              <p class="paiement-modern-subtitle">
+                Sélectionnez une facture patient et enregistrez son règlement.
+              </p>
+
+            </div>
+
+
+            <div class="paiement-header-icon">
+              💰
+            </div>
+
+          </div>
+
+
+
+          <!-- =====================================================
+               CONTENU
+          ====================================================== -->
+
+          <div class="paiement-modern-layout">
+
+
+            <!-- =================================================
+                 COLONNE GAUCHE
+            ================================================== -->
+
+            <div class="paiement-main-card">
+
+
+              <!-- TITRE -->
+
+              <div class="paiement-main-card-header">
+
+                <div class="paiement-main-icon">
+                  💳
+                </div>
+
+                <div>
+
+                  <h2>
+                    Nouveau paiement
+                  </h2>
+
+                  <p>
+                    Informations de la facture et du règlement
+                  </p>
+
+                </div>
+
+              </div>
+
+
+
+              <!-- =================================================
+                   FACTURE
+              ================================================== -->
+
+              <div class="paiement-modern-section">
+
+                <div class="paiement-modern-section-title">
+
+                  <span>
+                    01
+                  </span>
+
+                  <div>
+                    <strong>
+                      Facture concernée
+                    </strong>
+
+                    <small>
+                      Sélectionnez la facture à régler
+                    </small>
+                  </div>
+
+                </div>
+
+
+                <div class="paiement-modern-field">
+
+                  <label for="factureSelect">
+                    Facture *
+                  </label>
+
+                  <select
+                    id="factureSelect"
+                    required
+                  >
+
+                    <option value="">
+                      Sélectionner une facture
+                    </option>
+
+                  </select>
+
+                </div>
+
+              </div>
+
+
+
+              <!-- =================================================
+                   RESUME FACTURE
+              ================================================== -->
+
+              <div
+                class="paiement-facture-summary"
+                id="factureBox"
+                style="display: none;"
+              >
+
+
+                <div class="paiement-summary-top">
+
+                  <div>
+
+                    <span>
+                      Facture
+                    </span>
+
+                    <strong id="factureNumero">
+                      -
+                    </strong>
+
+                  </div>
+
+
+                  <span class="paiement-summary-status">
+                    À régler
+                  </span>
+
+                </div>
+
+
+                <div class="paiement-patient-name">
+
+                  <span>
+                    Patient
+                  </span>
+
+                  <strong id="facturePatient">
+                    -
+                  </strong>
+
+                </div>
+
+
+                <div class="paiement-financial-grid">
+
+
+                  <div class="paiement-financial-item">
+
+                    <span>
+                      Montant total
+                    </span>
+
+                    <strong id="factureTotal">
+                      0 FDJ
+                    </strong>
+
+                  </div>
+
+
+                  <div class="paiement-financial-item success">
+
+                    <span>
+                      Déjà payé
+                    </span>
+
+                    <strong id="facturePaye">
+                      0 FDJ
+                    </strong>
+
+                  </div>
+
+
+                  <div class="paiement-financial-item danger">
+
+                    <span>
+                      Reste à payer
+                    </span>
+
+                    <strong id="factureReste">
+                      0 FDJ
+                    </strong>
+
+                  </div>
+
+
+                </div>
+
+              </div>
+
+
+
+              <!-- =================================================
+                   FORMULAIRE
+              ================================================== -->
+
+              <form id="paiementForm">
+
+
+                <div class="paiement-modern-section">
+
+                  <div class="paiement-modern-section-title">
+
+                    <span>
+                      02
+                    </span>
+
+                    <div>
+
+                      <strong>
+                        Informations du paiement
+                      </strong>
+
+                      <small>
+                        Renseignez les détails du règlement
+                      </small>
+
+                    </div>
+
+                  </div>
+
+
+                  <div class="paiement-modern-grid">
+
+
+                    <div class="paiement-modern-field">
+
+                      <label for="datePaiement">
+                        Date du paiement *
+                      </label>
+
+                      <input
+                        type="date"
+                        id="datePaiement"
+                        required
+                      >
+
+                    </div>
+
+
+                    <div class="paiement-modern-field">
+
+                      <label for="referencePaiement">
+                        Référence
+                      </label>
+
+                      <input
+                        type="text"
+                        id="referencePaiement"
+                        placeholder="Ex : PAY-2026-001"
+                      >
+
+                    </div>
+
+
+                    <div class="paiement-modern-field">
+
+                      <label for="montantPaiement">
+                        Montant payé *
+                      </label>
+
+                      <div class="paiement-amount-input">
+
+                        <input
+                          type="number"
+                          id="montantPaiement"
+                          min="1"
+                          placeholder="0"
+                          required
+                        >
+
+                        <span>
+                          FDJ
+                        </span>
+
+                      </div>
+
+                    </div>
+
+
+                    <div class="paiement-modern-field">
+
+                      <label for="modePaiement">
+                        Mode de paiement *
+                      </label>
+
+                      <select
+                        id="modePaiement"
+                        required
+                      >
+
+                        <option value="">
+                          Sélectionner
+                        </option>
+
+                        <option value="especes">
+                          Espèces
+                        </option>
+
+                        <option value="carte">
+                          Carte bancaire
+                        </option>
+
+                        <option value="mobile">
+                          Paiement mobile
+                        </option>
+
+                        <option value="virement">
+                          Virement bancaire
+                        </option>
+
+                        <option value="assurance">
+                          Assurance
+                        </option>
+
+                      </select>
+
+                    </div>
+
+
+                    <div class="paiement-modern-field">
+
+                      <label for="statutPaiement">
+                        Statut
+                      </label>
+
+                      <select id="statutPaiement">
+
+                        <option value="valide">
+                          Validé
+                        </option>
+
+                        <option value="attente">
+                          En attente
+                        </option>
+
+                      </select>
+
+                    </div>
+
+
+                    <div class="paiement-modern-field full">
+
+                      <label for="observationPaiement">
+                        Observation
+                      </label>
+
+                      <textarea
+                        id="observationPaiement"
+                        rows="4"
+                        placeholder="Ajouter une remarque concernant ce paiement..."
+                      ></textarea>
+
+                    </div>
+
+
+                  </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     APERCU FINANCIER
+                ================================================== -->
+
+                <div class="paiement-preview">
+
+                  <div class="paiement-preview-title">
+                    Aperçu après paiement
+                  </div>
+
+
+                  <div class="paiement-preview-grid">
+
+
+                    <div class="paiement-preview-item">
+
+                      <span>
+                        Reste actuel
+                      </span>
+
+                      <strong id="resteActuel">
+                        0 FDJ
+                      </strong>
+
+                    </div>
+
+
+                    <div class="paiement-preview-arrow">
+                      →
+                    </div>
+
+
+                    <div class="paiement-preview-item">
+
+                      <span>
+                        Paiement
+                      </span>
+
+                      <strong
+                        id="nouveauPaiement"
+                        class="paiement-green"
+                      >
+                        0 FDJ
+                      </strong>
+
+                    </div>
+
+
+                    <div class="paiement-preview-arrow">
+                      →
+                    </div>
+
+
+                    <div class="paiement-preview-item paiement-preview-final">
+
+                      <span>
+                        Nouveau reste
+                      </span>
+
+                      <strong id="nouveauReste">
+                        0 FDJ
+                      </strong>
+
+                    </div>
+
+
+                  </div>
+
+                </div>
+
+
+
+                <!-- MESSAGE -->
+
+                <div
+                  id="paiementMessage"
+                  class="paiement-modern-message"
+                  style="display: none;"
+                >
+                </div>
+
+
+
+                <!-- BOUTONS -->
+
+                <div class="paiement-modern-actions">
+
+
+                  <button
+                    type="button"
+                    class="paiement-modern-cancel"
+                    id="cancelButton"
+                  >
+                    Annuler
+                  </button>
+
+
+                  <button
+                    type="submit"
+                    class="paiement-modern-save"
+                    id="saveButton"
+                  >
+                    ✓ Enregistrer le paiement
+                  </button>
+
+
+                </div>
+
+
+              </form>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 COLONNE DROITE
+            ================================================== -->
+
+            <aside class="paiement-side">
+
+
+              <div class="paiement-side-card">
+
+                <div class="paiement-side-icon blue">
+                  💳
+                </div>
+
+                <div>
+
+                  <strong>
+                    Paiement sécurisé
+                  </strong>
+
+                  <p>
+                    Vérifiez toujours le numéro de facture et le montant avant validation.
+                  </p>
+
+                </div>
+
+              </div>
+
+
+              <div class="paiement-side-card">
+
+                <div class="paiement-side-icon green">
+                  ✓
+                </div>
+
+                <div>
+
+                  <strong>
+                    Validation automatique
+                  </strong>
+
+                  <p>
+                    Le nouveau reste à payer est calculé automatiquement.
+                  </p>
+
+                </div>
+
+              </div>
+
+
+              <div class="paiement-side-card">
+
+                <div class="paiement-side-icon orange">
+                  ⚠
+                </div>
+
+                <div>
+
+                  <strong>
+                    Attention
+                  </strong>
+
+                  <p>
+                    Le montant payé ne peut pas dépasser le reste dû.
+                  </p>
+
+                </div>
+
+              </div>
+
+
+              <div class="paiement-side-help">
+
+                <div class="paiement-help-icon">
+                  🏥
+                </div>
+
+                <strong>
+                  Hôpital AL-SHIFA
+                </strong>
+
+                <p>
+                  Service de facturation et paiements
+                </p>
+
+                <span>
+                  Djibouti
+                </span>
+
+              </div>
+
+
+            </aside>
+
+
+          </div>
+
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+
+  <script type="module">
+
+    import {
+      afficherLayout
+    } from "../js/layout.js";
+
+
+    afficherLayout(
+      "Paiement"
+    );
+
+
+    const FACTURES_API =
+      "http://localhost:3000/api/factures";
+
+
+    const PAIEMENTS_API =
+      "http://localhost:3000/api/paiements";
+
+
+    const params =
+      new URLSearchParams(
+        window.location.search
+      );
+
+
+    const factureUrlId =
+      params.get(
+        "facture"
+      );
+
+
+    const factureSelect =
+      document.getElementById(
+        "factureSelect"
+      );
+
+
+    const factureBox =
+      document.getElementById(
+        "factureBox"
+      );
+
+
+    const factureNumero =
+      document.getElementById(
+        "factureNumero"
+      );
+
+
+    const facturePatient =
+      document.getElementById(
+        "facturePatient"
+      );
+
+
+    const factureTotal =
+      document.getElementById(
+        "factureTotal"
+      );
+
+
+    const facturePaye =
+      document.getElementById(
+        "facturePaye"
+      );
+
+
+    const factureReste =
+      document.getElementById(
+        "factureReste"
+      );
+
+
+    const paiementForm =
+      document.getElementById(
+        "paiementForm"
+      );
+
+
+    const datePaiement =
+      document.getElementById(
+        "datePaiement"
+      );
+
+
+    const referencePaiement =
+      document.getElementById(
+        "referencePaiement"
+      );
+
+
+    const montantPaiement =
+      document.getElementById(
+        "montantPaiement"
+      );
+
+
+    const modePaiement =
+      document.getElementById(
+        "modePaiement"
+      );
+
+
+    const statutPaiement =
+      document.getElementById(
+        "statutPaiement"
+      );
+
+
+    const observationPaiement =
+      document.getElementById(
+        "observationPaiement"
+      );
+
+
+    const resteActuel =
+      document.getElementById(
+        "resteActuel"
+      );
+
+
+    const nouveauPaiement =
+      document.getElementById(
+        "nouveauPaiement"
+      );
+
+
+    const nouveauReste =
+      document.getElementById(
+        "nouveauReste"
+      );
+
+
+    const saveButton =
+      document.getElementById(
+        "saveButton"
+      );
+
+
+    const messageBox =
+      document.getElementById(
+        "paiementMessage"
+      );
+
+
+    let facturesData = [];
+
+    let factureCourante = null;
+
+
+    /* =====================================================
+       DATE DU JOUR
+    ===================================================== */
+
+    const maintenant =
+      new Date();
+
+
+    const annee =
+      maintenant.getFullYear();
+
+
+    const mois =
+      String(
+        maintenant.getMonth() + 1
+      ).padStart(
+        2,
+        "0"
+      );
+
+
+    const jour =
+      String(
+        maintenant.getDate()
+      ).padStart(
+        2,
+        "0"
+      );
+
+
+    datePaiement.value =
+      annee
+      + "-"
+      + mois
+      + "-"
+      + jour;
+
+
+    referencePaiement.value =
+      "PAY-"
+      + annee
+      + "-"
+      + String(
+        Date.now()
+      ).slice(
+        -5
+      );
+
+
+    /* =====================================================
+       CHARGER FACTURES
+    ===================================================== */
+
+    async function chargerFactures() {
+
+      try {
+
+        const response =
+          await fetch(
+            FACTURES_API
+          );
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            "Impossible de charger les factures."
+          );
+
+        }
+
+
+        const data =
+          await response.json();
+
+
+        facturesData =
+          Array.isArray(data)
+            ? data
+            : data.factures || [];
+
+
+        factureSelect.innerHTML =
+          '<option value="">Sélectionner une facture</option>';
+
+
+        facturesData.forEach(
+          function(facture) {
+
+            const id =
+              facture.id_facture ??
+              facture.id;
+
+
+            const numero =
+              facture.numero_facture ??
+              "Facture #" + id;
+
+
+            const patient =
+              (
+                (
+                  facture.prenom_patient ||
+                  facture.prenom ||
+                  ""
+                )
+                + " "
+                +
+                (
+                  facture.nom_patient ||
+                  facture.nom ||
+                  ""
+                )
+              ).trim();
+
+
+            const option =
+              document.createElement(
+                "option"
+              );
+
+
+            option.value =
+              id;
+
+
+            option.textContent =
+              numero
+              +
+              (
+                patient
+                  ? " - " + patient
+                  : ""
+              );
+
+
+            factureSelect.appendChild(
+              option
+            );
+
+          }
+        );
+
+
+        if (factureUrlId) {
+
+          factureSelect.value =
+            String(
+              factureUrlId
+            );
+
+
+          afficherFacture(
+            factureUrlId
+          );
+
+        }
+
+      }
+
+      catch (error) {
+
+        console.error(
+          error
+        );
+
+
+        afficherMessage(
+          "Impossible de charger les factures.",
+          "error"
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       AFFICHER FACTURE
+    ===================================================== */
+
+    function afficherFacture(id) {
+
+      factureCourante =
+        facturesData.find(
+          function(facture) {
+
+            const currentId =
+              facture.id_facture ??
+              facture.id;
+
+
+            return String(
+              currentId
+            ) === String(
+              id
+            );
+
+          }
+        );
+
+
+      if (!factureCourante) {
+
+        factureBox.style.display =
+          "none";
+
+        return;
+
+      }
+
+
+      const numero =
+        factureCourante.numero_facture ??
+        "Facture #" + id;
+
+
+      const patient =
+        (
+          (
+            factureCourante.prenom_patient ||
+            factureCourante.prenom ||
+            ""
+          )
+          + " "
+          +
+          (
+            factureCourante.nom_patient ||
+            factureCourante.nom ||
+            ""
+          )
+        ).trim();
+
+
+      const total =
+        Number(
+          factureCourante.montant_total ??
+          factureCourante.total ??
+          0
+        );
+
+
+      const paye =
+        Number(
+          factureCourante.montant_paye ??
+          factureCourante.deja_paye ??
+          factureCourante.paye ??
+          0
+        );
+
+
+      const reste =
+        Math.max(
+          total - paye,
+          0
+        );
+
+
+      factureNumero.textContent =
+        numero;
+
+
+      facturePatient.textContent =
+        patient ||
+        "Non renseigné";
+
+
+      factureTotal.textContent =
+        total.toLocaleString(
+          "fr-FR"
+        )
+        + " FDJ";
+
+
+      facturePaye.textContent =
+        paye.toLocaleString(
+          "fr-FR"
+        )
+        + " FDJ";
+
+
+      factureReste.textContent =
+        reste.toLocaleString(
+          "fr-FR"
+        )
+        + " FDJ";
+
+
+      resteActuel.textContent =
+        reste.toLocaleString(
+          "fr-FR"
+        )
+        + " FDJ";
+
+
+      nouveauPaiement.textContent =
+        "0 FDJ";
+
+
+      nouveauReste.textContent =
+        reste.toLocaleString(
+          "fr-FR"
+        )
+        + " FDJ";
+
+
+      montantPaiement.value =
+        "";
+
+
+      montantPaiement.max =
+        reste;
+
+
+      factureBox.style.display =
+        "block";
+
+    }
+
+
+    factureSelect.addEventListener(
+      "change",
+      function() {
+
+        afficherFacture(
+          factureSelect.value
+        );
+
+      }
+    );
+
+
+    /* =====================================================
+       CALCUL DIRECT
+    ===================================================== */
+
+    montantPaiement.addEventListener(
+      "input",
+      function() {
+
+        if (!factureCourante) {
+          return;
+        }
+
+
+        const total =
+          Number(
+            factureCourante.montant_total ??
+            factureCourante.total ??
+            0
+          );
+
+
+        const paye =
+          Number(
+            factureCourante.montant_paye ??
+            factureCourante.deja_paye ??
+            factureCourante.paye ??
+            0
+          );
+
+
+        const reste =
+          Math.max(
+            total - paye,
+            0
+          );
+
+
+        let montant =
+          Number(
+            montantPaiement.value
+          );
+
+
+        if (
+          Number.isNaN(montant) ||
+          montant < 0
+        ) {
+
+          montant = 0;
+
+        }
+
+
+        if (montant > reste) {
+
+          montant = reste;
+
+          montantPaiement.value =
+            reste;
+
+        }
+
+
+        const nouveauSolde =
+          reste - montant;
+
+
+        nouveauPaiement.textContent =
+          montant.toLocaleString(
+            "fr-FR"
+          )
+          + " FDJ";
+
+
+        nouveauReste.textContent =
+          nouveauSolde.toLocaleString(
+            "fr-FR"
+          )
+          + " FDJ";
+
+      }
+    );
+
+
+    /* =====================================================
+       ENREGISTRER
+    ===================================================== */
+
+    paiementForm.addEventListener(
+      "submit",
+      async function(event) {
+
+        event.preventDefault();
+
+
+        if (!factureCourante) {
+
+          afficherMessage(
+            "Veuillez sélectionner une facture.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        const idFacture =
+          factureCourante.id_facture ??
+          factureCourante.id;
+
+
+        const total =
+          Number(
+            factureCourante.montant_total ??
+            factureCourante.total ??
+            0
+          );
+
+
+        const paye =
+          Number(
+            factureCourante.montant_paye ??
+            factureCourante.deja_paye ??
+            factureCourante.paye ??
+            0
+          );
+
+
+        const reste =
+          Math.max(
+            total - paye,
+            0
+          );
+
+
+        const montant =
+          Number(
+            montantPaiement.value
+          );
+
+
+        if (
+          !montant ||
+          montant <= 0
+        ) {
+
+          afficherMessage(
+            "Le montant doit être supérieur à 0.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        if (montant > reste) {
+
+          afficherMessage(
+            "Le montant ne peut pas dépasser le reste à payer.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        const paiement = {
+
+          id_facture:
+            idFacture,
+
+          date_paiement:
+            datePaiement.value,
+
+          reference:
+            referencePaiement.value.trim(),
+
+          montant:
+            montant,
+
+          mode_paiement:
+            modePaiement.value,
+
+          statut:
+            statutPaiement.value,
+
+          observation:
+            observationPaiement.value.trim()
+
+        };
+
+
+        if (
+          !paiement.date_paiement ||
+          !paiement.mode_paiement
+        ) {
+
+          afficherMessage(
+            "Veuillez renseigner la date et le mode de paiement.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        try {
+
+          saveButton.disabled =
+            true;
+
+
+          saveButton.textContent =
+            "Enregistrement...";
+
+
+          const response =
+            await fetch(
+              PAIEMENTS_API,
+              {
+
+                method:
+                  "POST",
+
+                headers: {
+
+                  "Content-Type":
+                    "application/json"
+
+                },
+
+                body:
+                  JSON.stringify(
+                    paiement
+                  )
+
+              }
+            );
+
+
+          let data = {};
+
+
+          try {
+
+            data =
+              await response.json();
+
+          }
+
+          catch {
+
+            data = {};
+
+          }
+
+
+          if (!response.ok) {
+
+            throw new Error(
+              data.message ||
+              "Impossible d'enregistrer le paiement."
+            );
+
+          }
+
+
+          afficherMessage(
+            "Paiement enregistré avec succès.",
+            "success"
+          );
+
+
+          setTimeout(
+            function() {
+
+              window.location.href =
+                "paiement.html";
+
+            },
+            1000
+          );
+
+        }
+
+        catch (error) {
+
+          console.error(
+            error
+          );
+
+
+          afficherMessage(
+            error.message,
+            "error"
+          );
+
+        }
+
+        finally {
+
+          saveButton.disabled =
+            false;
+
+
+          saveButton.textContent =
+            "✓ Enregistrer le paiement";
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       MESSAGE
+    ===================================================== */
+
+    function afficherMessage(
+      texte,
+      type
+    ) {
+
+      messageBox.textContent =
+        texte;
+
+
+      messageBox.className =
+        "paiement-modern-message "
+        + type;
+
+
+      messageBox.style.display =
+        "block";
+
+    }
+
+
+    /* =====================================================
+       ANNULER
+    ===================================================== */
+
+    document
+      .getElementById(
+        "cancelButton"
+      )
+      .addEventListener(
+        "click",
+        function() {
+
+          window.location.href =
+            "facture.html";
+
+        }
+      );
+
+
+    chargerFactures();
+
+  </script>
+
+
+</body>
+
+</html>

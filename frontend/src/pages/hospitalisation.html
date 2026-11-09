@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Nouvelle hospitalisation | Al-Shifa</title>
+
+  <link rel="stylesheet" href="../css/style.css">
+
+  <style>
+    .hospitalisation-page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 25px;
+    }
+
+    .patient-back-link {
+      display: inline-block;
+      margin-bottom: 22px;
+      color: #ea580c;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .hospitalisation-header {
+      margin-bottom: 25px;
+    }
+
+    .hospitalisation-small-title {
+      color: #ea580c;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 13px;
+    }
+
+    .hospitalisation-header h1 {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1e293b;
+      margin: 8px 0;
+    }
+
+    .hospitalisation-header p {
+      color: #64748b;
+    }
+
+    .hospitalisation-card {
+      background: white;
+      border-radius: 20px;
+      padding: 35px;
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.06);
+    }
+
+    .hospitalisation-card-header {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding-bottom: 25px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .hospitalisation-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #ffedd5, #fed7aa);
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+    }
+
+    .hospitalisation-card-header h2 {
+      color: #1e293b;
+      font-size: 22px;
+      margin-bottom: 5px;
+    }
+
+    .hospitalisation-card-header p {
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .hospitalisation-section-title {
+      margin: 30px 0 22px;
+      padding: 12px 16px;
+      border-left: 4px solid #ea580c;
+      background: linear-gradient(
+        90deg,
+        #fff7ed,
+        #ffffff
+      );
+      color: #c2410c;
+      font-size: 15px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .hospitalisation-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .form-group label {
+      color: #475569;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .form-group select,
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #cbd5e1;
+      border-radius: 11px;
+      background: #ffffff;
+      color: #334155;
+      font-size: 14px;
+      box-sizing: border-box;
+      outline: none;
+      transition: 0.2s;
+    }
+
+    .form-group select:focus,
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: #f97316;
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.12);
+    }
+
+    .form-group select:disabled {
+      background: #f1f5f9;
+      cursor: not-allowed;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .full-width {
+      grid-column: 1 / -1;
+    }
+
+    .selected-patient-box {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 18px;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 13px;
+      margin-bottom: 25px;
+    }
+
+    .selected-patient-avatar {
+      width: 48px;
+      height: 48px;
+      background: #ea580c;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+    }
+
+    .selected-patient-box strong,
+    .selected-patient-box span {
+      display: block;
+    }
+
+    .selected-patient-box span {
+      color: #64748b;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .hospitalisation-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 15px;
+      margin-top: 35px;
+      padding-top: 25px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .hospitalisation-cancel-button,
+    .hospitalisation-save-button {
+      padding: 14px 24px;
+      border-radius: 11px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+    }
+
+    .hospitalisation-cancel-button {
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .hospitalisation-save-button {
+      background: linear-gradient(135deg, #f97316, #c2410c);
+      color: white;
+      box-shadow: 0 5px 15px rgba(249, 115, 22, 0.25);
+    }
+
+    .hospitalisation-save-button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .hospitalisation-message {
+      margin-top: 25px;
+      padding: 15px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .hospitalisation-message.success {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .hospitalisation-message.error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .hospitalisation-message.info {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .field-hint {
+      color: #64748b;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    @media (max-width: 768px) {
+      .hospitalisation-page {
+        padding: 12px;
+      }
+
+      .hospitalisation-card {
+        padding: 20px;
+      }
+
+      .hospitalisation-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .full-width {
+        grid-column: auto;
+      }
+
+      .hospitalisation-actions {
+        flex-direction: column;
+      }
+
+      .hospitalisation-header h1 {
+        font-size: 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app">
+
+    <div id="sidebar"></div>
+
+    <main class="main">
+
+      <div id="topbar"></div>
+
+      <section class="content">
+
+        <div class="hospitalisation-page">
+
+          <a href="patients.html" class="patient-back-link">
+            ← Retour aux patients
+          </a>
+
+          <div class="hospitalisation-header">
+
+            <p class="hospitalisation-small-title">
+              Gestion hospitalière
+            </p>
+
+            <h1>Nouvelle hospitalisation</h1>
+
+            <p>
+              Enregistrer l'admission d'un patient
+              dans un service de l'Hôpital Al-Shifa.
+            </p>
+
+          </div>
+
+          <div class="hospitalisation-card">
+
+            <div class="hospitalisation-card-header">
+
+              <div class="hospitalisation-icon">
+                🏥
+              </div>
+
+              <div>
+                <h2>Informations d'hospitalisation</h2>
+                <p>
+                  Complétez les informations nécessaires
+                  à l'admission.
+                </p>
+              </div>
+
+            </div>
+
+            <div
+              class="selected-patient-box"
+              id="selectedPatientBox"
+              style="display:none;"
+            >
+
+              <div
+                class="selected-patient-avatar"
+                id="selectedPatientAvatar"
+              >
+                P
+              </div>
+
+              <div>
+                <strong id="selectedPatientName">
+                  Patient
+                </strong>
+
+                <span id="selectedPatientInfo">
+                  Patient sélectionné
+                </span>
+              </div>
+
+            </div>
+
+            <form id="hospitalisationForm">
+
+              <div class="hospitalisation-section-title">
+                Patient et médecin
+              </div>
+
+              <div class="hospitalisation-grid">
+
+                <div class="form-group">
+                  <label for="patientSelect">
+                    Patient *
+                  </label>
+
+                  <select id="patientSelect" required>
+                    <option value="">
+                      Chargement des patients...
+                    </option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="medecinSelect">
+                    Médecin responsable *
+                  </label>
+
+                  <select id="medecinSelect" required>
+                    <option value="">
+                      Chargement des médecins...
+                    </option>
+                  </select>
+                </div>
+
+              </div>
+
+              <div class="hospitalisation-section-title">
+                Affectation
+              </div>
+
+              <div class="hospitalisation-grid">
+
+                <div class="form-group">
+
+                  <label for="serviceSelect">
+                    Service *
+                  </label>
+
+                  <select id="serviceSelect" required>
+                    <option value="">
+                      Chargement des services...
+                    </option>
+                  </select>
+
+                </div>
+
+                <div class="form-group">
+
+                  <label for="chambreSelect">
+                    Chambre *
+                  </label>
+
+                  <select id="chambreSelect" required disabled>
+                    <option value="">
+                      Sélectionner d'abord un service
+                    </option>
+                  </select>
+
+                </div>
+
+                <div class="form-group">
+
+                  <label for="litSelect">
+                    Lit disponible *
+                  </label>
+
+                  <select id="litSelect" required disabled>
+                    <option value="">
+                      Sélectionner d'abord une chambre
+                    </option>
+                  </select>
+
+                  <span class="field-hint" id="litInfo">
+                    Seuls les lits disponibles sont proposés.
+                  </span>
+
+                </div>
+
+                <div class="form-group">
+
+                  <label for="dateEntree">
+                    Date d'entrée *
+                  </label>
+
+                  <input
+                    type="date"
+                    id="dateEntree"
+                    required
+                  >
+
+                </div>
+
+              </div>
+
+              <div class="hospitalisation-section-title">
+                Informations médicales
+              </div>
+
+              <div class="hospitalisation-grid">
+
+                <div class="form-group full-width">
+
+                  <label for="motifHospitalisation">
+                    Motif d'hospitalisation *
+                  </label>
+
+                  <textarea
+                    id="motifHospitalisation"
+                    placeholder="Ex : surveillance médicale, chirurgie, observation..."
+                    required
+                  ></textarea>
+
+                </div>
+
+                <div class="form-group full-width">
+
+                  <label for="diagnosticAdmission">
+                    Diagnostic d'admission
+                  </label>
+
+                  <textarea
+                    id="diagnosticAdmission"
+                    placeholder="Diagnostic établi lors de l'admission..."
+                  ></textarea>
+
+                </div>
+
+                <div class="form-group">
+
+                  <label for="statutHospitalisation">
+                    Statut
+                  </label>
+
+                  <select id="statutHospitalisation">
+
+                    <option value="en_cours">
+                      En cours
+                    </option>
+
+                    <option value="planifiee">
+                      Planifiée
+                    </option>
+
+                    <option value="terminee">
+                      Terminée
+                    </option>
+
+                  </select>
+
+                </div>
+
+              </div>
+
+              <div
+                id="hospitalisationMessage"
+                style="display:none;"
+                role="alert"
+              ></div>
+
+              <div class="hospitalisation-actions">
+
+                <button
+                  type="button"
+                  class="hospitalisation-cancel-button"
+                  id="cancelButton"
+                >
+                  Annuler
+                </button>
+
+                <button
+                  type="submit"
+                  class="hospitalisation-save-button"
+                  id="saveButton"
+                >
+                  Enregistrer l'hospitalisation
+                </button>
+
+              </div>
+
+            </form>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <script type="module">
+
+    import { afficherLayout } from "../js/layout.js";
+
+    afficherLayout("Hospitalisation");
+
+    // ==========================================
+    // CONFIGURATION API
+    // ==========================================
+
+    const API = "http://localhost:3000/api";
+
+    const URLS = {
+      patients: `${API}/patients`,
+      medecins: `${API}/medecins`,
+      services: `${API}/services`,
+      chambres: `${API}/chambres`,
+      lits: `${API}/lits`,
+      hospitalisations: `${API}/hospitalisations`
+    };
+
+    // ==========================================
+    // ELEMENTS HTML
+    // ==========================================
+
+    const $ = (id) => document.getElementById(id);
+
+    const form = $("hospitalisationForm");
+
+    const patientSelect = $("patientSelect");
+    const medecinSelect = $("medecinSelect");
+    const serviceSelect = $("serviceSelect");
+    const chambreSelect = $("chambreSelect");
+    const litSelect = $("litSelect");
+
+    const dateEntree = $("dateEntree");
+    const motifHospitalisation = $("motifHospitalisation");
+    const diagnosticAdmission = $("diagnosticAdmission");
+    const statutHospitalisation = $("statutHospitalisation");
+
+    const saveButton = $("saveButton");
+    const messageBox = $("hospitalisationMessage");
+    const litInfo = $("litInfo");
+
+    const selectedPatientBox = $("selectedPatientBox");
+    const selectedPatientAvatar = $("selectedPatientAvatar");
+    const selectedPatientName = $("selectedPatientName");
+    const selectedPatientInfo = $("selectedPatientInfo");
+
+    const params = new URLSearchParams(window.location.search);
+    const patientUrlId = params.get("patient");
+
+    // ==========================================
+    // DONNEES
+    // ==========================================
+
+    let patientsData = [];
+    let chambresData = [];
+    let litsData = [];
+
+    let chambresChargees = false;
+    let litsCharges = false;
+
+    // ==========================================
+    // FONCTIONS UTILITAIRES
+    // ==========================================
+
+    function afficherMessage(texte, type = "error") {
+
+      messageBox.className =
+        "hospitalisation-message " + type;
+
+      messageBox.textContent = texte;
+      messageBox.style.display = "block";
+
+    }
+
+    function cacherMessage() {
+      messageBox.style.display = "none";
+      messageBox.textContent = "";
+    }
+
+    function extraireListe(data, cle) {
+
+      if (Array.isArray(data)) {
+        return data;
+      }
+
+      if (data && Array.isArray(data[cle])) {
+        return data[cle];
+      }
+
+      if (data && Array.isArray(data.data)) {
+        return data.data;
+      }
+
+      throw new Error(
+        "Format de réponse API incorrect pour : " + cle
+      );
+
+    }
+
+    async function recupererDonnees(url, cle) {
+
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(
+          `Erreur ${response.status} lors du chargement de ${cle}.`
+        );
+      }
+
+      const data = await response.json();
+
+      return extraireListe(data, cle);
+
+    }
+
+    function viderSelect(select, texte) {
+
+      select.innerHTML = "";
+
+      const option = document.createElement("option");
+
+      option.value = "";
+      option.textContent = texte;
+
+      select.appendChild(option);
+
+    }
+
+    function ajouterOption(select, valeur, texte) {
+
+      if (valeur === null || valeur === undefined) {
+        return;
+      }
+
+      const option = document.createElement("option");
+
+      option.value = String(valeur);
+      option.textContent = texte;
+
+      select.appendChild(option);
+
+    }
+
+    function normaliserStatut(statut) {
+
+      return String(statut || "")
+        .trim()
+        .toUpperCase();
+
+    }
+
+    // ==========================================
+    // DATE DU JOUR
+    // ==========================================
+
+    function initialiserDate() {
+
+      const maintenant = new Date();
+
+      const annee = maintenant.getFullYear();
+
+      const mois = String(
+        maintenant.getMonth() + 1
+      ).padStart(2, "0");
+
+      const jour = String(
+        maintenant.getDate()
+      ).padStart(2, "0");
+
+      dateEntree.value = `${annee}-${mois}-${jour}`;
+
+    }
+
+    // ==========================================
+    // PATIENTS
+    // ==========================================
+
+    async function chargerPatients() {
+
+      try {
+
+        patientsData = await recupererDonnees(
+          URLS.patients,
+          "patients"
+        );
+
+        viderSelect(
+          patientSelect,
+          "Sélectionner un patient"
+        );
+
+        patientsData.forEach(patient => {
+
+          ajouterOption(
+            patientSelect,
+            patient.id_patient ?? patient.id,
+            `${patient.prenom || ""} ${patient.nom || ""}`.trim()
+          );
+
+        });
+
+        if (patientUrlId) {
+
+          patientSelect.value = patientUrlId;
+
+          afficherPatientSelectionne();
+
+        }
+
+      } catch (error) {
+
+        console.error("Erreur patients :", error);
+
+        viderSelect(
+          patientSelect,
+          "Impossible de charger les patients"
+        );
+
+        afficherMessage(error.message);
+
+      }
+
+    }
+
+    function afficherPatientSelectionne() {
+
+      const id = patientSelect.value;
+
+      const patient = patientsData.find(
+        p => String(p.id_patient ?? p.id) === String(id)
+      );
+
+      if (!patient) {
+
+        selectedPatientBox.style.display = "none";
+        return;
+
+      }
+
+      const prenom = patient.prenom || "";
+      const nom = patient.nom || "";
+
+      selectedPatientName.textContent =
+        `${prenom} ${nom}`.trim();
+
+      selectedPatientAvatar.textContent =
+        (
+          prenom.charAt(0) + nom.charAt(0)
+        ).toUpperCase() || "P";
+
+      selectedPatientInfo.textContent =
+        `Patient #${id}`;
+
+      selectedPatientBox.style.display = "flex";
+
+    }
+
+    patientSelect.addEventListener(
+      "change",
+      afficherPatientSelectionne
+    );
+
+    // ==========================================
+    // MEDECINS
+    // ==========================================
+
+    async function chargerMedecins() {
+
+      try {
+
+        const medecins = await recupererDonnees(
+          URLS.medecins,
+          "medecins"
+        );
+
+        viderSelect(
+          medecinSelect,
+          "Sélectionner un médecin"
+        );
+
+        medecins.forEach(medecin => {
+
+          const id =
+            medecin.id_medecin ??
+            medecin.id ??
+            medecin.num_medecin;
+
+          const nom =
+            `${medecin.prenom || ""} ${medecin.nom || ""}`.trim();
+
+          ajouterOption(
+            medecinSelect,
+            id,
+            `Dr. ${nom}`
+          );
+
+        });
+
+      } catch (error) {
+
+        console.error("Erreur médecins :", error);
+
+        viderSelect(
+          medecinSelect,
+          "Impossible de charger les médecins"
+        );
+
+        afficherMessage(error.message);
+
+      }
+
+    }
+
+    // ==========================================
+    // SERVICES
+    // ==========================================
+
+    async function chargerServices() {
+
+      try {
+
+        const services = await recupererDonnees(
+          URLS.services,
+          "services"
+        );
+
+        viderSelect(
+          serviceSelect,
+          "Sélectionner un service"
+        );
+
+        services.forEach(service => {
+
+          const id =
+            service.id_service ??
+            service.id;
+
+          const nom =
+            service.nom_service ??
+            service.nom ??
+            service.libelle ??
+            "Service";
+
+          ajouterOption(
+            serviceSelect,
+            id,
+            nom
+          );
+
+        });
+
+      } catch (error) {
+
+        console.error("Erreur services :", error);
+
+        viderSelect(
+          serviceSelect,
+          "Impossible de charger les services"
+        );
+
+        afficherMessage(error.message);
+
+      }
+
+    }
+
+    // ==========================================
+    // CHAMBRES
+    // ==========================================
+
+    async function chargerChambres() {
+
+      try {
+
+        chambresData = await recupererDonnees(
+          URLS.chambres,
+          "chambres"
+        );
+
+        chambresChargees = true;
+
+        filtrerChambres();
+
+      } catch (error) {
+
+        chambresChargees = false;
+
+        console.error("Erreur chambres :", error);
+
+        viderSelect(
+          chambreSelect,
+          "Erreur de chargement des chambres"
+        );
+
+        chambreSelect.disabled = true;
+
+        afficherMessage(error.message);
+
+      }
+
+    }
+
+    function filtrerChambres() {
+
+      const idService = serviceSelect.value;
+
+      viderSelect(
+        chambreSelect,
+        idService
+          ? "Sélectionner une chambre"
+          : "Sélectionner d'abord un service"
+      );
+
+      viderSelect(
+        litSelect,
+        "Sélectionner d'abord une chambre"
+      );
+
+      chambreSelect.disabled = true;
+      litSelect.disabled = true;
+
+      litInfo.textContent =
+        "Seuls les lits disponibles sont proposés.";
+
+      if (!idService || !chambresChargees) {
+        return;
+      }
+
+      const chambresFiltrees = chambresData.filter(
+        chambre =>
+          String(chambre.id_service) === String(idService)
+      );
+
+      if (chambresFiltrees.length === 0) {
+
+        viderSelect(
+          chambreSelect,
+          "Aucune chambre dans ce service"
+        );
+
+        return;
+
+      }
+
+      chambresFiltrees.forEach(chambre => {
+
+        const id =
+          chambre.id_chambre ??
+          chambre.id;
+
+        const numero =
+          chambre.numero_chambre ??
+          chambre.numero ??
+          chambre.nom ??
+          id;
+
+        ajouterOption(
+          chambreSelect,
+          id,
+          `Chambre ${numero}`
+        );
+
+      });
+
+      chambreSelect.disabled = false;
+
+    }
+
+    // ==========================================
+    // LITS
+    // ==========================================
+
+    async function chargerLits() {
+
+      try {
+
+        litsData = await recupererDonnees(
+          URLS.lits,
+          "lits"
+        );
+
+        litsCharges = true;
+
+        filtrerLits();
+
+      } catch (error) {
+
+        litsCharges = false;
+
+        console.error("Erreur lits :", error);
+
+        viderSelect(
+          litSelect,
+          "Impossible de charger les lits"
+        );
+
+        litSelect.disabled = true;
+
+        litInfo.textContent =
+          "Erreur : vérifie la route GET /api/lits.";
+
+        afficherMessage(
+          "Impossible de récupérer les lits. " +
+          "Vérifie que GET /api/lits fonctionne. " +
+          error.message
+        );
+
+      }
+
+    }
+
+    function filtrerLits() {
+
+      const idChambre = chambreSelect.value;
+
+      viderSelect(
+        litSelect,
+        idChambre
+          ? "Sélectionner un lit disponible"
+          : "Sélectionner d'abord une chambre"
+      );
+
+      litSelect.disabled = true;
+
+      if (!idChambre || !litsCharges) {
+        return;
+      }
+
+      const litsDisponibles = litsData.filter(lit => {
+
+        const memeChambre =
+          String(lit.id_chambre) === String(idChambre);
+
+        const disponible =
+          normaliserStatut(lit.statut) === "DISPONIBLE";
+
+        return memeChambre && disponible;
+
+      });
+
+      if (litsDisponibles.length === 0) {
+
+        viderSelect(
+          litSelect,
+          "Aucun lit disponible dans cette chambre"
+        );
+
+        litInfo.textContent =
+          "Cette chambre ne possède aucun lit disponible.";
+
+        return;
+
+      }
+
+      litsDisponibles.forEach(lit => {
+
+        const id =
+          lit.id_lit ??
+          lit.id;
+
+        const numero =
+          lit.numero_lit ??
+          lit.numero ??
+          lit.nom ??
+          id;
+
+        ajouterOption(
+          litSelect,
+          id,
+          `Lit ${numero} — Disponible`
+        );
+
+      });
+
+      litSelect.disabled = false;
+
+      litInfo.textContent =
+        `${litsDisponibles.length} lit(s) disponible(s) dans cette chambre.`;
+
+    }
+
+    // ==========================================
+    // EVENEMENTS SERVICE / CHAMBRE
+    // ==========================================
+
+    serviceSelect.addEventListener("change", () => {
+
+      cacherMessage();
+
+      filtrerChambres();
+
+    });
+
+    chambreSelect.addEventListener("change", () => {
+
+      cacherMessage();
+
+      filtrerLits();
+
+    });
+
+    // ==========================================
+    // ENREGISTRER UNE HOSPITALISATION
+    // ==========================================
+
+    form.addEventListener("submit", async event => {
+
+      event.preventDefault();
+
+      cacherMessage();
+
+      const hospitalisation = {
+
+        id_patient: Number(patientSelect.value),
+
+        id_medecin: Number(medecinSelect.value),
+
+        id_service: Number(serviceSelect.value),
+
+        id_chambre: Number(chambreSelect.value),
+
+        id_lit: Number(litSelect.value),
+
+        date_entree: dateEntree.value,
+
+        motif: motifHospitalisation.value.trim(),
+
+        diagnostic_admission:
+          diagnosticAdmission.value.trim(),
+
+        statut: statutHospitalisation.value
+
+      };
+
+      if (
+        !hospitalisation.id_patient ||
+        !hospitalisation.id_medecin ||
+        !hospitalisation.id_service ||
+        !hospitalisation.id_chambre ||
+        !hospitalisation.id_lit ||
+        !hospitalisation.date_entree ||
+        !hospitalisation.motif
+      ) {
+
+        afficherMessage(
+          "Veuillez remplir tous les champs obligatoires."
+        );
+
+        return;
+
+      }
+
+      try {
+
+        saveButton.disabled = true;
+
+        saveButton.textContent =
+          "Enregistrement en cours...";
+
+        // Actualiser les lits avant l'enregistrement.
+        // Le backend doit aussi vérifier leur disponibilité.
+
+        const responseLits = await fetch(URLS.lits);
+
+        if (!responseLits.ok) {
+          throw new Error(
+            "Impossible de vérifier la disponibilité du lit."
+          );
+        }
+
+        const donneesLits = await responseLits.json();
+
+        const litsActuels = extraireListe(
+          donneesLits,
+          "lits"
+        );
+
+        const litDisponible = litsActuels.some(lit => {
+
+          return (
+            String(lit.id_lit ?? lit.id) ===
+              String(hospitalisation.id_lit) &&
+
+            String(lit.id_chambre) ===
+              String(hospitalisation.id_chambre) &&
+
+            normaliserStatut(lit.statut) ===
+              "DISPONIBLE"
+          );
+
+        });
+
+        if (!litDisponible) {
+
+          throw new Error(
+            "Ce lit n'est plus disponible. " +
+            "Veuillez en sélectionner un autre."
+          );
+
+        }
+
+        const response = await fetch(
+          URLS.hospitalisations,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(hospitalisation)
+          }
+        );
+
+        const data = await response.json().catch(
+          () => ({})
+        );
+
+        if (!response.ok) {
+
+          throw new Error(
+            data.message ||
+            data.error ||
+            "Impossible d'enregistrer l'hospitalisation."
+          );
+
+        }
+
+        afficherMessage(
+          "Hospitalisation enregistrée avec succès.",
+          "success"
+        );
+
+        await chargerLits();
+
+        setTimeout(() => {
+
+          if (patientUrlId) {
+
+            window.location.href =
+              "patient-detail.html?id=" +
+              encodeURIComponent(patientUrlId);
+
+          } else {
+
+            window.location.href =
+              "patients.html";
+
+          }
+
+        }, 1200);
+
+      } catch (error) {
+
+        console.error(
+          "Erreur d'enregistrement :",
+          error
+        );
+
+        afficherMessage(error.message);
+
+        await chargerLits();
+
+      } finally {
+
+        saveButton.disabled = false;
+
+        saveButton.textContent =
+          "Enregistrer l'hospitalisation";
+
+      }
+
+    });
+
+    // ==========================================
+    // ANNULER
+    // ==========================================
+
+    $("cancelButton").addEventListener("click", () => {
+
+      if (patientUrlId) {
+
+        window.location.href =
+          "patient-detail.html?id=" +
+          encodeURIComponent(patientUrlId);
+
+      } else {
+
+        window.location.href = "patients.html";
+
+      }
+
+    });
+
+    // ==========================================
+    // DEMARRAGE
+    // ==========================================
+
+    async function initialiserPage() {
+
+      initialiserDate();
+
+      await Promise.all([
+        chargerPatients(),
+        chargerMedecins(),
+        chargerServices(),
+        chargerChambres(),
+        chargerLits()
+      ]);
+
+    }
+
+    initialiserPage();
+
+  </script>
+
+</body>
+</html>

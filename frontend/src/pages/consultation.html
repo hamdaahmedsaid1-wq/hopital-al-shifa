@@ -1,0 +1,1721 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Consultation - Al-Shifa
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="../css/style.css"
+  >
+
+</head>
+
+<body>
+
+  <div class="app">
+
+    <!-- SIDEBAR -->
+    <div id="sidebar"></div>
+
+
+    <main class="main">
+
+      <!-- TOPBAR -->
+      <div id="topbar"></div>
+
+
+      <section class="content">
+
+        <div class="ordonnance-page">
+
+
+          <!-- RETOUR -->
+
+          <a
+            href="patients.html"
+            class="patient-back-link"
+          >
+            ← Retour aux patients
+          </a>
+
+
+          <!-- TITRE -->
+
+          <div class="ordonnance-header">
+
+            <div>
+
+              <p class="ordonnance-small-title">
+                Consultation médicale
+              </p>
+
+              <h1>
+                Nouvelle consultation
+              </h1>
+
+              <p>
+                Enregistrer une consultation et une prescription médicale
+              </p>
+
+            </div>
+
+          </div>
+          <!-- =================================================
+               CARTE CONSULTATION
+          ================================================== -->
+
+          <div class="ordonnance-card">
+
+
+            <div class="ordonnance-card-header">
+
+              <div class="ordonnance-icon">
+                🩺
+              </div>
+
+              <div>
+
+                <h2>
+                  Informations de la consultation
+                </h2>
+
+                <p>
+                  Complétez les informations médicales du patient
+                </p>
+
+              </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 PATIENT SELECTIONNE
+            ================================================== -->
+
+            <div
+              class="selected-patient-box"
+              id="selectedPatientBox"
+              style="display: none;"
+            >
+
+              <div
+                class="selected-patient-avatar"
+                id="selectedPatientAvatar"
+              >
+                P
+              </div>
+
+              <div>
+
+                <strong id="selectedPatientName">
+                  Patient
+                </strong>
+
+                <span id="selectedPatientInfo">
+                  Patient sélectionné
+                </span>
+
+              </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 FORMULAIRE CONSULTATION
+            ================================================== -->
+
+            <form id="consultationForm">
+
+
+              <!-- PATIENT ET MEDECIN -->
+
+              <div class="ordonnance-section-title">
+                Patient et médecin
+              </div>
+
+
+              <div class="ordonnance-grid">
+
+
+                <!-- PATIENT -->
+
+                <div class="form-group">
+
+                  <label for="patientSelect">
+                    Patient *
+                  </label>
+
+                  <select
+                    id="patientSelect"
+                    required
+                  >
+
+                    <option value="">
+                      Chargement des patients...
+                    </option>
+
+                  </select>
+
+                </div>
+
+
+
+                <!-- MEDECIN -->
+
+                <div class="form-group">
+
+                  <label for="medecinSelect">
+                    Médecin *
+                  </label>
+
+                  <select
+                    id="medecinSelect"
+                    required
+                  >
+
+                    <option value="">
+                      Chargement...
+                    </option>
+
+                  </select>
+
+                </div>
+
+              </div>
+
+
+
+              <!-- =================================================
+                   CONSULTATION
+              ================================================== -->
+
+              <div class="ordonnance-section-title">
+                Consultation
+              </div>
+
+
+              <div class="ordonnance-grid">
+
+
+                <!-- DATE -->
+
+                <div class="form-group">
+
+                  <label for="dateConsultation">
+                    Date de consultation *
+                  </label>
+
+                  <input
+                    type="date"
+                    id="dateConsultation"
+                    required
+                  >
+
+                </div>
+
+
+
+                <!-- DIAGNOSTIC -->
+
+                <div class="form-group">
+
+                  <label for="diagnostic">
+                    Diagnostic *
+                  </label>
+
+                  <input
+                    type="text"
+                    id="diagnostic"
+                    placeholder="Ex : Infection respiratoire"
+                    required
+                  >
+
+                </div>
+
+
+
+                <!-- OBSERVATIONS -->
+
+                <div class="form-group full-width">
+
+                  <label for="observations">
+                    Observations
+                  </label>
+
+                  <textarea
+                    id="observations"
+                    rows="4"
+                    placeholder="Observations médicales, remarques, suivi recommandé..."
+                  ></textarea>
+
+                </div>
+
+
+              </div>
+              <!-- =================================================
+                   PRESCRIPTION / ORDONNANCE
+              ================================================== -->
+
+              <div class="ordonnance-section-title">
+                Prescription
+              </div>
+
+
+              <div class="ordonnance-grid">
+
+
+                <!-- DATE ORDONNANCE -->
+
+                <div class="form-group">
+
+                  <label for="dateOrdonnance">
+                    Date *
+                  </label>
+
+                  <input
+                    type="date"
+                    id="dateOrdonnance"
+                    required
+                  >
+
+                </div>
+
+
+
+                <!-- MOTIF / TITRE -->
+
+                <div class="form-group">
+
+                  <label for="titreOrdonnance">
+                    Motif / titre
+                  </label>
+
+                  <input
+                    type="text"
+                    id="titreOrdonnance"
+                    placeholder="Ex : traitement après consultation"
+                  >
+
+                </div>
+
+
+
+                <!-- PRESCRIPTION -->
+
+                <div class="form-group full-width">
+
+                  <label for="prescription">
+                    Prescription *
+                  </label>
+
+                  <textarea
+                    id="prescription"
+                    rows="6"
+                    placeholder="Ex : Paracétamol 500 mg, 1 comprimé matin et soir pendant 5 jours..."
+                    required
+                  ></textarea>
+
+                </div>
+
+
+
+                <!-- INSTRUCTIONS -->
+
+                <div class="form-group full-width">
+
+                  <label for="instructions">
+                    Instructions
+                  </label>
+
+                  <textarea
+                    id="instructions"
+                    rows="4"
+                    placeholder="Précautions, recommandations, conseils..."
+                  ></textarea>
+
+                </div>
+
+
+              </div>
+
+
+
+              <!-- =================================================
+                   MESSAGE
+              ================================================== -->
+
+              <div
+                id="consultationMessage"
+                style="display: none;"
+              >
+              </div>
+
+
+
+              <!-- =================================================
+                   ACTIONS
+              ================================================== -->
+
+              <div class="ordonnance-actions">
+
+
+                <button
+                  type="button"
+                  class="ordonnance-cancel-button"
+                  id="cancelButton"
+                >
+                  Annuler
+                </button>
+
+
+                <button
+                  type="submit"
+                  class="ordonnance-save-button"
+                  id="saveButton"
+                >
+                  Enregistrer la consultation
+                </button>
+
+
+              </div>
+
+
+            </form>
+
+
+          </div>
+
+
+        </div>
+
+
+      </section>
+
+
+    </main>
+
+
+  </div>
+  <script type="module">
+
+
+    /* =====================================================
+       IMPORTS
+    ===================================================== */
+
+    import {
+      afficherLayout
+    } from "../js/layout.js";
+
+
+    import {
+      secureFetch,
+      getUtilisateurConnecte
+    } from "../js/secure-api.js";
+
+
+    afficherLayout(
+      "Consultation"
+    );
+
+
+
+    /* =====================================================
+       API
+    ===================================================== */
+
+    const API_URL =
+      "http://localhost:3000/api";
+
+
+
+    /* =====================================================
+       UTILISATEUR CONNECTE
+    ===================================================== */
+
+    const utilisateur =
+      getUtilisateurConnecte();
+
+
+    const role =
+      String(
+        utilisateur?.role || ""
+      )
+        .toLowerCase()
+        .trim();
+
+
+    const estAdmin =
+      role.includes("administrateur")
+      ||
+      role.includes("admin");
+
+
+    const estMedecin =
+      role.includes("médecin")
+      ||
+      role.includes("medecin");
+
+
+    /*
+      Seuls administrateur
+      et médecin peuvent accéder
+      à cette page.
+    */
+
+    if (
+      !estAdmin
+      &&
+      !estMedecin
+    ) {
+
+      window.location.replace(
+        "dashboard.html"
+      );
+
+    }
+
+
+
+    /* =====================================================
+       PARAMETRE PATIENT DANS L'URL
+    ===================================================== */
+
+    const params =
+      new URLSearchParams(
+        window.location.search
+      );
+
+
+    const patientUrlId =
+      params.get(
+        "patient"
+      );
+
+
+
+    /* =====================================================
+       ELEMENTS HTML
+    ===================================================== */
+
+    const consultationForm =
+      document.getElementById(
+        "consultationForm"
+      );
+
+
+    const patientSelect =
+      document.getElementById(
+        "patientSelect"
+      );
+
+
+    const medecinSelect =
+      document.getElementById(
+        "medecinSelect"
+      );
+
+
+    const dateConsultation =
+      document.getElementById(
+        "dateConsultation"
+      );
+
+
+    const diagnostic =
+      document.getElementById(
+        "diagnostic"
+      );
+
+
+    const observations =
+      document.getElementById(
+        "observations"
+      );
+
+
+    const dateOrdonnance =
+      document.getElementById(
+        "dateOrdonnance"
+      );
+
+
+    const titreOrdonnance =
+      document.getElementById(
+        "titreOrdonnance"
+      );
+
+
+    const prescription =
+      document.getElementById(
+        "prescription"
+      );
+
+
+    const instructions =
+      document.getElementById(
+        "instructions"
+      );
+
+
+    const saveButton =
+      document.getElementById(
+        "saveButton"
+      );
+
+
+    const cancelButton =
+      document.getElementById(
+        "cancelButton"
+      );
+
+
+    const messageBox =
+      document.getElementById(
+        "consultationMessage"
+      );
+
+
+    const selectedPatientBox =
+      document.getElementById(
+        "selectedPatientBox"
+      );
+
+
+    const selectedPatientAvatar =
+      document.getElementById(
+        "selectedPatientAvatar"
+      );
+
+
+    const selectedPatientName =
+      document.getElementById(
+        "selectedPatientName"
+      );
+
+
+    const selectedPatientInfo =
+      document.getElementById(
+        "selectedPatientInfo"
+      );
+
+
+    let patientsData =
+      [];
+
+
+
+    /* =====================================================
+       AFFICHER MESSAGE
+    ===================================================== */
+
+    function afficherMessage(
+      message,
+      type = "error"
+    ) {
+
+      messageBox.style.display =
+        "block";
+
+
+      messageBox.textContent =
+        message;
+
+
+      if (
+        type === "success"
+      ) {
+
+        messageBox.style.background =
+          "#dcfce7";
+
+        messageBox.style.color =
+          "#166534";
+
+        messageBox.style.border =
+          "1px solid #86efac";
+
+      }
+
+      else {
+
+        messageBox.style.background =
+          "#fee2e2";
+
+        messageBox.style.color =
+          "#991b1b";
+
+        messageBox.style.border =
+          "1px solid #fecaca";
+
+      }
+
+
+      messageBox.style.padding =
+        "12px 15px";
+
+
+      messageBox.style.borderRadius =
+        "10px";
+
+
+      messageBox.style.marginTop =
+        "20px";
+
+    }
+
+
+
+    /* =====================================================
+       MASQUER MESSAGE
+    ===================================================== */
+
+    function masquerMessage() {
+
+      messageBox.style.display =
+        "none";
+
+      messageBox.textContent =
+        "";
+
+    }
+
+
+
+    /* =====================================================
+       DATE DU JOUR
+    ===================================================== */
+
+    function getToday() {
+
+      const aujourdHui =
+        new Date();
+
+
+      const annee =
+        aujourdHui.getFullYear();
+
+
+      const mois =
+        String(
+          aujourdHui.getMonth() + 1
+        )
+          .padStart(
+            2,
+            "0"
+          );
+
+
+      const jour =
+        String(
+          aujourdHui.getDate()
+        )
+          .padStart(
+            2,
+            "0"
+          );
+
+
+      return (
+        `${annee}-${mois}-${jour}`
+      );
+
+    }
+
+
+    dateConsultation.value =
+      getToday();
+
+
+    dateOrdonnance.value =
+      getToday();
+      /* =====================================================
+       CHARGER LES PATIENTS
+    ===================================================== */
+
+    async function chargerPatients() {
+
+      try {
+
+        const response =
+          await secureFetch(
+            `${API_URL}/access/patients`
+          );
+
+
+        if (!response.ok) {
+
+          const erreur =
+            await response
+              .json()
+              .catch(
+                () => ({})
+              );
+
+
+          throw new Error(
+            erreur.message
+            ||
+            "Impossible de charger les patients."
+          );
+
+        }
+
+
+        const data =
+          await response.json();
+
+
+        patientsData =
+          Array.isArray(data)
+            ? data
+            : (
+                data.patients
+                ||
+                []
+              );
+
+
+        patientSelect.innerHTML =
+          '<option value="">Sélectionner un patient</option>';
+
+
+        patientsData.forEach(
+          function(patient) {
+
+            const option =
+              document.createElement(
+                "option"
+              );
+
+
+            option.value =
+              patient.id_patient;
+
+
+            option.textContent =
+              (
+                (patient.prenom || "")
+                +
+                " "
+                +
+                (patient.nom || "")
+              )
+                .trim();
+
+
+            patientSelect.appendChild(
+              option
+            );
+
+          }
+        );
+
+
+        /* =============================================
+           PATIENT RECU DANS L'URL
+        ============================================= */
+
+        if (patientUrlId) {
+
+          const patientAutorise =
+            patientsData.some(
+              patient =>
+                String(
+                  patient.id_patient
+                )
+                ===
+                String(
+                  patientUrlId
+                )
+            );
+
+
+          if (patientAutorise) {
+
+            patientSelect.value =
+              String(
+                patientUrlId
+              );
+
+
+            afficherPatientSelectionne(
+              patientUrlId
+            );
+
+          }
+
+          else {
+
+            afficherMessage(
+              "Vous n'avez pas accès à ce patient.",
+              "error"
+            );
+
+          }
+
+        }
+
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "Erreur patients :",
+          error
+        );
+
+
+        patientSelect.innerHTML =
+          '<option value="">Impossible de charger les patients</option>';
+
+
+        afficherMessage(
+          error.message,
+          "error"
+        );
+
+      }
+
+    }
+
+
+
+    /* =====================================================
+       AFFICHER LE PATIENT SELECTIONNE
+    ===================================================== */
+
+    function afficherPatientSelectionne(
+      id
+    ) {
+
+      const patient =
+        patientsData.find(
+          function(patient) {
+
+            return (
+              String(
+                patient.id_patient
+              )
+              ===
+              String(
+                id
+              )
+            );
+
+          }
+        );
+
+
+      if (!patient) {
+
+        selectedPatientBox.style.display =
+          "none";
+
+        return;
+
+      }
+
+
+      const nom =
+        patient.nom || "";
+
+
+      const prenom =
+        patient.prenom || "";
+
+
+      const initiales =
+        (
+          prenom.charAt(0)
+          +
+          nom.charAt(0)
+        )
+          .toUpperCase();
+
+
+      selectedPatientAvatar.textContent =
+        initiales || "P";
+
+
+      selectedPatientName.textContent =
+        (
+          prenom
+          +
+          " "
+          +
+          nom
+        )
+          .trim();
+
+
+      selectedPatientInfo.textContent =
+        "Patient #"
+        +
+        patient.id_patient;
+
+
+      selectedPatientBox.style.display =
+        "flex";
+
+    }
+
+
+
+    /* =====================================================
+       CHANGEMENT DE PATIENT
+    ===================================================== */
+
+    patientSelect.addEventListener(
+
+      "change",
+
+      function() {
+
+        afficherPatientSelectionne(
+          patientSelect.value
+        );
+
+
+        masquerMessage();
+
+      }
+
+    );
+    /* =====================================================
+       CHARGER LE MEDECIN
+    ===================================================== */
+
+    async function chargerMedecins() {
+
+
+      /* =================================================
+         CAS 1 : MEDECIN CONNECTE
+      ================================================= */
+
+      if (estMedecin) {
+
+        try {
+
+          const response =
+            await secureFetch(
+              `${API_URL}/access/me`
+            );
+
+
+          if (!response.ok) {
+
+            const erreur =
+              await response
+                .json()
+                .catch(
+                  () => ({})
+                );
+
+
+            throw new Error(
+              erreur.message
+              ||
+              "Impossible d'identifier le médecin."
+            );
+
+          }
+
+
+          const data =
+            await response.json();
+
+
+          const medecin =
+            data.medecin;
+
+
+          if (!medecin) {
+
+            throw new Error(
+              "Aucun médecin n'est associé à ce compte."
+            );
+
+          }
+
+
+          medecinSelect.innerHTML =
+            "";
+
+
+          const option =
+            document.createElement(
+              "option"
+            );
+
+
+          option.value =
+            medecin.id_medecin;
+
+
+          option.textContent =
+            "Dr. "
+            +
+            (
+              (medecin.prenom || "")
+              +
+              " "
+              +
+              (medecin.nom || "")
+            )
+              .trim();
+
+
+          option.selected =
+            true;
+
+
+          medecinSelect.appendChild(
+            option
+          );
+
+
+          /*
+            Le médecin connecté
+            ne peut pas choisir
+            un autre médecin.
+          */
+
+          medecinSelect.disabled =
+            true;
+
+        }
+
+        catch (error) {
+
+          console.error(
+            "Erreur médecin :",
+            error
+          );
+
+
+          medecinSelect.innerHTML =
+            '<option value="">Médecin introuvable</option>';
+
+
+          afficherMessage(
+            error.message
+            ||
+            "Impossible d'identifier le médecin.",
+            "error"
+          );
+
+        }
+
+
+        return;
+
+      }
+
+
+
+      /* =================================================
+         CAS 2 : ADMINISTRATEUR
+      ================================================= */
+
+      try {
+
+        const response =
+          await secureFetch(
+            `${API_URL}/medecins`
+          );
+
+
+        if (!response.ok) {
+
+          const erreur =
+            await response
+              .json()
+              .catch(
+                () => ({})
+              );
+
+
+          throw new Error(
+            erreur.message
+            ||
+            "Impossible de charger les médecins."
+          );
+
+        }
+
+
+        const data =
+          await response.json();
+
+
+        const medecins =
+          Array.isArray(data)
+            ? data
+            : (
+                data.medecins
+                ||
+                []
+              );
+
+
+        medecinSelect.innerHTML =
+          '<option value="">Sélectionner un médecin</option>';
+
+
+        medecins.forEach(
+
+          function(medecin) {
+
+            const id =
+              medecin.id_medecin
+              ??
+              medecin.id
+              ??
+              medecin.num_medecin;
+
+
+            const option =
+              document.createElement(
+                "option"
+              );
+
+
+            option.value =
+              id;
+
+
+            option.textContent =
+              "Dr. "
+              +
+              (
+                (medecin.prenom || "")
+                +
+                " "
+                +
+                (medecin.nom || "")
+              )
+                .trim();
+
+
+            medecinSelect.appendChild(
+              option
+            );
+
+          }
+
+        );
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "Erreur médecins :",
+          error
+        );
+
+
+        medecinSelect.innerHTML =
+          '<option value="">Impossible de charger les médecins</option>';
+
+
+        afficherMessage(
+          error.message
+          ||
+          "Impossible de charger les médecins.",
+          "error"
+        );
+
+      }
+
+    }
+    /* =====================================================
+       ENREGISTRER CONSULTATION + ORDONNANCE
+    ===================================================== */
+
+    consultationForm.addEventListener(
+
+      "submit",
+
+      async function(event) {
+
+        event.preventDefault();
+
+        masquerMessage();
+
+
+        const idPatient =
+          Number(
+            patientSelect.value
+          );
+
+
+        const idMedecin =
+          Number(
+            medecinSelect.value
+          );
+
+
+        /* =================================================
+           VERIFICATIONS
+        ================================================= */
+
+        if (!idPatient) {
+
+          afficherMessage(
+            "Veuillez sélectionner un patient.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        if (!idMedecin) {
+
+          afficherMessage(
+            "Veuillez sélectionner un médecin.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        if (!dateConsultation.value) {
+
+          afficherMessage(
+            "Veuillez sélectionner la date de consultation.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        if (
+          !diagnostic.value.trim()
+        ) {
+
+          afficherMessage(
+            "Veuillez saisir le diagnostic.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        if (!dateOrdonnance.value) {
+
+          afficherMessage(
+            "Veuillez sélectionner la date de l'ordonnance.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        if (
+          !prescription.value.trim()
+        ) {
+
+          afficherMessage(
+            "Veuillez saisir la prescription.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        try {
+
+          saveButton.disabled =
+            true;
+
+
+          saveButton.textContent =
+            "Enregistrement...";
+
+
+          /* =================================================
+             1. CREER LA CONSULTATION
+          ================================================= */
+
+          const consultationData = {
+
+            date_consultation:
+              dateConsultation.value,
+
+            diagnostic:
+              diagnostic.value.trim(),
+
+            observations:
+              observations.value.trim(),
+
+            id_patient:
+              idPatient,
+
+            id_medecin:
+              idMedecin
+
+          };
+
+
+          console.log(
+            "CONSULTATION ENVOYEE :",
+            consultationData
+          );
+
+
+          const consultationResponse =
+            await secureFetch(
+
+              `${API_URL}/consultations`,
+
+              {
+
+                method:
+                  "POST",
+
+                headers: {
+
+                  "Content-Type":
+                    "application/json"
+
+                },
+
+                body:
+                  JSON.stringify(
+                    consultationData
+                  )
+
+              }
+
+            );
+
+
+          const consultationResult =
+            await consultationResponse
+              .json()
+              .catch(
+                () => ({})
+              );
+
+
+          if (
+            !consultationResponse.ok
+          ) {
+
+            throw new Error(
+
+              consultationResult.erreur
+              ||
+              consultationResult.message
+              ||
+              "Erreur lors de l'enregistrement de la consultation."
+
+            );
+
+          }
+
+
+          /* =================================================
+             RECUPERER ID CONSULTATION
+          ================================================= */
+
+          const idConsultation =
+            Number(
+              consultationResult.id_consultation
+            );
+
+
+          if (!idConsultation) {
+
+            throw new Error(
+              "L'identifiant de la consultation n'a pas été retourné."
+            );
+
+          }
+
+
+          console.log(
+            "ID CONSULTATION CREEE :",
+            idConsultation
+          );
+
+
+          /* =================================================
+             2. CREER L'ORDONNANCE
+          ================================================= */
+
+          const ordonnanceData = {
+
+            date_ordonnance:
+              dateOrdonnance.value,
+
+            id_consultation:
+              idConsultation,
+
+            motif:
+              titreOrdonnance
+                .value
+                .trim(),
+
+            prescription:
+              prescription
+                .value
+                .trim(),
+
+            instructions:
+              instructions
+                .value
+                .trim()
+
+          };
+
+
+          console.log(
+            "ORDONNANCE ENVOYEE :",
+            ordonnanceData
+          );
+
+
+          const ordonnanceResponse =
+            await secureFetch(
+
+              `${API_URL}/ordonnances`,
+
+              {
+
+                method:
+                  "POST",
+
+                headers: {
+
+                  "Content-Type":
+                    "application/json"
+
+                },
+
+                body:
+                  JSON.stringify(
+                    ordonnanceData
+                  )
+
+              }
+
+            );
+
+
+          const ordonnanceResult =
+            await ordonnanceResponse
+              .json()
+              .catch(
+                () => ({})
+              );
+
+
+          if (
+            !ordonnanceResponse.ok
+          ) {
+
+            throw new Error(
+
+              ordonnanceResult.erreur
+              ||
+              ordonnanceResult.message
+              ||
+              "La consultation a été créée, mais l'ordonnance n'a pas pu être enregistrée."
+
+            );
+
+          }
+
+
+          /* =================================================
+             SUCCES
+          ================================================= */
+
+          afficherMessage(
+
+            "Consultation et ordonnance enregistrées avec succès.",
+
+            "success"
+
+          );
+
+
+          console.log(
+            "ORDONNANCE CREEE :",
+            ordonnanceResult
+          );
+
+
+          /* =================================================
+             VIDER LES CHAMPS MEDICAUX
+          ================================================= */
+
+          diagnostic.value =
+            "";
+
+
+          observations.value =
+            "";
+
+
+          titreOrdonnance.value =
+            "";
+
+
+          prescription.value =
+            "";
+
+
+          instructions.value =
+            "";
+
+
+          dateConsultation.value =
+            getToday();
+
+
+          dateOrdonnance.value =
+            getToday();
+
+
+        }
+
+        catch (error) {
+
+          console.error(
+            "ERREUR CONSULTATION / ORDONNANCE :",
+            error
+          );
+
+
+          afficherMessage(
+
+            error.message
+            ||
+            "Une erreur est survenue.",
+
+            "error"
+
+          );
+
+        }
+
+        finally {
+
+          saveButton.disabled =
+            false;
+
+
+          saveButton.textContent =
+            "Enregistrer la consultation";
+
+        }
+
+      }
+
+    );
+    /* =====================================================
+       ANNULER
+    ===================================================== */
+
+    cancelButton.addEventListener(
+
+      "click",
+
+      function() {
+
+        if (patientUrlId) {
+
+          window.location.href =
+            `patient-detail.html?id=${patientUrlId}`;
+
+        }
+
+        else {
+
+          window.location.href =
+            "patients.html";
+
+        }
+
+      }
+
+    );
+
+
+
+    /* =====================================================
+       INITIALISER LA PAGE
+    ===================================================== */
+
+    async function initialiserPage() {
+
+      try {
+
+        await chargerPatients();
+
+        await chargerMedecins();
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "ERREUR INITIALISATION PAGE :",
+          error
+        );
+
+
+        afficherMessage(
+          "Impossible d'initialiser la page.",
+          "error"
+        );
+
+      }
+
+    }
+
+
+
+    /* =====================================================
+       DEMARRAGE
+    ===================================================== */
+
+    initialiserPage();
+
+
+  </script>
+
+
+</body>
+
+</html>

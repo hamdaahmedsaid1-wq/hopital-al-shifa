@@ -1,0 +1,2842 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Patients - Hôpital Al-Shifa
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="../css/style.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="../css/patients-orange.css"
+  >
+
+</head>
+
+
+<body>
+
+  <div class="app">
+
+
+    <!-- =========================================
+         SIDEBAR
+    ========================================== -->
+
+    <div id="sidebar"></div>
+
+
+    <!-- =========================================
+         CONTENU PRINCIPAL
+    ========================================== -->
+
+    <main class="main">
+
+
+      <!-- TOPBAR -->
+
+      <div id="topbar"></div>
+
+
+      <div class="patients-page">
+
+
+        <!-- =====================================
+             TITRE
+        ====================================== -->
+
+        <section class="patients-heading">
+
+          <div class="patients-title-icon">
+
+            👥
+
+          </div>
+
+
+          <div>
+
+            <h1>
+              Gestion des patients
+            </h1>
+
+            <p>
+              Recherchez, consultez et gérez les informations des patients.
+            </p>
+
+          </div>
+
+        </section>
+
+
+
+        <!-- =====================================
+             RECHERCHE + FILTRES
+        ====================================== -->
+
+        <section class="patients-toolbar">
+
+
+          <div class="patients-search-row">
+
+
+            <div class="patients-search-box">
+
+              <span class="patients-search-icon">
+                🔍
+              </span>
+
+              <input
+                type="text"
+                id="patientSearch"
+                placeholder="Rechercher par nom, prénom, téléphone, numéro de dossier..."
+              >
+
+            </div>
+
+
+            <button
+              type="button"
+              class="patient-search-button"
+              id="searchPatientBtn"
+            >
+
+              Rechercher
+
+            </button>
+
+
+            <button
+              type="button"
+              class="patient-add-button"
+              id="newPatientBtn"
+            >
+
+              <span>＋</span>
+
+              Nouveau patient
+
+            </button>
+
+          </div>
+
+
+
+          <div class="patients-filter-row">
+
+
+            <!-- SERVICE -->
+
+            <select id="serviceFilter">
+
+              <option value="">
+                Tous les services
+              </option>
+
+              <option value="Médecine générale">
+                Médecine générale
+              </option>
+
+              <option value="Cardiologie">
+                Cardiologie
+              </option>
+
+              <option value="Pédiatrie">
+                Pédiatrie
+              </option>
+
+              <option value="Orthopédie">
+                Orthopédie
+              </option>
+
+              <option value="Chirurgie">
+                Chirurgie
+              </option>
+
+              <option value="Urgences">
+                Urgences
+              </option>
+
+            </select>
+
+
+            <!-- STATUT -->
+
+            <select id="statusFilter">
+
+              <option value="">
+                Tous les statuts
+              </option>
+
+              <option value="Actif">
+                Actif
+              </option>
+
+              <option value="Hospitalisé">
+                Hospitalisé
+              </option>
+
+              <option value="Sorti">
+                Sorti
+              </option>
+
+            </select>
+
+
+            <!-- GROUPE SANGUIN -->
+
+            <select id="bloodFilter">
+
+              <option value="">
+                Tous les groupes sanguins
+              </option>
+
+              <option value="A+">
+                A+
+              </option>
+
+              <option value="A-">
+                A-
+              </option>
+
+              <option value="B+">
+                B+
+              </option>
+
+              <option value="B-">
+                B-
+              </option>
+
+              <option value="AB+">
+                AB+
+              </option>
+
+              <option value="AB-">
+                AB-
+              </option>
+
+              <option value="O+">
+                O+
+              </option>
+
+              <option value="O-">
+                O-
+              </option>
+
+            </select>
+
+
+            <button
+              type="button"
+              class="patient-reset-button"
+              id="resetFiltersBtn"
+            >
+
+              Réinitialiser
+
+            </button>
+
+          </div>
+
+        </section>
+
+
+
+        <!-- =====================================
+             TABLEAU
+        ====================================== -->
+
+        <section class="patients-table-card">
+
+
+          <div class="patients-table-scroll">
+
+
+            <table class="patients-table">
+
+
+              <thead>
+
+                <tr>
+
+                  <th class="checkbox-column">
+
+                    <input
+                      type="checkbox"
+                    >
+
+                  </th>
+
+                  <th>
+                    N° Dossier
+                  </th>
+
+                  <th>
+                    Nom et prénom
+                  </th>
+
+                  <th>
+                    Date de naissance
+                  </th>
+
+                  <th>
+                    Âge
+                  </th>
+
+                  <th>
+                    Genre
+                  </th>
+
+                  <th>
+                    Groupe sanguin
+                  </th>
+
+                  <th>
+                    Téléphone
+                  </th>
+
+                  <th>
+                    Statut
+                  </th>
+
+                  <th>
+                    Actions
+                  </th>
+
+                </tr>
+
+              </thead>
+
+
+
+              <tbody id="patientsTableBody">
+
+                <tr>
+
+                  <td
+                    colspan="10"
+                    class="patients-empty"
+                  >
+
+                    Chargement des patients...
+
+                  </td>
+
+                </tr>
+
+              </tbody>
+
+
+            </table>
+
+          </div>
+
+
+
+          <!-- =================================
+               PAGINATION
+          ================================== -->
+
+          <div class="patients-pagination">
+
+
+            <div class="patients-pagination-info">
+
+              Affichage de
+
+              <strong id="paginationStart">
+                0
+              </strong>
+
+              à
+
+              <strong id="paginationEnd">
+                0
+              </strong>
+
+              sur
+
+              <strong id="paginationTotal">
+                0
+              </strong>
+
+              patients
+
+            </div>
+
+
+
+            <div class="patients-pages">
+
+
+              <button
+                type="button"
+                class="pagination-arrow"
+                id="previousPage"
+              >
+                ‹
+              </button>
+
+
+              <span id="pageNumbers"></span>
+
+
+              <button
+                type="button"
+                class="pagination-arrow"
+                id="nextPage"
+              >
+                ›
+              </button>
+
+            </div>
+
+
+
+            <select
+              class="patients-per-page"
+              id="patientsPerPage"
+            >
+
+              <option value="8">
+                8 par page
+              </option>
+
+              <option value="10">
+                10 par page
+              </option>
+
+              <option value="20">
+                20 par page
+              </option>
+
+            </select>
+
+
+          </div>
+
+        </section>
+
+
+      </div>
+
+    </main>
+
+  </div>
+
+
+
+  <!-- =========================================
+       MODAL NOUVEAU PATIENT
+  ========================================== -->
+
+  <div
+    class="patient-modal"
+    id="patientModal"
+  >
+
+    <div class="patient-modal-box">
+
+
+      <div class="patient-modal-header">
+
+
+        <div>
+
+          <h2>
+            Nouveau patient
+          </h2>
+
+          <p>
+            Ajouter un nouveau patient à l'Hôpital Al-Shifa.
+          </p>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="patient-modal-close"
+          id="closePatientModal"
+        >
+
+          ×
+
+        </button>
+
+
+      </div>
+
+
+
+      <form id="patientForm">
+
+
+        <div class="patient-form-grid">
+
+
+          <!-- NOM -->
+
+          <div class="patient-form-group">
+
+            <label>
+              Nom
+            </label>
+
+            <input
+              type="text"
+              id="patientNom"
+              required
+            >
+
+          </div>
+
+
+
+          <!-- PRENOM -->
+
+          <div class="patient-form-group">
+
+            <label>
+              Prénom
+            </label>
+
+            <input
+              type="text"
+              id="patientPrenom"
+              required
+            >
+
+          </div>
+
+
+
+          <!-- DATE NAISSANCE -->
+
+          <div class="patient-form-group">
+
+            <label>
+              Date de naissance
+            </label>
+
+            <input
+              type="date"
+              id="patientNaissance"
+              required
+            >
+
+          </div>
+
+
+
+          <!-- GENRE -->
+
+          <div class="patient-form-group">
+
+            <label>
+              Genre
+            </label>
+
+            <select
+              id="patientGenre"
+              required
+            >
+
+              <option value="">
+                Sélectionner
+              </option>
+
+              <option value="Homme">
+                Homme
+              </option>
+
+              <option value="Femme">
+                Femme
+              </option>
+
+            </select>
+
+          </div>
+
+
+
+          <!-- GROUPE SANGUIN -->
+
+          <div class="patient-form-group">
+
+            <label>
+              Groupe sanguin
+            </label>
+
+            <select id="patientBlood">
+
+              <option value="">
+                Sélectionner
+              </option>
+
+              <option value="A+">
+                A+
+              </option>
+
+              <option value="A-">
+                A-
+              </option>
+
+              <option value="B+">
+                B+
+              </option>
+
+              <option value="B-">
+                B-
+              </option>
+
+              <option value="AB+">
+                AB+
+              </option>
+
+              <option value="AB-">
+                AB-
+              </option>
+
+              <option value="O+">
+                O+
+              </option>
+
+              <option value="O-">
+                O-
+              </option>
+
+            </select>
+
+          </div>
+
+
+
+          <!-- TELEPHONE -->
+
+          <div class="patient-form-group">
+
+            <label>
+              Téléphone
+            </label>
+
+            <input
+              type="text"
+              id="patientPhone"
+              placeholder="77 12 34 56"
+            >
+
+          </div>
+
+
+
+          <!-- ADRESSE -->
+
+          <div class="patient-form-group full">
+
+            <label>
+              Adresse
+            </label>
+
+            <input
+              type="text"
+              id="patientAddress"
+              placeholder="Djibouti"
+            >
+
+          </div>
+
+
+        </div>
+
+
+
+        <div class="patient-modal-actions">
+
+
+          <button
+            type="button"
+            class="patient-cancel-btn"
+            id="cancelPatientBtn"
+          >
+
+            Annuler
+
+          </button>
+
+
+          <button
+            type="submit"
+            class="patient-save-btn"
+          >
+
+            Enregistrer le patient
+
+          </button>
+
+
+        </div>
+
+
+      </form>
+
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =========================================
+       JAVASCRIPT
+  ========================================== -->
+
+  <script type="module">
+
+
+    /* =========================================
+       IMPORTS
+    ========================================== */
+
+    import {
+      afficherLayout
+    } from "../js/layout.js";
+
+
+    import {
+      secureFetch,
+      getUtilisateurConnecte
+    } from "../js/secure-api.js";
+
+
+    afficherLayout();
+
+
+
+    /* =========================================
+       API
+    ========================================== */
+
+    const API_URL =
+      "http://localhost:3000/api";
+
+
+
+    /* =========================================
+       UTILISATEUR CONNECTE
+    ========================================== */
+
+    const utilisateur =
+      getUtilisateurConnecte();
+
+
+    const role =
+      String(
+        utilisateur?.role || ""
+      )
+        .toLowerCase()
+        .trim();
+
+
+    const estAdmin =
+      role.includes("administrateur")
+      ||
+      role.includes("admin");
+
+
+    const estMedecin =
+      role.includes("médecin")
+      ||
+      role.includes("medecin");
+
+
+    const estReception =
+      role.includes("réception")
+      ||
+      role.includes("reception");
+
+
+    /*
+      Seuls ADMIN et RECEPTION
+      peuvent ajouter / modifier /
+      supprimer les patients
+    */
+
+    const peutGererPatients =
+      estAdmin ||
+      estReception;
+
+
+
+    /* =========================================
+       VARIABLES
+    ========================================== */
+
+    let patients = [];
+
+    let filteredPatients = [];
+
+    let currentPage = 1;
+
+    let perPage = 8;
+
+
+
+    /* =========================================
+       ELEMENTS HTML
+    ========================================== */
+
+    const tbody =
+      document.getElementById(
+        "patientsTableBody"
+      );
+
+
+    const searchInput =
+      document.getElementById(
+        "patientSearch"
+      );
+
+
+    const serviceFilter =
+      document.getElementById(
+        "serviceFilter"
+      );
+
+
+    const statusFilter =
+      document.getElementById(
+        "statusFilter"
+      );
+
+
+    const bloodFilter =
+      document.getElementById(
+        "bloodFilter"
+      );
+
+
+    const modal =
+      document.getElementById(
+        "patientModal"
+      );
+
+
+    const form =
+      document.getElementById(
+        "patientForm"
+      );
+
+
+    const newPatientBtn =
+      document.getElementById(
+        "newPatientBtn"
+      );
+
+
+
+    /* =========================================
+       PERMISSIONS VISUELLES
+    ========================================== */
+
+    if (!peutGererPatients) {
+
+      if (newPatientBtn) {
+
+        newPatientBtn.style.display =
+          "none";
+
+      }
+
+    }
+
+
+
+    /* =========================================
+       CALCUL AGE
+    ========================================== */
+
+    function calculateAge(date) {
+
+      if (!date) {
+        return "-";
+      }
+
+
+      const birth =
+        new Date(date);
+
+
+      const today =
+        new Date();
+
+
+      let age =
+        today.getFullYear()
+        -
+        birth.getFullYear();
+
+
+      const month =
+        today.getMonth()
+        -
+        birth.getMonth();
+
+
+      if (
+
+        month < 0
+
+        ||
+
+        (
+          month === 0
+
+          &&
+
+          today.getDate()
+          <
+          birth.getDate()
+        )
+
+      ) {
+
+        age--;
+
+      }
+
+
+      return age;
+
+    }
+
+
+
+    /* =========================================
+       FORMAT DATE
+    ========================================== */
+
+    function formatDate(date) {
+
+      if (!date) {
+        return "-";
+      }
+
+
+      return new Date(date)
+        .toLocaleDateString(
+          "fr-FR"
+        );
+
+    }
+
+
+
+    /* =========================================
+       CLASSE GENRE
+    ========================================== */
+
+    function genderClass(gender) {
+
+      const value =
+        String(
+          gender || ""
+        )
+          .toLowerCase();
+
+
+      if (
+
+        value === "femme"
+
+        ||
+
+        value === "f"
+
+      ) {
+
+        return "patient-gender female";
+
+      }
+
+
+      return "patient-gender male";
+
+    }
+
+
+
+    /* =========================================
+       CLASSE STATUT
+    ========================================== */
+
+    function statusClass(status) {
+
+      const value =
+        String(
+          status || ""
+        )
+          .toLowerCase();
+
+
+      if (
+        value.includes(
+          "hospital"
+        )
+      ) {
+
+        return "patient-status hospitalized";
+
+      }
+
+
+      if (
+        value === "sorti"
+      ) {
+
+        return "patient-status discharged";
+
+      }
+
+
+      return "patient-status active";
+
+    }
+
+
+
+    /* =========================================
+       CREER UNE CELLULE
+    ========================================== */
+
+    function createCell(text) {
+
+      const td =
+        document.createElement(
+          "td"
+        );
+
+
+      td.textContent =
+        text;
+
+
+      return td;
+
+    }
+
+
+
+    /* =========================================
+       AFFICHAGE PATIENTS
+    ========================================== */
+
+    function renderPatients() {
+
+
+      tbody.innerHTML =
+        "";
+
+
+      const start =
+        (currentPage - 1)
+        *
+        perPage;
+
+
+      const end =
+        start
+        +
+        perPage;
+
+
+      const visible =
+        filteredPatients.slice(
+          start,
+          end
+        );
+
+
+
+      /* AUCUN PATIENT */
+
+      if (
+        visible.length === 0
+      ) {
+
+        const tr =
+          document.createElement(
+            "tr"
+          );
+
+
+        const td =
+          document.createElement(
+            "td"
+          );
+
+
+        td.colSpan =
+          10;
+
+
+        td.className =
+          "patients-empty";
+
+
+        td.textContent =
+          "Aucun patient trouvé.";
+
+
+        tr.appendChild(
+          td
+        );
+
+
+        tbody.appendChild(
+          tr
+        );
+
+
+        updatePagination();
+
+
+        return;
+
+      }
+
+
+
+      /* PATIENTS */
+
+      visible.forEach(
+        (patient, index) => {
+
+
+          const id =
+            patient.id_patient
+            ||
+            patient.id
+            ||
+            index + 1;
+
+
+          const nom =
+            patient.nom
+            ||
+            "";
+
+
+          const prenom =
+            patient.prenom
+            ||
+            "";
+
+
+          const dossier =
+            patient.numero_dossier
+
+            ||
+
+            patient.num_dossier
+
+            ||
+
+            `P-2026-${String(id).padStart(
+              3,
+              "0"
+            )}`;
+
+
+          const naissance =
+            patient.date_naissance
+
+            ||
+
+            patient.naissance;
+
+
+          const genre =
+            patient.sexe
+
+            ||
+
+            patient.genre
+
+            ||
+
+            "-";
+
+
+          const blood =
+            patient.groupe_sanguin
+
+            ||
+
+            "-";
+
+
+          const telephone =
+            patient.telephone
+
+            ||
+
+            "-";
+
+
+          const statut =
+            patient.statut
+
+            ||
+
+            "Actif";
+
+
+
+          const tr =
+            document.createElement(
+              "tr"
+            );
+
+
+
+          /* CHECKBOX */
+
+          const checkboxTd =
+            document.createElement(
+              "td"
+            );
+
+
+          checkboxTd.className =
+            "checkbox-column";
+
+
+          const checkbox =
+            document.createElement(
+              "input"
+            );
+
+
+          checkbox.type =
+            "checkbox";
+
+
+          checkboxTd.appendChild(
+            checkbox
+          );
+
+
+          tr.appendChild(
+            checkboxTd
+          );
+
+
+
+          /* DOSSIER */
+
+          const dossierTd =
+            createCell(
+              dossier
+            );
+
+
+          dossierTd.className =
+            "patient-dossier";
+
+
+          tr.appendChild(
+            dossierTd
+          );
+
+
+
+          /* NOM */
+
+          const nameTd =
+            document.createElement(
+              "td"
+            );
+
+
+          const nameCell =
+            document.createElement(
+              "div"
+            );
+
+
+          nameCell.className =
+            "patient-name-cell";
+
+
+          const avatar =
+            document.createElement(
+              "div"
+            );
+
+
+          avatar.className =
+            "patient-avatar";
+
+
+          avatar.textContent =
+            (prenom || "P")
+              .charAt(0)
+              .toUpperCase();
+
+
+          const strong =
+            document.createElement(
+              "strong"
+            );
+
+
+          strong.textContent =
+            `${prenom} ${nom}`;
+
+
+          nameCell.appendChild(
+            avatar
+          );
+
+
+          nameCell.appendChild(
+            strong
+          );
+
+
+          nameTd.appendChild(
+            nameCell
+          );
+
+
+          tr.appendChild(
+            nameTd
+          );
+
+
+
+          /* DATE NAISSANCE */
+
+          tr.appendChild(
+
+            createCell(
+
+              formatDate(
+                naissance
+              )
+
+            )
+
+          );
+
+
+
+          /* AGE */
+
+          const age =
+            calculateAge(
+              naissance
+            );
+
+
+          tr.appendChild(
+
+            createCell(
+
+              age === "-"
+                ? "-"
+                : `${age} ans`
+
+            )
+
+          );
+
+
+
+          /* GENRE */
+
+          const genderTd =
+            document.createElement(
+              "td"
+            );
+
+
+          const genderBadge =
+            document.createElement(
+              "span"
+            );
+
+
+          genderBadge.className =
+            genderClass(
+              genre
+            );
+
+
+          genderBadge.textContent =
+            genre;
+
+
+          genderTd.appendChild(
+            genderBadge
+          );
+
+
+          tr.appendChild(
+            genderTd
+          );
+
+
+
+          /* GROUPE SANGUIN */
+
+          const bloodTd =
+            document.createElement(
+              "td"
+            );
+
+
+          const bloodBadge =
+            document.createElement(
+              "span"
+            );
+
+
+          bloodBadge.className =
+            "patient-blood";
+
+
+          bloodBadge.textContent =
+            blood;
+
+
+          bloodTd.appendChild(
+            bloodBadge
+          );
+
+
+          tr.appendChild(
+            bloodTd
+          );
+
+
+
+          /* TELEPHONE */
+
+          tr.appendChild(
+
+            createCell(
+              telephone
+            )
+
+          );
+
+
+
+          /* STATUT */
+
+          const statusTd =
+            document.createElement(
+              "td"
+            );
+
+
+          const statusBadge =
+            document.createElement(
+              "span"
+            );
+
+
+          statusBadge.className =
+            statusClass(
+              statut
+            );
+
+
+          statusBadge.textContent =
+            statut;
+
+
+          statusTd.appendChild(
+            statusBadge
+          );
+
+
+          tr.appendChild(
+            statusTd
+          );
+
+
+
+          /* ACTIONS */
+
+          const actionsTd =
+            document.createElement(
+              "td"
+            );
+
+
+          const actions =
+            document.createElement(
+              "div"
+            );
+
+
+          actions.className =
+            "patient-actions";
+
+
+
+          /* CONSULTER */
+
+          const viewButton =
+            document.createElement(
+              "button"
+            );
+
+
+          viewButton.type =
+            "button";
+
+
+          viewButton.className =
+            "patient-action-btn view";
+
+
+          viewButton.textContent =
+            "👁";
+
+
+          viewButton.title =
+            "Consulter le dossier";
+
+
+          viewButton.addEventListener(
+
+            "click",
+
+            () => {
+
+              window.location.href =
+                `patient-detail.html?id=${id}`;
+
+            }
+
+          );
+
+
+          actions.appendChild(
+            viewButton
+          );
+
+
+
+          /*
+             ADMIN + RECEPTION
+             peuvent modifier/supprimer
+          */
+
+          if (
+            peutGererPatients
+          ) {
+
+
+            /* MODIFIER */
+
+            const editButton =
+              document.createElement(
+                "button"
+              );
+
+
+            editButton.type =
+              "button";
+
+
+            editButton.className =
+              "patient-action-btn edit";
+
+
+            editButton.textContent =
+              "✎";
+
+
+            editButton.title =
+              "Modifier";
+
+
+            editButton.addEventListener(
+
+              "click",
+
+              () => {
+
+                window.location.href =
+                  `patient-detail.html?id=${id}&edit=1`;
+
+              }
+
+            );
+
+
+            actions.appendChild(
+              editButton
+            );
+
+
+
+            /* SUPPRIMER */
+
+            const deleteButton =
+              document.createElement(
+                "button"
+              );
+
+
+            deleteButton.type =
+              "button";
+
+
+            deleteButton.className =
+              "patient-action-btn more";
+
+
+            deleteButton.textContent =
+              "⋮";
+
+
+            deleteButton.title =
+              "Supprimer";
+
+
+            deleteButton.addEventListener(
+
+              "click",
+
+              () => {
+
+                deletePatient(
+                  id
+                );
+
+              }
+
+            );
+
+
+            actions.appendChild(
+              deleteButton
+            );
+
+          }
+
+
+
+          actionsTd.appendChild(
+            actions
+          );
+
+
+          tr.appendChild(
+            actionsTd
+          );
+
+
+          tbody.appendChild(
+            tr
+          );
+
+
+        }
+      );
+
+
+      updatePagination();
+
+    }
+
+
+
+    /* =========================================
+       PAGINATION
+    ========================================== */
+
+    function updatePagination() {
+
+
+      const total =
+        filteredPatients.length;
+
+
+      const start =
+
+        total === 0
+
+          ? 0
+
+          : (
+              (currentPage - 1)
+              *
+              perPage
+            )
+            +
+            1;
+
+
+      const end =
+        Math.min(
+
+          currentPage
+          *
+          perPage,
+
+          total
+
+        );
+
+
+      document.getElementById(
+        "paginationStart"
+      ).textContent =
+        start;
+
+
+      document.getElementById(
+        "paginationEnd"
+      ).textContent =
+        end;
+
+
+      document.getElementById(
+        "paginationTotal"
+      ).textContent =
+        total;
+
+
+      renderPageNumbers();
+
+    }
+
+
+
+    /* =========================================
+       NUMEROS PAGES
+    ========================================== */
+
+    function renderPageNumbers() {
+
+
+      const container =
+        document.getElementById(
+          "pageNumbers"
+        );
+
+
+      container.innerHTML =
+        "";
+
+
+      const totalPages =
+        Math.ceil(
+
+          filteredPatients.length
+          /
+          perPage
+
+        );
+
+
+      if (
+        totalPages === 0
+      ) {
+
+        return;
+
+      }
+
+
+
+      for (
+        let numero = 1;
+        numero <= totalPages;
+        numero++
+      ) {
+
+
+        const button =
+          document.createElement(
+            "button"
+          );
+
+
+        button.type =
+          "button";
+
+
+        button.className =
+
+          numero === currentPage
+
+            ? "page-number active"
+
+            : "page-number";
+
+
+        button.textContent =
+          numero;
+
+
+        button.addEventListener(
+
+          "click",
+
+          () => {
+
+            currentPage =
+              numero;
+
+
+            renderPatients();
+
+          }
+
+        );
+
+
+        container.appendChild(
+          button
+        );
+
+      }
+
+    }
+
+
+
+    /* =========================================
+       CHARGER LES PATIENTS
+       ROUTE SECURISEE
+    ========================================== */
+
+    async function loadPatients() {
+
+
+      try {
+
+
+        /*
+          IMPORTANT :
+
+          ADMIN
+          → reçoit tous les patients
+
+          RECEPTION
+          → reçoit tous les patients
+
+          MEDECIN
+          → reçoit seulement ses patients
+
+          Le backend décide selon
+          le token JWT.
+        */
+
+
+        const response =
+          await secureFetch(
+
+            `${API_URL}/access/patients`
+
+          );
+
+
+
+        if (
+          !response.ok
+        ) {
+
+
+          let message =
+            "Erreur serveur";
+
+
+          try {
+
+            const erreur =
+              await response.json();
+
+
+            if (
+              erreur.message
+            ) {
+
+              message =
+                erreur.message;
+
+            }
+
+          }
+
+          catch {
+
+            // rien
+
+          }
+
+
+          throw new Error(
+            message
+          );
+
+        }
+
+
+
+        const data =
+          await response.json();
+
+
+
+        patients =
+
+          Array.isArray(data)
+
+            ? data
+
+            : (
+
+                data.patients
+
+                ||
+
+                []
+
+              );
+
+
+
+        filteredPatients =
+          [...patients];
+
+
+        currentPage =
+          1;
+
+
+        renderPatients();
+
+
+      }
+
+      catch (error) {
+
+
+        console.error(
+
+          "Erreur chargement patients :",
+
+          error
+
+        );
+
+
+        tbody.innerHTML =
+          "";
+
+
+        const tr =
+          document.createElement(
+            "tr"
+          );
+
+
+        const td =
+          document.createElement(
+            "td"
+          );
+
+
+        td.colSpan =
+          10;
+
+
+        td.className =
+          "patients-empty";
+
+
+        td.textContent =
+
+          error.message
+
+          ||
+
+          "Impossible de charger les patients.";
+
+
+        tr.appendChild(
+          td
+        );
+
+
+        tbody.appendChild(
+          tr
+        );
+
+      }
+
+    }
+
+
+
+    /* =========================================
+       NOMBRE PAR PAGE
+    ========================================== */
+
+    document
+      .getElementById(
+        "patientsPerPage"
+      )
+      .addEventListener(
+
+        "change",
+
+        (event) => {
+
+
+          perPage =
+            Number(
+              event.target.value
+            );
+
+
+          currentPage =
+            1;
+
+
+          renderPatients();
+
+        }
+
+      );
+
+
+
+    /* =========================================
+       PAGE PRECEDENTE
+    ========================================== */
+
+    document
+      .getElementById(
+        "previousPage"
+      )
+      .addEventListener(
+
+        "click",
+
+        () => {
+
+
+          if (
+            currentPage > 1
+          ) {
+
+            currentPage--;
+
+
+            renderPatients();
+
+          }
+
+        }
+
+      );
+
+
+
+    /* =========================================
+       PAGE SUIVANTE
+    ========================================== */
+
+    document
+      .getElementById(
+        "nextPage"
+      )
+      .addEventListener(
+
+        "click",
+
+        () => {
+
+
+          const totalPages =
+            Math.ceil(
+
+              filteredPatients.length
+              /
+              perPage
+
+            );
+
+
+          if (
+            currentPage
+            <
+            totalPages
+          ) {
+
+            currentPage++;
+
+
+            renderPatients();
+
+          }
+
+        }
+
+      );
+
+
+
+    /* =========================================
+       RECHERCHE + FILTRES
+    ========================================== */
+
+    function filterPatients() {
+
+
+      const search =
+        searchInput.value
+          .trim()
+          .toLowerCase();
+
+
+      const status =
+        statusFilter.value;
+
+
+      const blood =
+        bloodFilter.value;
+
+
+      const service =
+        serviceFilter.value;
+
+
+
+      filteredPatients =
+        patients.filter(
+
+          (patient) => {
+
+
+            const nom =
+              String(
+                patient.nom || ""
+              )
+                .toLowerCase();
+
+
+            const prenom =
+              String(
+                patient.prenom || ""
+              )
+                .toLowerCase();
+
+
+            const telephone =
+              String(
+                patient.telephone || ""
+              )
+                .toLowerCase();
+
+
+            const dossier =
+              String(
+
+                patient.numero_dossier
+
+                ||
+
+                patient.num_dossier
+
+                ||
+
+                patient.id_patient
+
+                ||
+
+                ""
+
+              )
+                .toLowerCase();
+
+
+            const statut =
+              patient.statut
+
+              ||
+
+              "Actif";
+
+
+            const groupe =
+              patient.groupe_sanguin
+
+              ||
+
+              "";
+
+
+            const patientService =
+              patient.service
+
+              ||
+
+              patient.nom_service
+
+              ||
+
+              "";
+
+
+
+            return (
+
+              (
+
+                !search
+
+                ||
+
+                nom.includes(
+                  search
+                )
+
+                ||
+
+                prenom.includes(
+                  search
+                )
+
+                ||
+
+                telephone.includes(
+                  search
+                )
+
+                ||
+
+                dossier.includes(
+                  search
+                )
+
+              )
+
+              &&
+
+              (
+
+                !status
+
+                ||
+
+                statut === status
+
+              )
+
+              &&
+
+              (
+
+                !blood
+
+                ||
+
+                groupe === blood
+
+              )
+
+              &&
+
+              (
+
+                !service
+
+                ||
+
+                patientService === service
+
+              )
+
+            );
+
+          }
+
+        );
+
+
+      currentPage =
+        1;
+
+
+      renderPatients();
+
+    }
+
+
+
+    /* BOUTON RECHERCHER */
+
+    document
+      .getElementById(
+        "searchPatientBtn"
+      )
+      .addEventListener(
+
+        "click",
+
+        filterPatients
+
+      );
+
+
+
+    /* ENTREE DANS RECHERCHE */
+
+    searchInput.addEventListener(
+
+      "keyup",
+
+      (event) => {
+
+
+        if (
+          event.key === "Enter"
+        ) {
+
+          filterPatients();
+
+        }
+
+      }
+
+    );
+
+
+
+    /* FILTRES */
+
+    statusFilter.addEventListener(
+      "change",
+      filterPatients
+    );
+
+
+    bloodFilter.addEventListener(
+      "change",
+      filterPatients
+    );
+
+
+    serviceFilter.addEventListener(
+      "change",
+      filterPatients
+    );
+
+
+
+    /* =========================================
+       REINITIALISER
+    ========================================== */
+
+    document
+      .getElementById(
+        "resetFiltersBtn"
+      )
+      .addEventListener(
+
+        "click",
+
+        () => {
+
+
+          searchInput.value =
+            "";
+
+
+          serviceFilter.value =
+            "";
+
+
+          statusFilter.value =
+            "";
+
+
+          bloodFilter.value =
+            "";
+
+
+          filteredPatients =
+            [...patients];
+
+
+          currentPage =
+            1;
+
+
+          renderPatients();
+
+        }
+
+      );
+
+
+
+    /* =========================================
+       MODAL
+    ========================================== */
+
+    function openModal() {
+
+
+      if (
+        !peutGererPatients
+      ) {
+
+        return;
+
+      }
+
+
+      modal.classList.add(
+        "show"
+      );
+
+    }
+
+
+
+    function closeModal() {
+
+      modal.classList.remove(
+        "show"
+      );
+
+    }
+
+
+
+    if (
+      newPatientBtn
+    ) {
+
+      newPatientBtn.addEventListener(
+
+        "click",
+
+        openModal
+
+      );
+
+    }
+
+
+
+    document
+      .getElementById(
+        "closePatientModal"
+      )
+      .addEventListener(
+
+        "click",
+
+        closeModal
+
+      );
+
+
+
+    document
+      .getElementById(
+        "cancelPatientBtn"
+      )
+      .addEventListener(
+
+        "click",
+
+        closeModal
+
+      );
+
+
+
+    modal.addEventListener(
+
+      "click",
+
+      (event) => {
+
+
+        if (
+          event.target === modal
+        ) {
+
+          closeModal();
+
+        }
+
+      }
+
+    );
+
+
+
+    /* =========================================
+       AJOUT PATIENT
+       ADMIN / RECEPTION UNIQUEMENT
+    ========================================== */
+
+    form.addEventListener(
+
+      "submit",
+
+      async (event) => {
+
+
+        event.preventDefault();
+
+
+
+        if (
+          !peutGererPatients
+        ) {
+
+          alert(
+            "Vous n'avez pas l'autorisation d'ajouter un patient."
+          );
+
+          return;
+
+        }
+
+
+
+        const newPatient = {
+
+
+          nom:
+
+            document
+              .getElementById(
+                "patientNom"
+              )
+              .value
+              .trim(),
+
+
+          prenom:
+
+            document
+              .getElementById(
+                "patientPrenom"
+              )
+              .value
+              .trim(),
+
+
+          date_naissance:
+
+            document
+              .getElementById(
+                "patientNaissance"
+              )
+              .value,
+
+
+          sexe:
+
+            document
+              .getElementById(
+                "patientGenre"
+              )
+              .value,
+
+
+          groupe_sanguin:
+
+            document
+              .getElementById(
+                "patientBlood"
+              )
+              .value,
+
+
+          telephone:
+
+            document
+              .getElementById(
+                "patientPhone"
+              )
+              .value
+              .trim(),
+
+
+          adresse:
+
+            document
+              .getElementById(
+                "patientAddress"
+              )
+              .value
+              .trim()
+
+        };
+
+
+
+        try {
+
+
+          /*
+            Pour l'ajout nous conservons
+            la route existante pour le moment.
+            Le token est quand même envoyé.
+          */
+
+          const response =
+            await secureFetch(
+
+              `${API_URL}/patients`,
+
+              {
+
+                method:
+                  "POST",
+
+                body:
+                  JSON.stringify(
+                    newPatient
+                  )
+
+              }
+
+            );
+
+
+
+          if (
+            !response.ok
+          ) {
+
+
+            const erreur =
+              await response
+                .json()
+                .catch(
+                  () => ({})
+                );
+
+
+            throw new Error(
+
+              erreur.message
+
+              ||
+
+              "Erreur ajout patient"
+
+            );
+
+          }
+
+
+
+          alert(
+            "Patient enregistré avec succès."
+          );
+
+
+          form.reset();
+
+
+          closeModal();
+
+
+          await loadPatients();
+
+
+        }
+
+        catch (error) {
+
+
+          console.error(
+
+            "Erreur ajout patient :",
+
+            error
+
+          );
+
+
+          alert(
+
+            error.message
+
+            ||
+
+            "Impossible d'ajouter le patient."
+
+          );
+
+        }
+
+      }
+
+    );
+
+
+
+    /* =========================================
+       SUPPRIMER PATIENT
+       ADMIN / RECEPTION UNIQUEMENT
+    ========================================== */
+
+    async function deletePatient(id) {
+
+
+      if (
+        !peutGererPatients
+      ) {
+
+        alert(
+          "Vous n'avez pas l'autorisation de supprimer ce patient."
+        );
+
+        return;
+
+      }
+
+
+
+      const confirmation =
+        confirm(
+          "Voulez-vous vraiment supprimer ce patient ?"
+        );
+
+
+      if (
+        !confirmation
+      ) {
+
+        return;
+
+      }
+
+
+
+      try {
+
+
+        const response =
+          await secureFetch(
+
+            `${API_URL}/patients/${id}`,
+
+            {
+
+              method:
+                "DELETE"
+
+            }
+
+          );
+
+
+
+        if (
+          !response.ok
+        ) {
+
+
+          const erreur =
+            await response
+              .json()
+              .catch(
+                () => ({})
+              );
+
+
+          throw new Error(
+
+            erreur.message
+
+            ||
+
+            "Erreur suppression"
+
+          );
+
+        }
+
+
+
+        await loadPatients();
+
+
+      }
+
+      catch (error) {
+
+
+        console.error(
+
+          "Erreur suppression :",
+
+          error
+
+        );
+
+
+        alert(
+
+          error.message
+
+          ||
+
+          "Impossible de supprimer ce patient."
+
+        );
+
+      }
+
+    }
+
+
+
+    /* =========================================
+       INITIALISATION
+    ========================================== */
+
+    loadPatients();
+
+
+  </script>
+
+
+</body>
+
+</html>

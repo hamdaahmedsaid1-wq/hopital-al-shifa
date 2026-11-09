@@ -1,0 +1,1925 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Dossier patient - Al-Shifa
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="../css/style.css"
+  >
+
+</head>
+
+
+<body>
+
+  <div class="app">
+
+
+    <div id="sidebar"></div>
+
+
+    <main class="main">
+
+
+      <div id="topbar"></div>
+
+
+      <section class="content">
+
+
+        <div class="patient-detail-page">
+
+
+          <!-- RETOUR -->
+
+          <a
+            href="patients.html"
+            class="patient-back-link"
+          >
+            ← Retour aux patients
+          </a>
+
+
+
+          <!-- EN-TETE -->
+
+          <div class="patient-detail-header">
+
+
+            <div>
+
+
+              <p class="patients-small-title">
+                Dossier médical
+              </p>
+
+
+              <h1>
+                Dossier patient
+              </h1>
+
+
+              <p>
+                Informations détaillées et suivi du patient
+              </p>
+
+
+            </div>
+
+
+          </div>
+
+
+
+          <!-- MESSAGE CHARGEMENT -->
+
+          <div
+            id="detailLoading"
+            class="patient-detail-empty"
+          >
+
+            Chargement du patient...
+
+          </div>
+
+
+
+          <!-- CONTENU PATIENT -->
+
+          <div
+            id="patientDetailContent"
+            style="display: none;"
+          >
+
+
+            <!-- CARTE PRINCIPALE -->
+
+            <div class="patient-detail-hero">
+
+
+              <div class="patient-detail-main">
+
+
+                <div
+                  class="patient-detail-avatar"
+                  id="patientAvatar"
+                >
+
+                  P
+
+                </div>
+
+
+
+                <div class="patient-detail-identity">
+
+
+                  <h2 id="patientName">
+                    Patient
+                  </h2>
+
+
+                  <p id="patientNumber">
+                    Patient #-
+                  </p>
+
+
+
+                  <div class="patient-detail-badges">
+
+
+                    <span
+                      class="patient-detail-badge"
+                      id="patientSexBadge"
+                    >
+
+                      Sexe -
+
+                    </span>
+
+
+                    <span
+                      class="patient-detail-badge blood"
+                      id="patientBloodBadge"
+                    >
+
+                      Groupe -
+
+                    </span>
+
+
+                  </div>
+
+
+                </div>
+
+
+              </div>
+
+
+
+              <button
+                type="button"
+                class="patient-detail-edit"
+                id="editPatientButton"
+              >
+
+                ✏ Modifier
+
+              </button>
+
+
+            </div>
+
+
+
+            <!-- ACTIONS RAPIDES -->
+
+            <div class="patient-quick-actions">
+
+
+              <!-- RENDEZ-VOUS -->
+
+              <button
+                type="button"
+                class="patient-action-card"
+                id="appointmentButton"
+              >
+
+                <div class="patient-action-icon">
+                  📅
+                </div>
+
+                <strong>
+                  Rendez-vous
+                </strong>
+
+                <span>
+                  Planifier un rendez-vous
+                </span>
+
+              </button>
+
+
+
+              <!-- CONSULTATION -->
+
+              <button
+                type="button"
+                class="patient-action-card"
+                id="consultationButton"
+              >
+
+                <div class="patient-action-icon">
+                  ✚
+                </div>
+
+                <strong>
+                  Consultation
+                </strong>
+
+                <span>
+                  Nouvelle consultation
+                </span>
+
+              </button>
+
+
+
+              <!-- HOSPITALISATION -->
+
+              <button
+                type="button"
+                class="patient-action-card"
+                id="hospitalisationButton"
+              >
+
+                <div class="patient-action-icon">
+                  🏥
+                </div>
+
+                <strong>
+                  Hospitalisation
+                </strong>
+
+                <span>
+                  Hospitaliser le patient
+                </span>
+
+              </button>
+
+
+
+              <!-- ORDONNANCE -->
+
+              <button
+                type="button"
+                class="patient-action-card"
+                id="ordonnanceButton"
+              >
+
+                <div class="patient-action-icon">
+                  📋
+                </div>
+
+                <strong>
+                  Ordonnance
+                </strong>
+
+                <span>
+                  Créer une ordonnance
+                </span>
+
+              </button>
+
+
+            </div>
+
+
+
+            <!-- ONGLETS -->
+
+            <div class="patient-detail-tabs">
+
+
+              <button
+                type="button"
+                class="patient-detail-tab active"
+                data-tab="informations"
+              >
+
+                Informations
+
+              </button>
+
+
+
+              <button
+                type="button"
+                class="patient-detail-tab"
+                data-tab="historique"
+              >
+
+                Historique médical
+
+              </button>
+
+
+
+              <button
+                type="button"
+                class="patient-detail-tab"
+                data-tab="consultations"
+              >
+
+                Consultations
+
+              </button>
+
+
+
+              <button
+                type="button"
+                class="patient-detail-tab"
+                data-tab="ordonnances"
+              >
+
+                Ordonnances
+
+              </button>
+
+
+
+              <button
+                type="button"
+                class="patient-detail-tab"
+                data-tab="hospitalisations"
+              >
+
+                Hospitalisations
+
+              </button>
+
+
+            </div>
+
+
+
+            <!-- INFORMATIONS -->
+
+            <div
+              class="
+                patient-detail-section
+                patient-detail-tab-content
+                active
+              "
+              id="tab-informations"
+            >
+
+
+              <h3>
+                Informations générales
+              </h3>
+
+
+
+              <div class="patient-detail-info-grid">
+
+
+                <div class="patient-detail-info">
+
+                  <span>
+                    Identifiant
+                  </span>
+
+                  <strong id="infoId">
+                    -
+                  </strong>
+
+                </div>
+
+
+
+                <div class="patient-detail-info">
+
+                  <span>
+                    Nom
+                  </span>
+
+                  <strong id="infoNom">
+                    -
+                  </strong>
+
+                </div>
+
+
+
+                <div class="patient-detail-info">
+
+                  <span>
+                    Prénom
+                  </span>
+
+                  <strong id="infoPrenom">
+                    -
+                  </strong>
+
+                </div>
+
+
+
+                <div class="patient-detail-info">
+
+                  <span>
+                    Date de naissance
+                  </span>
+
+                  <strong id="infoDateNaissance">
+                    -
+                  </strong>
+
+                </div>
+
+
+
+                <div class="patient-detail-info">
+
+                  <span>
+                    Sexe
+                  </span>
+
+                  <strong id="infoSexe">
+                    -
+                  </strong>
+
+                </div>
+
+
+
+                <div class="patient-detail-info">
+
+                  <span>
+                    Téléphone
+                  </span>
+
+                  <strong id="infoTelephone">
+                    -
+                  </strong>
+
+                </div>
+
+
+
+                <div class="patient-detail-info">
+
+                  <span>
+                    Groupe sanguin
+                  </span>
+
+                  <strong id="infoGroupe">
+                    -
+                  </strong>
+
+                </div>
+
+
+
+                <div class="patient-detail-info">
+
+                  <span>
+                    Adresse
+                  </span>
+
+                  <strong id="infoAdresse">
+                    Non renseignée
+                  </strong>
+
+                </div>
+
+
+
+                <div class="patient-detail-info">
+
+                  <span>
+                    Email
+                  </span>
+
+                  <strong id="infoEmail">
+                    Non renseigné
+                  </strong>
+
+                </div>
+
+
+              </div>
+
+
+            </div>
+
+
+
+            <!-- HISTORIQUE -->
+
+            <div
+              class="
+                patient-detail-section
+                patient-detail-tab-content
+              "
+              id="tab-historique"
+            >
+
+              <h3>
+                Historique médical
+              </h3>
+
+              <div class="patient-detail-empty">
+
+                Aucun historique médical disponible pour le moment.
+
+              </div>
+
+            </div>
+
+
+
+            <!-- CONSULTATIONS -->
+
+            <div
+              class="
+                patient-detail-section
+                patient-detail-tab-content
+              "
+              id="tab-consultations"
+            >
+
+              <h3>
+                Consultations
+              </h3>
+
+              <div class="patient-detail-empty">
+
+                Aucune consultation enregistrée.
+
+              </div>
+
+            </div>
+
+
+
+            <!-- ORDONNANCES -->
+
+            <div
+              class="
+                patient-detail-section
+                patient-detail-tab-content
+              "
+              id="tab-ordonnances"
+            >
+
+              <h3>
+                Ordonnances
+              </h3>
+
+              <div class="patient-detail-empty">
+
+                Aucune ordonnance enregistrée.
+
+              </div>
+
+            </div>
+
+
+
+            <!-- HOSPITALISATIONS -->
+
+            <div
+              class="
+                patient-detail-section
+                patient-detail-tab-content
+              "
+              id="tab-hospitalisations"
+            >
+
+              <h3>
+                Hospitalisations
+              </h3>
+
+              <div class="patient-detail-empty">
+
+                Aucune hospitalisation enregistrée.
+
+              </div>
+
+            </div>
+
+
+          </div>
+
+
+        </div>
+
+
+      </section>
+
+
+    </main>
+
+
+  </div>
+
+
+
+  <script type="module">
+
+
+    /* =====================================================
+       IMPORTS
+    ===================================================== */
+
+    import {
+      afficherLayout
+    } from "../js/layout.js";
+
+
+    import {
+      secureFetch,
+      getUtilisateurConnecte
+    } from "../js/secure-api.js";
+
+
+
+    afficherLayout(
+      "Dossier patient"
+    );
+
+
+
+    /* =====================================================
+       API
+    ===================================================== */
+
+    const API_URL =
+      "http://localhost:3000/api";
+
+
+
+    /* =====================================================
+       ID PATIENT
+    ===================================================== */
+
+    const params =
+      new URLSearchParams(
+        window.location.search
+      );
+
+
+    const patientId =
+      params.get(
+        "id"
+      );
+
+
+
+    /* =====================================================
+       ELEMENTS HTML
+    ===================================================== */
+
+    const detailLoading =
+      document.getElementById(
+        "detailLoading"
+      );
+
+
+    const patientDetailContent =
+      document.getElementById(
+        "patientDetailContent"
+      );
+
+
+    const editPatientButton =
+      document.getElementById(
+        "editPatientButton"
+      );
+
+
+    const appointmentButton =
+      document.getElementById(
+        "appointmentButton"
+      );
+
+
+    const consultationButton =
+      document.getElementById(
+        "consultationButton"
+      );
+
+
+    const hospitalisationButton =
+      document.getElementById(
+        "hospitalisationButton"
+      );
+
+
+    const ordonnanceButton =
+      document.getElementById(
+        "ordonnanceButton"
+      );
+
+
+
+    /* =====================================================
+       UTILISATEUR CONNECTE
+    ===================================================== */
+
+    const utilisateur =
+      getUtilisateurConnecte();
+
+
+    const role =
+      String(
+        utilisateur?.role || ""
+      )
+        .toLowerCase()
+        .trim();
+
+
+
+    const estAdmin =
+      role.includes(
+        "administrateur"
+      )
+      ||
+      role.includes(
+        "admin"
+      );
+
+
+
+    const estMedecin =
+      role.includes(
+        "médecin"
+      )
+      ||
+      role.includes(
+        "medecin"
+      );
+
+
+
+    const estReception =
+      role.includes(
+        "réception"
+      )
+      ||
+      role.includes(
+        "reception"
+      );
+
+
+
+    const estInfirmier =
+      role.includes(
+        "infirmier"
+      );
+
+
+
+    let patientCourant =
+      null;
+
+
+
+    /* =====================================================
+       MASQUER ELEMENT
+    ===================================================== */
+
+    function masquerElement(
+      element
+    ) {
+
+      if (element) {
+
+        element.style.display =
+          "none";
+
+      }
+
+    }
+
+
+
+    /* =====================================================
+       DROITS SELON LE ROLE
+    ===================================================== */
+
+    function appliquerDroitsPatient() {
+
+
+      /*
+        MODIFIER PATIENT
+
+        Admin
+        Réception
+      */
+
+      if (
+        !estAdmin
+        &&
+        !estReception
+      ) {
+
+        masquerElement(
+          editPatientButton
+        );
+
+      }
+
+
+
+      /*
+        PLANIFIER RDV
+
+        Admin
+        Réception
+      */
+
+      if (
+        !estAdmin
+        &&
+        !estReception
+      ) {
+
+        masquerElement(
+          appointmentButton
+        );
+
+      }
+
+
+
+      /*
+        CONSULTATION
+
+        Admin
+        Médecin
+      */
+
+      if (
+        !estAdmin
+        &&
+        !estMedecin
+      ) {
+
+        masquerElement(
+          consultationButton
+        );
+
+      }
+
+
+
+      /*
+        HOSPITALISATION
+
+        Admin
+        Infirmier
+      */
+
+      if (
+        !estAdmin
+        &&
+        !estInfirmier
+      ) {
+
+        masquerElement(
+          hospitalisationButton
+        );
+
+      }
+
+
+
+      /*
+        ORDONNANCE
+
+        Admin
+        Médecin
+      */
+
+      if (
+        !estAdmin
+        &&
+        !estMedecin
+      ) {
+
+        masquerElement(
+          ordonnanceButton
+        );
+
+      }
+
+
+
+      /* =================================================
+         ONGLETS MEDICAUX
+      ================================================= */
+
+
+      const historiqueTab =
+        document.querySelector(
+          '[data-tab="historique"]'
+        );
+
+
+      const consultationsTab =
+        document.querySelector(
+          '[data-tab="consultations"]'
+        );
+
+
+      const ordonnancesTab =
+        document.querySelector(
+          '[data-tab="ordonnances"]'
+        );
+
+
+      const hospitalisationsTab =
+        document.querySelector(
+          '[data-tab="hospitalisations"]'
+        );
+
+
+
+      /*
+        Réception et autres rôles
+        ne voient pas historique,
+        consultations et ordonnances.
+      */
+
+      if (
+        !estAdmin
+        &&
+        !estMedecin
+      ) {
+
+        masquerElement(
+          historiqueTab
+        );
+
+
+        masquerElement(
+          consultationsTab
+        );
+
+
+        masquerElement(
+          ordonnancesTab
+        );
+
+      }
+
+
+
+      /*
+        Hospitalisation visible
+        seulement admin + infirmier
+      */
+
+      if (
+        !estAdmin
+        &&
+        !estInfirmier
+      ) {
+
+        masquerElement(
+          hospitalisationsTab
+        );
+
+      }
+
+    }
+
+
+
+    appliquerDroitsPatient();
+
+
+
+    /* =====================================================
+       CHARGER PATIENT
+       ROUTE SECURISEE
+    ===================================================== */
+
+    async function chargerPatient() {
+
+
+      if (!patientId) {
+
+        detailLoading.textContent =
+          "Aucun patient sélectionné.";
+
+        return;
+
+      }
+
+
+
+      try {
+
+
+        detailLoading.textContent =
+          "Chargement du patient...";
+
+
+
+        /*
+          NOUVELLE ROUTE SECURISEE
+        */
+
+        const response =
+          await secureFetch(
+
+            `${API_URL}/access/patients/${encodeURIComponent(patientId)}`
+
+          );
+
+
+
+        if (
+          !response.ok
+        ) {
+
+
+          let message =
+            "Impossible de charger le patient.";
+
+
+
+          try {
+
+
+            const erreur =
+              await response.json();
+
+
+
+            if (
+              erreur.message
+            ) {
+
+              message =
+                erreur.message;
+
+            }
+
+
+          }
+
+          catch {
+
+            // Aucun JSON exploitable
+
+          }
+
+
+
+          throw new Error(
+            message
+          );
+
+        }
+
+
+
+        const data =
+          await response.json();
+
+
+
+        patientCourant =
+          data.patient
+          ??
+          data;
+
+
+
+        afficherPatient(
+          patientCourant
+        );
+
+
+
+        detailLoading.style.display =
+          "none";
+
+
+
+        patientDetailContent.style.display =
+          "block";
+
+
+      }
+
+      catch (error) {
+
+
+        console.error(
+          "Erreur chargement patient :",
+          error
+        );
+
+
+
+        patientDetailContent.style.display =
+          "none";
+
+
+
+        detailLoading.style.display =
+          "block";
+
+
+
+        detailLoading.textContent =
+
+          error.message
+
+          ||
+
+          "Impossible de charger le patient.";
+
+
+      }
+
+    }
+
+
+
+    /* =====================================================
+       AFFICHER PATIENT
+    ===================================================== */
+
+    function afficherPatient(
+      patient
+    ) {
+
+
+      const id =
+
+        patient.id
+
+        ??
+
+        patient.id_patient
+
+        ??
+
+        patient.num_patient
+
+        ??
+
+        patientId;
+
+
+
+      const nom =
+        patient.nom
+        ??
+        "";
+
+
+
+      const prenom =
+        patient.prenom
+        ??
+        "";
+
+
+
+      const sexe =
+        patient.sexe
+        ??
+        "-";
+
+
+
+      const telephone =
+        patient.telephone
+        ??
+        "-";
+
+
+
+      const groupe =
+        patient.groupe_sanguin
+        ??
+        "-";
+
+
+
+      const adresse =
+        patient.adresse
+        ??
+        "Non renseignée";
+
+
+
+      const email =
+        patient.email
+        ??
+        "Non renseigné";
+
+
+
+      const initiales =
+        (
+          prenom.charAt(0)
+          +
+          nom.charAt(0)
+        )
+          .toUpperCase();
+
+
+
+      document.getElementById(
+        "patientAvatar"
+      ).textContent =
+
+        initiales
+
+        ||
+
+        "P";
+
+
+
+      document.getElementById(
+        "patientName"
+      ).textContent =
+
+        (
+          prenom
+          +
+          " "
+          +
+          nom
+        )
+          .trim()
+
+        ||
+
+        "Patient";
+
+
+
+      document.getElementById(
+        "patientNumber"
+      ).textContent =
+
+        "Patient #"
+        +
+        id;
+
+
+
+      document.getElementById(
+        "patientSexBadge"
+      ).textContent =
+
+        formaterSexe(
+          sexe
+        );
+
+
+
+      document.getElementById(
+        "patientBloodBadge"
+      ).textContent =
+
+        groupe !== "-"
+
+          ? groupe
+
+          : "Groupe non renseigné";
+
+
+
+      document.getElementById(
+        "infoId"
+      ).textContent =
+        id;
+
+
+
+      document.getElementById(
+        "infoNom"
+      ).textContent =
+
+        nom
+
+        ||
+
+        "-";
+
+
+
+      document.getElementById(
+        "infoPrenom"
+      ).textContent =
+
+        prenom
+
+        ||
+
+        "-";
+
+
+
+      document.getElementById(
+        "infoDateNaissance"
+      ).textContent =
+
+        formaterDate(
+          patient.date_naissance
+        );
+
+
+
+      document.getElementById(
+        "infoSexe"
+      ).textContent =
+
+        formaterSexe(
+          sexe,
+          true
+        );
+
+
+
+      document.getElementById(
+        "infoTelephone"
+      ).textContent =
+        telephone;
+
+
+
+      document.getElementById(
+        "infoGroupe"
+      ).textContent =
+        groupe;
+
+
+
+      document.getElementById(
+        "infoAdresse"
+      ).textContent =
+        adresse;
+
+
+
+      document.getElementById(
+        "infoEmail"
+      ).textContent =
+        email;
+
+
+    }
+
+
+
+    /* =====================================================
+       FORMAT SEXE
+    ===================================================== */
+
+    function formaterSexe(
+      sexe,
+      court = false
+    ) {
+
+
+      const valeur =
+        String(
+          sexe || ""
+        )
+          .toLowerCase();
+
+
+
+      if (
+
+        valeur === "m"
+
+        ||
+
+        valeur === "homme"
+
+        ||
+
+        valeur === "masculin"
+
+      ) {
+
+        return "Masculin";
+
+      }
+
+
+
+      if (
+
+        valeur === "f"
+
+        ||
+
+        valeur === "femme"
+
+        ||
+
+        valeur === "féminin"
+
+        ||
+
+        valeur === "feminin"
+
+      ) {
+
+        return "Féminin";
+
+      }
+
+
+
+      return court
+
+        ? "-"
+
+        : "Sexe non renseigné";
+
+
+    }
+
+
+
+    /* =====================================================
+       ONGLETS
+    ===================================================== */
+
+    document
+      .querySelectorAll(
+        ".patient-detail-tab"
+      )
+      .forEach(
+
+        function(button) {
+
+
+          button.addEventListener(
+
+            "click",
+
+            function() {
+
+
+              if (
+                button.style.display
+                ===
+                "none"
+              ) {
+
+                return;
+
+              }
+
+
+
+              document
+                .querySelectorAll(
+                  ".patient-detail-tab"
+                )
+                .forEach(
+
+                  function(item) {
+
+                    item.classList.remove(
+                      "active"
+                    );
+
+                  }
+
+                );
+
+
+
+              document
+                .querySelectorAll(
+                  ".patient-detail-tab-content"
+                )
+                .forEach(
+
+                  function(content) {
+
+                    content.classList.remove(
+                      "active"
+                    );
+
+                  }
+
+                );
+
+
+
+              button.classList.add(
+                "active"
+              );
+
+
+
+              const tab =
+                button.dataset.tab;
+
+
+
+              const contenu =
+                document.getElementById(
+                  "tab-" + tab
+                );
+
+
+
+              if (
+                contenu
+              ) {
+
+                contenu.classList.add(
+                  "active"
+                );
+
+              }
+
+
+            }
+
+          );
+
+
+        }
+
+      );
+
+
+
+    /* =====================================================
+       MODIFIER
+       ADMIN + RECEPTION
+    ===================================================== */
+
+    if (
+      editPatientButton
+    ) {
+
+
+      editPatientButton
+        .addEventListener(
+
+          "click",
+
+          function() {
+
+
+            if (
+              !estAdmin
+              &&
+              !estReception
+            ) {
+
+              return;
+
+            }
+
+
+
+            window.location.href =
+
+              "patients.html?edit="
+
+              +
+
+              encodeURIComponent(
+                patientId
+              );
+
+
+          }
+
+        );
+
+
+    }
+
+
+
+    /* =====================================================
+       RENDEZ-VOUS
+       ADMIN + RECEPTION
+    ===================================================== */
+
+    if (
+      appointmentButton
+    ) {
+
+
+      appointmentButton
+        .addEventListener(
+
+          "click",
+
+          function() {
+
+
+            if (
+              !estAdmin
+              &&
+              !estReception
+            ) {
+
+              return;
+
+            }
+
+
+
+            window.location.href =
+
+              "planifier-rendez-vous.html?patient="
+
+              +
+
+              encodeURIComponent(
+                patientId
+              );
+
+
+          }
+
+        );
+
+
+    }
+
+
+
+    /* =====================================================
+       CONSULTATION
+       ADMIN + MEDECIN
+    ===================================================== */
+
+    if (
+      consultationButton
+    ) {
+
+
+      consultationButton
+        .addEventListener(
+
+          "click",
+
+          function() {
+
+
+            if (
+              !estAdmin
+              &&
+              !estMedecin
+            ) {
+
+              return;
+
+            }
+
+
+
+            window.location.href =
+
+              "consultation.html?patient="
+
+              +
+
+              encodeURIComponent(
+                patientId
+              );
+
+
+          }
+
+        );
+
+
+    }
+
+
+
+    /* =====================================================
+       HOSPITALISATION
+       ADMIN + INFIRMIER
+    ===================================================== */
+
+    if (
+      hospitalisationButton
+    ) {
+
+
+      hospitalisationButton
+        .addEventListener(
+
+          "click",
+
+          function() {
+
+
+            if (
+              !estAdmin
+              &&
+              !estInfirmier
+            ) {
+
+              return;
+
+            }
+
+
+
+            window.location.href =
+
+              "hospitalisation.html?patient="
+
+              +
+
+              encodeURIComponent(
+                patientId
+              );
+
+
+          }
+
+        );
+
+
+    }
+
+
+
+    /* =====================================================
+       ORDONNANCE
+       ADMIN + MEDECIN
+    ===================================================== */
+
+    if (
+      ordonnanceButton
+    ) {
+
+
+      ordonnanceButton
+        .addEventListener(
+
+          "click",
+
+          function() {
+
+
+            if (
+              !estAdmin
+              &&
+              !estMedecin
+            ) {
+
+              return;
+
+            }
+
+
+
+            window.location.href =
+
+              "ordonnance.html?patient="
+
+              +
+
+              encodeURIComponent(
+                patientId
+              );
+
+
+          }
+
+        );
+
+
+    }
+
+
+
+    /* =====================================================
+       FORMAT DATE
+    ===================================================== */
+
+    function formaterDate(
+      date
+    ) {
+
+
+      if (!date) {
+
+        return "-";
+
+      }
+
+
+
+      const texte =
+        String(
+          date
+        );
+
+
+
+      /*
+        Evite le décalage de date
+        causé par les fuseaux horaires.
+      */
+
+      const correspondance =
+        texte.match(
+
+          /^(\d{4})-(\d{2})-(\d{2})/
+
+        );
+
+
+
+      if (
+        correspondance
+      ) {
+
+
+        return (
+
+          correspondance[3]
+
+          +
+
+          "/"
+
+          +
+
+          correspondance[2]
+
+          +
+
+          "/"
+
+          +
+
+          correspondance[1]
+
+        );
+
+
+      }
+
+
+
+      const d =
+        new Date(
+          date
+        );
+
+
+
+      if (
+
+        Number.isNaN(
+          d.getTime()
+        )
+
+      ) {
+
+        return texte;
+
+      }
+
+
+
+      return d.toLocaleDateString(
+        "fr-FR"
+      );
+
+
+    }
+
+
+
+    /* =====================================================
+       INITIALISATION
+    ===================================================== */
+
+    chargerPatient();
+
+
+  </script>
+
+
+</body>
+
+</html>

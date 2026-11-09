@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Utilisateurs - Al-Shifa</title>
+
+  <link
+    rel="stylesheet"
+    href="../css/style.css"
+  >
+</head>
+
+<body>
+
+  <div class="app">
+
+    <div id="sidebar"></div>
+
+    <main class="main">
+
+      <div id="topbar"></div>
+
+      <section class="content">
+
+        <div class="utilisateurs-page">
+
+          <!-- EN-TETE -->
+
+          <div class="utilisateurs-header">
+
+            <div>
+
+              <p class="utilisateurs-small-title">
+                Administration
+              </p>
+
+              <h1>
+                Gestion des utilisateurs
+              </h1>
+
+              <p>
+                Gérez les comptes et les rôles du personnel
+              </p>
+
+            </div>
+
+
+            <button
+              type="button"
+              class="utilisateur-add-button"
+              id="ouvrirFormulaireBtn"
+            >
+              + Ajouter un utilisateur
+            </button>
+
+          </div>
+
+
+          <!-- STATISTIQUES -->
+
+          <div class="utilisateurs-stats">
+
+            <div class="utilisateur-stat-card">
+
+              <div class="utilisateur-stat-icon">
+                👥
+              </div>
+
+              <div>
+
+                <span>
+                  Total utilisateurs
+                </span>
+
+                <strong id="totalUtilisateurs">
+                  0
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <div class="utilisateur-stat-card">
+
+              <div class="utilisateur-stat-icon">
+                ✅
+              </div>
+
+              <div>
+
+                <span>
+                  Comptes actifs
+                </span>
+
+                <strong id="totalActifs">
+                  0
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <div class="utilisateur-stat-card">
+
+              <div class="utilisateur-stat-icon">
+                🛡️
+              </div>
+
+              <div>
+
+                <span>
+                  Administrateurs
+                </span>
+
+                <strong id="totalAdmins">
+                  0
+                </strong>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- LISTE UTILISATEURS -->
+
+          <div class="utilisateurs-card">
+
+            <div class="utilisateurs-card-header">
+
+              <div>
+
+                <h2>
+                  Liste des utilisateurs
+                </h2>
+
+                <p>
+                  Comptes autorisés à accéder au système
+                </p>
+
+              </div>
+
+
+              <div class="utilisateurs-search">
+
+                <input
+                  type="text"
+                  id="rechercheUtilisateur"
+                  placeholder="Rechercher un utilisateur..."
+                >
+
+              </div>
+
+            </div>
+
+
+            <div class="utilisateurs-table-wrapper">
+
+              <table class="utilisateurs-table">
+
+                <thead>
+
+                  <tr>
+
+                    <th>
+                      Utilisateur
+                    </th>
+
+                    <th>
+                      Email
+                    </th>
+
+                    <th>
+                      Rôle
+                    </th>
+
+                    <th>
+                      Statut
+                    </th>
+
+                    <th>
+                      Actions
+                    </th>
+
+                  </tr>
+
+                </thead>
+
+
+                <tbody id="utilisateursTableBody">
+
+                  <tr>
+
+                    <td
+                      colspan="5"
+                      class="utilisateurs-empty"
+                    >
+                      Chargement des utilisateurs...
+                    </td>
+
+                  </tr>
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+
+          <!-- FORMULAIRE -->
+
+          <div
+            class="utilisateur-form-overlay"
+            id="utilisateurFormOverlay"
+            style="display: none;"
+          >
+
+            <div class="utilisateur-form-card">
+
+              <div class="utilisateur-form-header">
+
+                <div>
+
+                  <p class="utilisateurs-small-title">
+                    Compte utilisateur
+                  </p>
+
+                  <h2 id="formulaireTitre">
+                    Ajouter un utilisateur
+                  </h2>
+
+                </div>
+
+
+                <button
+                  type="button"
+                  class="utilisateur-close-button"
+                  id="fermerFormulaireBtn"
+                >
+                  ×
+                </button>
+
+              </div>
+
+
+              <form id="utilisateurForm">
+
+                <input
+                  type="hidden"
+                  id="idUtilisateur"
+                >
+
+
+                <div class="utilisateur-form-grid">
+
+                  <div class="form-group">
+
+                    <label for="nomUtilisateur">
+                      Nom *
+                    </label>
+
+                    <input
+                      type="text"
+                      id="nomUtilisateur"
+                      placeholder="Nom"
+                      required
+                    >
+
+                  </div>
+
+
+                  <div class="form-group">
+
+                    <label for="prenomUtilisateur">
+                      Prénom *
+                    </label>
+
+                    <input
+                      type="text"
+                      id="prenomUtilisateur"
+                      placeholder="Prénom"
+                      required
+                    >
+
+                  </div>
+
+
+                  <div class="form-group full-width">
+
+                    <label for="emailUtilisateur">
+                      Email *
+                    </label>
+
+                    <input
+                      type="email"
+                      id="emailUtilisateur"
+                      placeholder="exemple@alshifa.dj"
+                      required
+                    >
+
+                  </div>
+
+
+                  <div class="form-group">
+
+                    <label for="motDePasseUtilisateur">
+                      Mot de passe
+                    </label>
+
+                    <input
+                      type="password"
+                      id="motDePasseUtilisateur"
+                      placeholder="Mot de passe"
+                    >
+
+                  </div>
+
+
+                  <div class="form-group">
+
+                    <label for="roleUtilisateur">
+                      Rôle *
+                    </label>
+
+                    <select
+                      id="roleUtilisateur"
+                      required
+                    >
+
+                      <option value="">
+                        Sélectionner un rôle
+                      </option>
+
+                    </select>
+
+                  </div>
+
+
+                  <div class="form-group">
+
+                    <label for="statutUtilisateur">
+                      Statut
+                    </label>
+
+                    <select id="statutUtilisateur">
+
+                      <option value="actif">
+                        Actif
+                      </option>
+
+                      <option value="inactif">
+                        Inactif
+                      </option>
+
+                    </select>
+
+                  </div>
+
+                </div>
+
+
+                <div
+                  id="utilisateurMessage"
+                  style="display: none;"
+                >
+                </div>
+
+
+                <div class="utilisateur-form-actions">
+
+                  <button
+                    type="button"
+                    class="utilisateur-cancel-button"
+                    id="annulerUtilisateurBtn"
+                  >
+                    Annuler
+                  </button>
+
+
+                  <button
+                    type="submit"
+                    class="utilisateur-save-button"
+                    id="enregistrerUtilisateurBtn"
+                  >
+                    Enregistrer
+                  </button>
+
+                </div>
+
+              </form>
+
+            </div>
+
+          </div>
+          </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <script type="module">
+
+    import {
+      afficherLayout
+    } from "../js/layout.js";
+
+
+    afficherLayout(
+      "Utilisateurs"
+    );
+
+
+    const UTILISATEURS_API =
+      "http://localhost:3000/api/utilisateurs";
+
+
+    const ROLES_API =
+      "http://localhost:3000/api/roles";
+
+
+    const tableBody =
+      document.getElementById(
+        "utilisateursTableBody"
+      );
+
+
+    const overlay =
+      document.getElementById(
+        "utilisateurFormOverlay"
+      );
+
+
+    const formulaire =
+      document.getElementById(
+        "utilisateurForm"
+      );
+
+
+    const recherche =
+      document.getElementById(
+        "rechercheUtilisateur"
+      );
+
+
+    const idUtilisateur =
+      document.getElementById(
+        "idUtilisateur"
+      );
+
+
+    const nomUtilisateur =
+      document.getElementById(
+        "nomUtilisateur"
+      );
+
+
+    const prenomUtilisateur =
+      document.getElementById(
+        "prenomUtilisateur"
+      );
+
+
+    const emailUtilisateur =
+      document.getElementById(
+        "emailUtilisateur"
+      );
+
+
+    const motDePasseUtilisateur =
+      document.getElementById(
+        "motDePasseUtilisateur"
+      );
+
+
+    const roleUtilisateur =
+      document.getElementById(
+        "roleUtilisateur"
+      );
+
+
+    const statutUtilisateur =
+      document.getElementById(
+        "statutUtilisateur"
+      );
+
+
+    const formulaireTitre =
+      document.getElementById(
+        "formulaireTitre"
+      );
+
+
+    const messageBox =
+      document.getElementById(
+        "utilisateurMessage"
+      );
+
+
+    const enregistrerBtn =
+      document.getElementById(
+        "enregistrerUtilisateurBtn"
+      );
+
+
+    let utilisateursData = [];
+
+
+    /* ==========================================
+       CHARGER LES UTILISATEURS
+    ========================================== */
+
+    async function chargerUtilisateurs() {
+
+      try {
+
+        const response =
+          await fetch(
+            UTILISATEURS_API
+          );
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            "Impossible de charger les utilisateurs."
+          );
+
+        }
+
+
+        const data =
+          await response.json();
+
+
+        utilisateursData =
+          Array.isArray(data)
+            ? data
+            : data.utilisateurs || [];
+
+
+        afficherUtilisateurs(
+          utilisateursData
+        );
+
+
+        calculerStatistiques();
+
+      }
+
+      catch (error) {
+
+        console.error(
+          error
+        );
+
+
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="5" class="utilisateurs-empty">
+              Impossible de charger les utilisateurs.
+            </td>
+          </tr>
+        `;
+
+      }
+
+    }
+
+
+    /* ==========================================
+       AFFICHER LES UTILISATEURS
+    ========================================== */
+
+    function afficherUtilisateurs(
+      utilisateurs
+    ) {
+
+      if (
+        utilisateurs.length === 0
+      ) {
+
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="5" class="utilisateurs-empty">
+              Aucun utilisateur trouvé.
+            </td>
+          </tr>
+        `;
+
+        return;
+
+      }
+
+
+      tableBody.innerHTML = "";
+
+
+      utilisateurs.forEach(
+        function(utilisateur) {
+
+          const id =
+            utilisateur.id_utilisateur ??
+            utilisateur.id;
+
+
+          const nom =
+            utilisateur.nom ??
+            "";
+
+
+          const prenom =
+            utilisateur.prenom ??
+            "";
+
+
+          const email =
+            utilisateur.email ??
+            utilisateur.login ??
+            "-";
+
+
+          const role =
+            utilisateur.nom_role ??
+            utilisateur.role ??
+            "Utilisateur";
+
+
+          const statut =
+            utilisateur.statut ??
+            "actif";
+
+
+          const tr =
+            document.createElement(
+              "tr"
+            );
+
+
+          tr.innerHTML = `
+
+            <td>
+
+              <div class="utilisateur-identite">
+
+                <div class="utilisateur-avatar">
+
+                  ${
+                    (
+                      prenom.charAt(0)
+                      +
+                      nom.charAt(0)
+                    ).toUpperCase()
+                    || "U"
+                  }
+
+                </div>
+
+                <div>
+
+                  <strong>
+                    ${prenom} ${nom}
+                  </strong>
+
+                  <span>
+                    ID #${id}
+                  </span>
+
+                </div>
+
+              </div>
+
+            </td>
+
+
+            <td>
+              ${email}
+            </td>
+
+
+            <td>
+
+              <span class="utilisateur-role">
+                ${role}
+              </span>
+
+            </td>
+
+
+            <td>
+
+              <span class="
+                utilisateur-statut
+                ${statut === "actif"
+                  ? "actif"
+                  : "inactif"}
+              ">
+
+                ${statut}
+
+              </span>
+
+            </td>
+
+
+            <td>
+
+              <div class="utilisateur-actions">
+
+                <button
+                  type="button"
+                  class="utilisateur-edit-btn"
+                  data-id="${id}"
+                >
+                  Modifier
+                </button>
+
+
+                <button
+                  type="button"
+                  class="utilisateur-delete-btn"
+                  data-id="${id}"
+                >
+                  Supprimer
+                </button>
+
+              </div>
+
+            </td>
+
+          `;
+
+
+          tableBody.appendChild(
+            tr
+          );
+
+        }
+      );
+
+
+      ajouterEvenementsActions();
+
+    }
+
+
+    /* ==========================================
+       STATISTIQUES
+    ========================================== */
+
+    function calculerStatistiques() {
+
+      document.getElementById(
+        "totalUtilisateurs"
+      ).textContent =
+        utilisateursData.length;
+
+
+      const actifs =
+        utilisateursData.filter(
+          function(utilisateur) {
+
+            return (
+              utilisateur.statut ??
+              "actif"
+            ) === "actif";
+
+          }
+        ).length;
+
+
+      document.getElementById(
+        "totalActifs"
+      ).textContent =
+        actifs;
+
+
+      const admins =
+        utilisateursData.filter(
+          function(utilisateur) {
+
+            const role =
+              String(
+                utilisateur.nom_role ??
+                utilisateur.role ??
+                ""
+              ).toLowerCase();
+
+
+            return role.includes(
+              "admin"
+            );
+
+          }
+        ).length;
+
+
+      document.getElementById(
+        "totalAdmins"
+      ).textContent =
+        admins;
+
+    }
+
+
+    /* ==========================================
+       CHARGER LES ROLES
+    ========================================== */
+
+    async function chargerRoles() {
+
+      try {
+
+        const response =
+          await fetch(
+            ROLES_API
+          );
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            "Impossible de charger les rôles."
+          );
+
+        }
+
+
+        const data =
+          await response.json();
+
+
+        const roles =
+          Array.isArray(data)
+            ? data
+            : data.roles || [];
+
+
+        roleUtilisateur.innerHTML =
+          '<option value="">Sélectionner un rôle</option>';
+
+
+        roles.forEach(
+          function(role) {
+
+            const id =
+              role.id_role ??
+              role.id;
+
+
+            const nom =
+              role.nom_role ??
+              role.nom ??
+              role.libelle ??
+              "Rôle";
+
+
+            const option =
+              document.createElement(
+                "option"
+              );
+
+
+            option.value =
+              id;
+
+
+            option.textContent =
+              nom;
+
+
+            roleUtilisateur.appendChild(
+              option
+            );
+
+          }
+        );
+
+      }
+
+      catch (error) {
+
+        console.error(
+          error
+        );
+
+      }
+
+    }
+
+
+    /* ==========================================
+       OUVRIR FORMULAIRE
+    ========================================== */
+
+    document
+      .getElementById(
+        "ouvrirFormulaireBtn"
+      )
+      .addEventListener(
+        "click",
+        function() {
+
+          formulaire.reset();
+
+
+          idUtilisateur.value =
+            "";
+
+
+          formulaireTitre.textContent =
+            "Ajouter un utilisateur";
+
+
+          messageBox.style.display =
+            "none";
+
+
+          overlay.style.display =
+            "flex";
+
+        }
+      );
+
+
+    /* ==========================================
+       FERMER FORMULAIRE
+    ========================================== */
+
+    function fermerFormulaire() {
+
+      overlay.style.display =
+        "none";
+
+
+      formulaire.reset();
+
+
+      idUtilisateur.value =
+        "";
+
+
+      messageBox.style.display =
+        "none";
+
+    }
+
+
+    document
+      .getElementById(
+        "fermerFormulaireBtn"
+      )
+      .addEventListener(
+        "click",
+        fermerFormulaire
+      );
+
+
+    document
+      .getElementById(
+        "annulerUtilisateurBtn"
+      )
+      .addEventListener(
+        "click",
+        fermerFormulaire
+      );
+
+
+    /* ==========================================
+       RECHERCHE
+    ========================================== */
+
+    recherche.addEventListener(
+      "input",
+      function() {
+
+        const texte =
+          recherche.value
+            .toLowerCase()
+            .trim();
+
+
+        const resultat =
+          utilisateursData.filter(
+            function(utilisateur) {
+
+              const contenu =
+                (
+                  (utilisateur.nom || "")
+                  + " "
+                  + (utilisateur.prenom || "")
+                  + " "
+                  + (utilisateur.email || "")
+                  + " "
+                  + (utilisateur.nom_role || "")
+                  + " "
+                  + (utilisateur.role || "")
+                ).toLowerCase();
+
+
+              return contenu.includes(
+                texte
+              );
+
+            }
+          );
+
+
+        afficherUtilisateurs(
+          resultat
+        );
+
+      }
+    );
+
+
+    /* ==========================================
+       MODIFIER / SUPPRIMER
+    ========================================== */
+
+    function ajouterEvenementsActions() {
+
+      document
+        .querySelectorAll(
+          ".utilisateur-edit-btn"
+        )
+        .forEach(
+          function(button) {
+
+            button.addEventListener(
+              "click",
+              function() {
+
+                modifierUtilisateur(
+                  button.dataset.id
+                );
+
+              }
+            );
+
+          }
+        );
+
+
+      document
+        .querySelectorAll(
+          ".utilisateur-delete-btn"
+        )
+        .forEach(
+          function(button) {
+
+            button.addEventListener(
+              "click",
+              function() {
+
+                supprimerUtilisateur(
+                  button.dataset.id
+                );
+
+              }
+            );
+
+          }
+        );
+
+    }
+
+
+    function modifierUtilisateur(id) {
+
+      const utilisateur =
+        utilisateursData.find(
+          function(item) {
+
+            return String(
+              item.id_utilisateur ??
+              item.id
+            ) === String(
+              id
+            );
+
+          }
+        );
+
+
+      if (!utilisateur) {
+
+        return;
+
+      }
+
+
+      idUtilisateur.value =
+        id;
+
+
+      nomUtilisateur.value =
+        utilisateur.nom ??
+        "";
+
+
+      prenomUtilisateur.value =
+        utilisateur.prenom ??
+        "";
+
+
+      emailUtilisateur.value =
+        utilisateur.email ??
+        "";
+
+
+      roleUtilisateur.value =
+        utilisateur.id_role ??
+        "";
+
+
+      statutUtilisateur.value =
+        utilisateur.statut ??
+        "actif";
+
+
+      motDePasseUtilisateur.value =
+        "";
+
+
+      formulaireTitre.textContent =
+        "Modifier l'utilisateur";
+
+
+      overlay.style.display =
+        "flex";
+
+    }
+
+
+    async function supprimerUtilisateur(
+      id
+    ) {
+
+      const confirmation =
+        confirm(
+          "Voulez-vous vraiment supprimer cet utilisateur ?"
+        );
+
+
+      if (!confirmation) {
+
+        return;
+
+      }
+
+
+      try {
+
+        const response =
+          await fetch(
+            UTILISATEURS_API
+            + "/"
+            + id,
+            {
+              method:
+                "DELETE"
+            }
+          );
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            "Impossible de supprimer cet utilisateur."
+          );
+
+        }
+
+
+        await chargerUtilisateurs();
+
+      }
+
+      catch (error) {
+
+        alert(
+          error.message
+        );
+
+      }
+
+    }
+
+
+    /* ==========================================
+       AJOUTER / MODIFIER
+    ========================================== */
+
+    formulaire.addEventListener(
+      "submit",
+      async function(event) {
+
+        event.preventDefault();
+
+
+        const id =
+          idUtilisateur.value;
+        statut:
+          statut
+            const utilisateur = {
+
+          nom:
+            nomUtilisateur.value.trim(),
+
+          prenom:
+            prenomUtilisateur.value.trim(),
+
+          email:
+            emailUtilisateur.value.trim(),
+
+          id_role:
+            roleUtilisateur.value,
+
+          statut:
+            statutUtilisateur.value
+
+        };
+
+
+        if (
+          motDePasseUtilisateur.value
+        ) {
+
+          utilisateur.mot_de_passe =
+            motDePasseUtilisateur.value;
+
+        }
+
+
+        try {
+
+          enregistrerBtn.disabled =
+            true;
+
+
+          enregistrerBtn.textContent =
+            "Enregistrement...";
+
+
+          const url =
+            id
+              ? UTILISATEURS_API + "/" + id
+              : UTILISATEURS_API;
+
+
+          const method =
+            id
+              ? "PUT"
+              : "POST";
+
+
+          const response =
+            await fetch(
+              url,
+              {
+
+                method: method,
+
+                headers: {
+                  "Content-Type":
+                    "application/json"
+                },
+
+                body:
+                  JSON.stringify(
+                    utilisateur
+                  )
+
+              }
+            );
+
+
+          let data = {};
+
+
+          try {
+
+            data =
+              await response.json();
+
+          }
+
+          catch {
+
+            data = {};
+
+          }
+
+
+          if (!response.ok) {
+
+            throw new Error(
+              data.message ||
+              "Impossible d'enregistrer l'utilisateur."
+            );
+
+          }
+
+
+          afficherMessage(
+            id
+              ? "Utilisateur modifié avec succès."
+              : "Utilisateur ajouté avec succès.",
+            "success"
+          );
+
+
+          await chargerUtilisateurs();
+
+
+          setTimeout(
+            function() {
+
+              fermerFormulaire();
+
+            },
+            700
+          );
+
+        }
+
+        catch (error) {
+
+          console.error(
+            error
+          );
+
+
+          afficherMessage(
+            error.message,
+            "error"
+          );
+
+        }
+
+        finally {
+
+          enregistrerBtn.disabled =
+            false;
+
+
+          enregistrerBtn.textContent =
+            "Enregistrer";
+
+        }
+
+      }
+    );
+
+
+    function afficherMessage(
+      texte,
+      type
+    ) {
+
+      messageBox.textContent =
+        texte;
+
+
+      messageBox.className =
+        "utilisateur-message "
+        + type;
+
+
+      messageBox.style.display =
+        "block";
+
+    }
+
+
+    chargerUtilisateurs();
+
+    chargerRoles();
+
+  </script>
+
+</body>
+
+</html>

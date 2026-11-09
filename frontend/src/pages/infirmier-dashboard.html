@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Espace infirmier - Al-Shifa
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="../css/style.css"
+  >
+
+</head>
+
+
+<body>
+
+  <div class="app">
+
+    <div id="sidebar"></div>
+
+
+    <main class="main">
+
+      <div id="topbar"></div>
+
+
+      <section class="doctor-dashboard">
+
+
+        <!-- =================================================
+             BIENVENUE
+        ================================================== -->
+
+        <div class="doctor-hero">
+
+          <small>
+            ESPACE INFIRMIER • HÔPITAL AL-SHIFA
+          </small>
+
+          <h1 id="infirmierWelcome">
+            Bonjour Infirmier 👋
+          </h1>
+
+          <p>
+            Suivez les patients hospitalisés et leur prise en charge.
+          </p>
+
+        </div>
+
+
+
+        <!-- =================================================
+             STATISTIQUES
+        ================================================== -->
+
+        <section class="doctor-kpis">
+
+
+          <!-- HOSPITALISATIONS -->
+
+          <div class="doctor-kpi">
+
+            <div class="doctor-kpi-icon">
+              🛏️
+            </div>
+
+            <div>
+
+              <span>
+                Hospitalisations
+              </span>
+
+              <strong id="hospitalisationsCount">
+                0
+              </strong>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- PATIENTS HOSPITALISES -->
+
+          <div class="doctor-kpi">
+
+            <div class="doctor-kpi-icon">
+              👥
+            </div>
+
+            <div>
+
+              <span>
+                Patients hospitalisés
+              </span>
+
+              <strong id="patientsCount">
+                0
+              </strong>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- EN COURS -->
+
+          <div class="doctor-kpi">
+
+            <div class="doctor-kpi-icon">
+              🩺
+            </div>
+
+            <div>
+
+              <span>
+                En cours
+              </span>
+
+              <strong id="activeCount">
+                0
+              </strong>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- SORTIES -->
+
+          <div class="doctor-kpi">
+
+            <div class="doctor-kpi-icon">
+              🚪
+            </div>
+
+            <div>
+
+              <span>
+                Sorties
+              </span>
+
+              <strong id="sortiesCount">
+                0
+              </strong>
+
+            </div>
+
+          </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             CONTENU
+        ================================================== -->
+
+        <section class="doctor-grid">
+
+
+          <!-- PATIENTS HOSPITALISES -->
+
+          <div class="doctor-panel">
+
+            <h2>
+              🛏️ Patients hospitalisés
+            </h2>
+
+
+            <div id="hospitalisationsList">
+
+              <p>
+                Chargement des hospitalisations...
+              </p>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- ACTIONS RAPIDES -->
+
+          <div class="doctor-panel">
+
+            <h2>
+              ⚡ Actions rapides
+            </h2>
+
+
+            <div class="doctor-actions">
+
+
+              <a
+                href="hospitalisation.html"
+                class="doctor-action"
+              >
+                🛏️ Hospitalisations
+              </a>
+
+
+              <a
+                href="suivi-hospitalisation.html"
+                class="doctor-action"
+              >
+                🩺 Suivi hospitalisation
+              </a>
+
+
+              <a
+                href="sortie-patient.html"
+                class="doctor-action"
+              >
+                🚪 Sortie patient
+              </a>
+
+
+              <a
+                href="patients.html"
+                class="doctor-action"
+              >
+                👥 Voir les patients
+              </a>
+
+
+              <a
+                href="profil.html"
+                class="doctor-action"
+              >
+                👤 Mon profil
+              </a>
+
+
+            </div>
+
+          </div>
+
+
+        </section>
+
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       JAVASCRIPT
+  ====================================================== -->
+
+  <script type="module">
+
+
+    /* =====================================================
+       IMPORTS
+    ===================================================== */
+
+    import {
+      afficherLayout
+    } from "../js/layout.js";
+
+
+    import {
+      secureFetch,
+      getUtilisateurConnecte
+    } from "../js/secure-api.js";
+
+
+    afficherLayout(
+      "Espace infirmier"
+    );
+
+
+
+    /* =====================================================
+       API
+    ===================================================== */
+
+    const API_URL =
+      "http://localhost:3000/api";
+
+
+
+    /* =====================================================
+       UTILISATEUR CONNECTE
+    ===================================================== */
+
+    const utilisateur =
+      getUtilisateurConnecte();
+
+
+    if (!utilisateur) {
+
+      window.location.replace(
+        "/"
+      );
+
+    }
+
+
+
+    /* =====================================================
+       NOM COMPLET INFIRMIER
+    ===================================================== */
+
+    const infirmierWelcome =
+      document.getElementById(
+        "infirmierWelcome"
+      );
+
+
+    if (
+      utilisateur?.prenom
+      ||
+      utilisateur?.nom
+    ) {
+
+      const nomComplet =
+        `${utilisateur.prenom || ""} ${utilisateur.nom || ""}`
+          .trim();
+
+
+      infirmierWelcome.textContent =
+        `Bonjour ${nomComplet} 👋`;
+
+    }
+
+    else {
+
+      infirmierWelcome.textContent =
+        "Bonjour Infirmier 👋";
+
+    }
+
+
+
+    /* =====================================================
+       ROLE
+    ===================================================== */
+
+    const role =
+      String(
+        utilisateur?.role || ""
+      )
+        .toLowerCase()
+        .trim();
+
+
+
+    /* =====================================================
+       PROTECTION DU DASHBOARD
+    ===================================================== */
+
+    if (
+      !role.includes("infirmier")
+    ) {
+
+      window.location.replace(
+        "dashboard.html"
+      );
+
+    }
+
+
+
+    /* =====================================================
+       ELEMENTS HTML
+    ===================================================== */
+
+    const hospitalisationsCount =
+      document.getElementById(
+        "hospitalisationsCount"
+      );
+
+
+    const patientsCount =
+      document.getElementById(
+        "patientsCount"
+      );
+
+
+    const activeCount =
+      document.getElementById(
+        "activeCount"
+      );
+
+
+    const sortiesCount =
+      document.getElementById(
+        "sortiesCount"
+      );
+
+
+    const hospitalisationsList =
+      document.getElementById(
+        "hospitalisationsList"
+      );
+
+
+
+    /* =====================================================
+       DASHBOARD INFIRMIER
+    ===================================================== */
+
+    async function chargerDashboardInfirmier() {
+
+      try {
+
+
+        /* =================================================
+           APPEL BACKEND SECURISE
+        ================================================= */
+
+        const response =
+          await secureFetch(
+
+            `${API_URL}/access/infirmier/dashboard`
+
+          );
+
+
+
+        const data =
+          await response
+            .json()
+            .catch(
+              () => ({})
+            );
+
+
+
+        /* =================================================
+           VERIFIER REPONSE BACKEND
+        ================================================= */
+
+        if (!response.ok) {
+
+          throw new Error(
+
+            data.message
+
+            ||
+
+            "Impossible de charger le dashboard infirmier."
+
+          );
+
+        }
+
+
+
+        console.log(
+          "DASHBOARD INFIRMIER :",
+          data
+        );
+
+
+
+        /* =================================================
+           STATISTIQUES
+        ================================================= */
+
+        hospitalisationsCount.textContent =
+
+          data.statistiques?.hospitalisations
+
+          ??
+
+          0;
+
+
+
+        patientsCount.textContent =
+
+          data.statistiques?.patients_hospitalises
+
+          ??
+
+          0;
+
+
+
+        activeCount.textContent =
+
+          data.statistiques?.en_cours
+
+          ??
+
+          0;
+
+
+
+        sortiesCount.textContent =
+
+          data.statistiques?.sorties
+
+          ??
+
+          0;
+
+
+
+        /* =================================================
+           HOSPITALISATIONS
+        ================================================= */
+
+        const hospitalisations =
+
+          Array.isArray(
+            data.hospitalisations
+          )
+
+            ? data.hospitalisations
+
+            : [];
+
+
+
+        /* =================================================
+           AUCUN PATIENT
+        ================================================= */
+
+        if (
+          hospitalisations.length === 0
+        ) {
+
+          hospitalisationsList.innerHTML =
+            `
+
+              <div
+                style="
+                  text-align:center;
+                  padding:40px 20px;
+                  color:#94a3b8;
+                "
+              >
+
+                <div
+                  style="
+                    font-size:40px;
+                    margin-bottom:10px;
+                  "
+                >
+                  🛏️
+                </div>
+
+
+                <strong
+                  style="
+                    color:#475569;
+                  "
+                >
+                  Aucun patient actuellement hospitalisé
+                </strong>
+
+              </div>
+
+            `;
+
+
+          return;
+
+        }
+
+
+
+        /* =================================================
+           AFFICHER PATIENTS HOSPITALISES
+        ================================================= */
+
+        hospitalisationsList.innerHTML =
+
+          hospitalisations
+            .map(
+
+              hospitalisation => {
+
+
+                const patient =
+
+                  `${
+                    hospitalisation.prenom_patient || ""
+                  } ${
+                    hospitalisation.nom_patient || ""
+                  }`
+                    .trim();
+
+
+
+                const chambre =
+
+                  hospitalisation.numero_chambre
+
+                  ??
+
+                  hospitalisation.chambre
+
+                  ??
+
+                  "-";
+
+
+
+                const lit =
+
+                  hospitalisation.numero_lit
+
+                  ??
+
+                  hospitalisation.lit
+
+                  ??
+
+                  "-";
+
+
+
+                const dateEntree =
+
+                  hospitalisation.date_entree
+
+                    ? String(
+                        hospitalisation.date_entree
+                      ).substring(
+                        0,
+                        10
+                      )
+
+                    : "-";
+
+
+
+                return `
+
+                  <div class="doctor-appointment">
+
+
+                    <span class="doctor-time">
+
+                      🛏️
+
+                    </span>
+
+
+
+                    <div class="doctor-patient">
+
+
+                      <strong>
+
+                        ${
+                          patient
+                          ||
+                          "Patient"
+                        }
+
+                      </strong>
+
+
+
+                      <small>
+
+                        Chambre ${chambre}
+
+                        • Lit ${lit}
+
+                        • Entrée ${dateEntree}
+
+                      </small>
+
+
+                    </div>
+
+
+
+                    <span class="status confirmed">
+
+                      En cours
+
+                    </span>
+
+
+                  </div>
+
+                `;
+
+              }
+
+            )
+            .join("");
+
+
+
+      }
+
+      catch (error) {
+
+
+        console.error(
+
+          "Erreur dashboard infirmier :",
+
+          error
+
+        );
+
+
+
+        /* =================================================
+           REMETTRE COMPTEURS A ZERO
+        ================================================= */
+
+        hospitalisationsCount.textContent =
+          "0";
+
+
+        patientsCount.textContent =
+          "0";
+
+
+        activeCount.textContent =
+          "0";
+
+
+        sortiesCount.textContent =
+          "0";
+
+
+
+        /* =================================================
+           MESSAGE ERREUR
+        ================================================= */
+
+        hospitalisationsList.innerHTML =
+          `
+
+            <div
+              style="
+                padding:25px;
+                color:#991b1b;
+                background:#fee2e2;
+                border-radius:12px;
+              "
+            >
+
+              Impossible de charger les données
+              depuis le serveur.
+
+              <br><br>
+
+              ${
+                error.message
+                ||
+                ""
+              }
+
+            </div>
+
+          `;
+
+      }
+
+    }
+
+
+
+    /* =====================================================
+       CHARGEMENT DU DASHBOARD
+    ===================================================== */
+
+    chargerDashboardInfirmier();
+
+
+  </script>
+
+
+</body>
+
+</html>

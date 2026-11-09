@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Espace réception - Al-Shifa
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="../css/style.css"
+  >
+
+</head>
+
+
+<body>
+
+  <div class="app">
+
+    <div id="sidebar"></div>
+
+
+    <main class="main">
+
+      <div id="topbar"></div>
+
+
+      <section class="doctor-dashboard">
+
+
+        <!-- =================================================
+             BIENVENUE
+        ================================================== -->
+
+        <div class="doctor-hero">
+
+          <small>
+            ESPACE RÉCEPTION • HÔPITAL AL-SHIFA
+          </small>
+
+          <h1 id="receptionWelcome">
+            Bonjour Réception 👋
+          </h1>
+
+          <p>
+            Gérez les patients et les rendez-vous de l'hôpital.
+          </p>
+
+        </div>
+
+
+
+        <!-- =================================================
+             STATISTIQUES
+        ================================================== -->
+
+        <section class="doctor-kpis">
+
+
+          <!-- PATIENTS -->
+
+          <div class="doctor-kpi">
+
+            <div class="doctor-kpi-icon">
+              👥
+            </div>
+
+            <div>
+
+              <span>
+                Patients
+              </span>
+
+              <strong id="patientsCount">
+                0
+              </strong>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- RENDEZ-VOUS AUJOURD'HUI -->
+
+          <div class="doctor-kpi">
+
+            <div class="doctor-kpi-icon">
+              📅
+            </div>
+
+            <div>
+
+              <span>
+                Rendez-vous aujourd'hui
+              </span>
+
+              <strong id="todayCount">
+                0
+              </strong>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- CONFIRMES -->
+
+          <div class="doctor-kpi">
+
+            <div class="doctor-kpi-icon">
+              ✅
+            </div>
+
+            <div>
+
+              <span>
+                Confirmés
+              </span>
+
+              <strong id="confirmedCount">
+                0
+              </strong>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- EN ATTENTE -->
+
+          <div class="doctor-kpi">
+
+            <div class="doctor-kpi-icon">
+              ⏳
+            </div>
+
+            <div>
+
+              <span>
+                En attente
+              </span>
+
+              <strong id="waitingCount">
+                0
+              </strong>
+
+            </div>
+
+          </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             CONTENU
+        ================================================== -->
+
+        <section class="doctor-grid">
+
+
+          <!-- RENDEZ-VOUS DU JOUR -->
+
+          <div class="doctor-panel">
+
+            <h2>
+              📅 Rendez-vous du jour
+            </h2>
+
+
+            <div id="rendezVousList">
+
+              <p>
+                Chargement des rendez-vous...
+              </p>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- ACTIONS RAPIDES -->
+
+          <div class="doctor-panel">
+
+            <h2>
+              ⚡ Actions rapides
+            </h2>
+
+
+            <div class="doctor-actions">
+
+
+              <a
+                href="patients.html"
+                class="doctor-action"
+              >
+                👥 Voir les patients
+              </a>
+
+
+              <a
+                href="patients.html"
+                class="doctor-action"
+              >
+                ➕ Ajouter un patient
+              </a>
+
+
+              <a
+                href="rendez-vous.html"
+                class="doctor-action"
+              >
+                📅 Rendez-vous
+              </a>
+
+
+              <a
+                href="rendez-vous.html"
+                class="doctor-action"
+              >
+                ➕ Nouveau rendez-vous
+              </a>
+
+
+              <a
+                href="profil.html"
+                class="doctor-action"
+              >
+                👤 Mon profil
+              </a>
+
+
+            </div>
+
+          </div>
+
+
+        </section>
+
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       JAVASCRIPT
+  ====================================================== -->
+
+  <script type="module">
+
+
+    /* =====================================================
+       IMPORTS
+    ===================================================== */
+
+    import {
+      afficherLayout
+    } from "../js/layout.js";
+
+
+    import {
+      secureFetch,
+      getUtilisateurConnecte
+    } from "../js/secure-api.js";
+
+
+    afficherLayout(
+      "Espace réception"
+    );
+
+
+
+    /* =====================================================
+       API
+    ===================================================== */
+
+    const API_URL =
+      "http://localhost:3000/api";
+
+
+
+    /* =====================================================
+       UTILISATEUR CONNECTE
+    ===================================================== */
+
+    const utilisateur =
+      getUtilisateurConnecte();
+
+
+    if (!utilisateur) {
+
+      window.location.replace(
+        "/"
+      );
+
+    }
+
+
+
+    /* =====================================================
+       NOM COMPLET RECEPTION
+    ===================================================== */
+
+    const receptionWelcome =
+      document.getElementById(
+        "receptionWelcome"
+      );
+
+
+    if (
+      utilisateur?.prenom
+      ||
+      utilisateur?.nom
+    ) {
+
+      const nomComplet =
+        `${utilisateur.prenom || ""} ${utilisateur.nom || ""}`
+          .trim();
+
+
+      receptionWelcome.textContent =
+        `Bonjour ${nomComplet} 👋`;
+
+    }
+
+    else {
+
+      receptionWelcome.textContent =
+        "Bonjour Réception 👋";
+
+    }
+
+
+
+    /* =====================================================
+       ROLE
+    ===================================================== */
+
+    const role =
+      String(
+        utilisateur?.role || ""
+      )
+        .toLowerCase()
+        .trim();
+
+
+
+    /* =====================================================
+       PROTECTION DU DASHBOARD
+    ===================================================== */
+
+    if (
+      !role.includes("réception")
+      &&
+      !role.includes("reception")
+    ) {
+
+      window.location.replace(
+        "dashboard.html"
+      );
+
+    }
+
+
+
+    /* =====================================================
+       ELEMENTS HTML
+    ===================================================== */
+
+    const patientsCount =
+      document.getElementById(
+        "patientsCount"
+      );
+
+
+    const todayCount =
+      document.getElementById(
+        "todayCount"
+      );
+
+
+    const confirmedCount =
+      document.getElementById(
+        "confirmedCount"
+      );
+
+
+    const waitingCount =
+      document.getElementById(
+        "waitingCount"
+      );
+
+
+    const rendezVousList =
+      document.getElementById(
+        "rendezVousList"
+      );
+
+
+
+    /* =====================================================
+       DATE DU JOUR
+    ===================================================== */
+
+    function getDateDuJour() {
+
+      const maintenant =
+        new Date();
+
+
+      const annee =
+        maintenant.getFullYear();
+
+
+      const mois =
+        String(
+          maintenant.getMonth() + 1
+        ).padStart(
+          2,
+          "0"
+        );
+
+
+      const jour =
+        String(
+          maintenant.getDate()
+        ).padStart(
+          2,
+          "0"
+        );
+
+
+      return `${annee}-${mois}-${jour}`;
+
+    }
+
+
+
+    /* =====================================================
+       CHARGER DASHBOARD RECEPTION
+    ===================================================== */
+
+    async function chargerDashboardReception() {
+
+      try {
+
+
+        /* =================================================
+           PATIENTS
+        ================================================= */
+
+        const patientsResponse =
+          await secureFetch(
+            `${API_URL}/access/patients`
+          );
+
+
+        const patientsData =
+          await patientsResponse
+            .json()
+            .catch(
+              () => []
+            );
+
+
+        if (!patientsResponse.ok) {
+
+          throw new Error(
+            patientsData.message
+            ||
+            "Impossible de charger les patients."
+          );
+
+        }
+
+
+        const patients =
+          Array.isArray(
+            patientsData
+          )
+            ? patientsData
+            : patientsData.patients || [];
+
+
+        patientsCount.textContent =
+          patients.length;
+
+
+
+        /* =================================================
+           RENDEZ-VOUS
+        ================================================= */
+
+        const rdvResponse =
+          await secureFetch(
+            `${API_URL}/access/rendez-vous`
+          );
+
+
+        const rdvData =
+          await rdvResponse
+            .json()
+            .catch(
+              () => []
+            );
+
+
+        if (!rdvResponse.ok) {
+
+          throw new Error(
+            rdvData.message
+            ||
+            "Impossible de charger les rendez-vous."
+          );
+
+        }
+
+
+        const rendezVous =
+          Array.isArray(
+            rdvData
+          )
+            ? rdvData
+            : rdvData.rendez_vous || rdvData.rendezVous || [];
+
+
+
+        /* =================================================
+           RENDEZ-VOUS DU JOUR
+        ================================================= */
+
+        const aujourdHui =
+          getDateDuJour();
+
+
+        const rendezVousDuJour =
+          rendezVous.filter(
+            rdv => {
+
+              const dateRdv =
+                rdv.date_rendez_vous
+                ||
+                rdv.date_rdv
+                ||
+                rdv.date;
+
+
+              if (!dateRdv) {
+                return false;
+              }
+
+
+              return String(
+                dateRdv
+              ).substring(
+                0,
+                10
+              ) === aujourdHui;
+
+            }
+          );
+
+
+
+        todayCount.textContent =
+          rendezVousDuJour.length;
+
+
+
+        /* =================================================
+           STATUTS
+        ================================================= */
+
+        const confirmes =
+          rendezVousDuJour.filter(
+            rdv => {
+
+              const statut =
+                String(
+                  rdv.statut || ""
+                )
+                  .toLowerCase()
+                  .trim();
+
+
+              return (
+                statut.includes("confirm")
+                ||
+                statut === "validé"
+                ||
+                statut === "valide"
+              );
+
+            }
+          );
+
+
+        const enAttente =
+          rendezVousDuJour.filter(
+            rdv => {
+
+              const statut =
+                String(
+                  rdv.statut || ""
+                )
+                  .toLowerCase()
+                  .trim();
+
+
+              return (
+                statut.includes("attente")
+                ||
+                statut === ""
+              );
+
+            }
+          );
+
+
+        confirmedCount.textContent =
+          confirmes.length;
+
+
+        waitingCount.textContent =
+          enAttente.length;
+
+
+
+        /* =================================================
+           AUCUN RENDEZ-VOUS
+        ================================================= */
+
+        if (
+          rendezVousDuJour.length === 0
+        ) {
+
+          rendezVousList.innerHTML =
+            `
+
+              <div
+                style="
+                  text-align:center;
+                  padding:40px 20px;
+                  color:#94a3b8;
+                "
+              >
+
+                <div
+                  style="
+                    font-size:40px;
+                    margin-bottom:10px;
+                  "
+                >
+                  📅
+                </div>
+
+
+                <strong
+                  style="
+                    color:#475569;
+                  "
+                >
+                  Aucun rendez-vous aujourd'hui
+                </strong>
+
+              </div>
+
+            `;
+
+
+          return;
+
+        }
+
+
+
+        /* =================================================
+           AFFICHER RENDEZ-VOUS
+        ================================================= */
+
+        rendezVousList.innerHTML =
+
+          rendezVousDuJour
+            .map(
+
+              rdv => {
+
+
+                const patient =
+
+                  `${
+                    rdv.prenom_patient || ""
+                  } ${
+                    rdv.nom_patient || ""
+                  }`
+                    .trim()
+                  ||
+                  rdv.patient
+                  ||
+                  "Patient";
+
+
+                const heure =
+                  rdv.heure_rendez_vous
+                  ||
+                  rdv.heure_rdv
+                  ||
+                  rdv.heure
+                  ||
+                  "--:--";
+
+
+                const medecin =
+
+                  `${
+                    rdv.prenom_medecin || ""
+                  } ${
+                    rdv.nom_medecin || ""
+                  }`
+                    .trim();
+
+
+                const statut =
+                  String(
+                    rdv.statut || "En attente"
+                  );
+
+
+                const statutNormalise =
+                  statut
+                    .toLowerCase()
+                    .trim();
+
+
+                let statusClass =
+                  "waiting";
+
+
+                if (
+                  statutNormalise.includes(
+                    "confirm"
+                  )
+                ) {
+
+                  statusClass =
+                    "confirmed";
+
+                }
+
+
+                if (
+                  statutNormalise.includes(
+                    "annul"
+                  )
+                ) {
+
+                  statusClass =
+                    "cancelled";
+
+                }
+
+
+
+                return `
+
+                  <div class="doctor-appointment">
+
+
+                    <span class="doctor-time">
+
+                      ${String(heure).substring(0, 5)}
+
+                    </span>
+
+
+
+                    <div class="doctor-patient">
+
+
+                      <strong>
+
+                        ${patient}
+
+                      </strong>
+
+
+                      <small>
+
+                        ${
+                          medecin
+                            ? `Dr ${medecin}`
+                            : "Médecin non renseigné"
+                        }
+
+                      </small>
+
+
+                    </div>
+
+
+
+                    <span class="status ${statusClass}">
+
+                      ${statut}
+
+                    </span>
+
+
+                  </div>
+
+                `;
+
+              }
+
+            )
+            .join("");
+
+
+
+      }
+
+      catch (error) {
+
+
+        console.error(
+          "Erreur dashboard réception :",
+          error
+        );
+
+
+        patientsCount.textContent =
+          "0";
+
+
+        todayCount.textContent =
+          "0";
+
+
+        confirmedCount.textContent =
+          "0";
+
+
+        waitingCount.textContent =
+          "0";
+
+
+        rendezVousList.innerHTML =
+          `
+
+            <div
+              style="
+                padding:25px;
+                color:#991b1b;
+                background:#fee2e2;
+                border-radius:12px;
+              "
+            >
+
+              Impossible de charger les données
+              depuis le serveur.
+
+              <br><br>
+
+              ${
+                error.message
+                ||
+                ""
+              }
+
+            </div>
+
+          `;
+
+      }
+
+    }
+
+
+
+    /* =====================================================
+       CHARGEMENT
+    ===================================================== */
+
+    chargerDashboardReception();
+
+
+  </script>
+
+
+</body>
+
+</html>

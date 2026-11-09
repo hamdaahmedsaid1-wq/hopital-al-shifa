@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connexion | Hôpital Al-Shifa</title>
+
+<style>
+:root {
+  --orange: #f97316;
+  --orange-dark: #d94a00;
+  --dark: #111827;
+  --muted: #667085;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #fff5ef;
+}
+
+.login-page {
+  display: grid;
+  grid-template-columns: 57.5% 42.5%;
+  min-height: 100vh;
+}
+
+/* IMAGE DE GAUCHE */
+
+.login-left {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  color: white;
+  isolation: isolate;
+
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(142, 21, 0, .92) 0%,
+      rgba(189, 39, 0, .76) 24%,
+      rgba(237, 75, 0, .35) 48%,
+      rgba(255, 125, 0, .05) 75%,
+      transparent 100%
+    ),
+    url("/src/assets/hopital-login.png");
+
+  background-size: cover;
+  background-position: center;
+}
+
+/* VAGUES SVG */
+
+.wave {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.wave-top {
+  top: 0;
+  height: 30%;
+}
+
+.wave-bottom {
+  bottom: 0;
+  height: 20%;
+}
+
+.wave svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* LOGO GAUCHE */
+
+.left-header {
+  position: absolute;
+  z-index: 3;
+  top: 5%;
+  left: 5.5%;
+  display: flex;
+  align-items: center;
+  gap: 17px;
+}
+
+.hospital-mark {
+  width: 72px;
+  height: 72px;
+}
+
+.hospital-mark svg {
+  width: 100%;
+  height: 100%;
+}
+
+.hospital-name {
+  padding-right: 25px;
+  border-right: 2px solid rgba(255,255,255,.85);
+}
+
+.hospital-name strong {
+  display: block;
+  font-size: clamp(20px, 2vw, 30px);
+  line-height: 1.05;
+  font-weight: 900;
+}
+
+.hospital-name span {
+  display: block;
+  margin-top: 5px;
+  font-size: 18px;
+}
+
+/* TEXTE BIENVENUE */
+
+.left-content {
+  position: absolute;
+  z-index: 3;
+  top: 32%;
+  left: 5.5%;
+  width: 88%;
+  max-width: 560px;
+}
+
+.left-content h1 {
+  font-size: clamp(55px, 5.3vw, 84px);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -2px;
+  text-shadow: 0 3px 12px rgba(80,20,0,.25);
+}
+
+.orange-line {
+  width: 145px;
+  height: 9px;
+  margin: 18px 0 19px;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #e65100, #ff9c00);
+}
+
+.left-description {
+  font-size: clamp(17px, 1.55vw, 23px);
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+  margin-top: 55px;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  font-size: clamp(14px, 1.15vw, 18px);
+  font-weight: 700;
+}
+
+.feature-icon {
+  width: 51px;
+  height: 51px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,132,23,.65);
+  border: 1px solid rgba(255,255,255,.22);
+}
+
+.feature-icon svg {
+  width: 27px;
+  height: 27px;
+  stroke: white;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* PARTIE DROITE */
+
+.login-right {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  background: linear-gradient(135deg, #fff4ed, #fffaf7);
+}
+
+.login-card {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 570px;
+  padding: 45px 40px;
+  border-radius: 30px;
+  background: white;
+  border: 1px solid #ffeadb;
+  box-shadow: 0 18px 55px rgba(153,66,25,.13);
+}
+
+.login-card::before {
+  content: "";
+  position: absolute;
+  width: 190px;
+  height: 160px;
+  top: -75px;
+  right: -65px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffd9b8, #ff9b46);
+  opacity: .7;
+}
+
+.card-content {
+  position: relative;
+  z-index: 1;
+}
+
+.card-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 40px;
+}
+
+.card-brand-icon {
+  width: 62px;
+  height: 62px;
+  color: #f36b08;
+}
+
+.card-brand-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.card-brand-text {
+  border-left: 1px solid #e65308;
+  padding-left: 14px;
+}
+
+.card-brand-text strong {
+  display: block;
+  font-size: clamp(17px, 1.5vw, 23px);
+  font-weight: 900;
+  color: var(--dark);
+}
+
+.card-brand-text span {
+  display: block;
+  margin-top: 4px;
+  color: #334155;
+}
+
+.login-card h2 {
+  font-size: clamp(29px, 2.6vw, 38px);
+  font-weight: 900;
+  color: var(--dark);
+}
+
+.description {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 8px 0 33px;
+}
+
+.form-group {
+  margin-bottom: 23px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--dark);
+}
+
+.input-box {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  color: #667085;
+  pointer-events: none;
+}
+
+.input-box input {
+  width: 100%;
+  height: 57px;
+  padding: 0 50px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  outline: none;
+  font-size: 15px;
+  color: var(--dark);
+}
+
+.input-box input:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 4px rgba(249,115,22,.12);
+}
+
+.password-toggle {
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 21px;
+}
+
+.form-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 8px 0 30px;
+}
+
+.remember {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #334155;
+  font-size: 14px;
+}
+
+.remember input {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--orange);
+}
+
+.forgot {
+  color: var(--orange-dark);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.login-btn {
+  width: 100%;
+  height: 59px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #ff940b, #e65308);
+  color: white;
+  font-size: 18px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(234,88,12,.2);
+}
+
+.login-btn:hover {
+  filter: brightness(1.06);
+}
+
+.login-btn:disabled {
+  opacity: .65;
+  cursor: wait;
+}
+
+.message {
+  display: none;
+  padding: 12px;
+  margin-bottom: 18px;
+  border-radius: 9px;
+  font-size: 14px;
+}
+
+.message.error {
+  display: block;
+  color: #b91c1c;
+  background: #fef2f2;
+}
+
+.message.success {
+  display: block;
+  color: #15803d;
+  background: #f0fdf4;
+}
+
+.login-footer {
+  margin-top: 34px;
+  text-align: center;
+  color: #475569;
+}
+
+.login-footer strong {
+  display: block;
+  font-size: 13px;
+}
+
+.login-footer small {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* ADAPTATION AUX ECRANS */
+
+@media (max-width: 1100px) {
+  .login-page {
+    grid-template-columns: 54% 46%;
+  }
+
+  .login-left {
+    background-position: 55% center;
+  }
+
+  .left-content {
+    top: 31%;
+  }
+
+  .features {
+    margin-top: 35px;
+  }
+
+  .login-right {
+    padding: 20px;
+  }
+
+  .login-card {
+    padding: 35px 25px;
+  }
+}
+
+@media (max-width: 850px) {
+  .login-page {
+    grid-template-columns: 1fr;
+  }
+
+  .login-left {
+    display: none;
+  }
+
+  .login-right {
+    padding: 22px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 32px 22px;
+  }
+
+  .card-brand-icon {
+    width: 49px;
+    height: 49px;
+  }
+
+  .card-brand-text strong {
+    font-size: 17px;
+  }
+}
+
+@media (max-height: 740px) and (min-width: 851px) {
+  .left-content {
+    top: 29%;
+  }
+
+  .features {
+    margin-top: 25px;
+    gap: 10px;
+  }
+
+  .feature-icon {
+    width: 43px;
+    height: 43px;
+  }
+}
+</style>
+</head>
+<body>
+<main class="login-page">
+
+  <!-- PARTIE GAUCHE -->
+
+  <section class="login-left">
+
+    <!-- VAGUES SUPERIEURES -->
+
+    <div class="wave wave-top">
+      <svg viewBox="0 0 900 270"
+           preserveAspectRatio="none"
+           aria-hidden="true">
+        <defs>
+          <linearGradient id="topGradient"
+                          x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#a91000"/>
+            <stop offset="38%" stop-color="#ed3900"/>
+            <stop offset="75%" stop-color="#ff8700"/>
+            <stop offset="100%" stop-color="#ffc34c"/>
+          </linearGradient>
+          <linearGradient id="topHighlight"
+                          x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#d42b00"/>
+            <stop offset="60%" stop-color="#ff7800"/>
+            <stop offset="100%" stop-color="#ffbc34"/>
+          </linearGradient>
+        </defs>
+
+        <path
+          d="M0 0 H900
+             C700 100 650 175 430 205
+             C250 235 140 175 0 230 Z"
+          fill="url(#topGradient)"
+        />
+
+        <path
+          d="M0 0 H850
+             C690 80 570 115 420 85
+             C240 40 125 55 0 105 Z"
+          fill="url(#topHighlight)"
+          opacity=".85"
+        />
+
+        <path
+          d="M0 55
+             C150 0 265 60 430 47
+             C580 34 670 0 735 0"
+          stroke="#ffc04a"
+          stroke-width="4"
+          fill="none"
+          opacity=".75"
+        />
+      </svg>
+    </div>
+
+    <!-- VAGUES INFERIEURES -->
+
+    <div class="wave wave-bottom">
+      <svg viewBox="0 0 900 190"
+           preserveAspectRatio="none"
+           aria-hidden="true">
+        <defs>
+          <linearGradient id="bottomGradient"
+                          x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#ae1500"/>
+            <stop offset="35%" stop-color="#ec4400"/>
+            <stop offset="75%" stop-color="#ff8700"/>
+            <stop offset="100%" stop-color="#ffc15a"/>
+          </linearGradient>
+          <linearGradient id="bottomLight"
+                          x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#ff7900"/>
+            <stop offset="50%" stop-color="#ffb02c"/>
+            <stop offset="100%" stop-color="#ffdc83"/>
+          </linearGradient>
+        </defs>
+
+        <path
+          d="M0 65
+             C160 10 280 150 455 100
+             C640 45 725 20 900 85
+             L900 190 H0 Z"
+          fill="url(#bottomLight)"
+        />
+
+        <path
+          d="M0 110
+             C175 50 260 175 470 130
+             C660 90 755 75 900 120
+             L900 190 H0 Z"
+          fill="url(#bottomGradient)"
+        />
+
+        <path
+          d="M0 155
+             C210 100 320 195 520 160
+             C680 135 780 140 900 165
+             L900 190 H0 Z"
+          fill="#bd2400"
+          opacity=".65"
+        />
+      </svg>
+    </div>
+
+    <!-- LOGO -->
+
+    <div class="left-header">
+      <div class="hospital-mark">
+        <svg viewBox="0 0 64 64" fill="none">
+          <path
+            d="M32 55L9 33C-4 19 11 3 25 13L32 20L39 13C53 3 68 19 55 33L32 55Z"
+            fill="white"
+          />
+          <path
+            d="M8 33H21L26 25L32 42L38 28L42 33H56"
+            stroke="#e65308"
+            stroke-width="3.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+
+      <div class="hospital-name">
+        <strong>HÔPITAL<br>AL-SHIFA</strong>
+        <span>Djibouti</span>
+      </div>
+    </div>
+
+    <!-- BIENVENUE -->
+
+    <div class="left-content">
+
+      <h1>Bienvenue</h1>
+      <div class="orange-line"></div>
+
+      <p class="left-description">
+        Connectez-vous à votre espace<br>
+        de gestion hospitalière
+      </p>
+
+      <div class="features">
+
+        <div class="feature">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24">
+              <circle cx="9" cy="7" r="3"/>
+              <path d="M3 20v-2a6 6 0 0 1 12 0v2"/>
+              <circle cx="18" cy="9" r="2"/>
+              <path d="M17 15a5 5 0 0 1 4 5"/>
+            </svg>
+          </div>
+          <span>Gestion des patients</span>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="5" width="18"
+                    height="16" rx="2"/>
+              <path d="M7 2v6M17 2v6M3 10h18"/>
+              <path d="M8 14h3M14 14h3M8 18h3"/>
+            </svg>
+          </div>
+          <span>Planification des rendez-vous</span>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="13" width="4"
+                    height="8" rx="1"/>
+              <rect x="10" y="8" width="4"
+                    height="13" rx="1"/>
+              <rect x="17" y="3" width="4"
+                    height="18" rx="1"/>
+            </svg>
+          </div>
+          <span>Suivi des activités hospitalières</span>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+  <!-- PARTIE DROITE -->
+
+  <section class="login-right">
+    <div class="login-card">
+      <div class="card-content">
+
+        <!-- IDENTITE HOPITAL -->
+
+        <div class="card-brand">
+          <div class="card-brand-icon">
+            <svg viewBox="0 0 64 64" fill="none">
+              <path
+                d="M32 55L9 33C-4 19 11 3 25 13L32 20L39 13C53 3 68 19 55 33L32 55Z"
+                fill="currentColor"
+              />
+              <path
+                d="M8 33H21L26 25L32 42L38 28L42 33H56"
+                stroke="white"
+                stroke-width="3.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+
+          <div class="card-brand-text">
+            <strong>HÔPITAL AL-SHIFA</strong>
+            <span>Djibouti</span>
+          </div>
+        </div>
+
+        <h2>Connectez-vous</h2>
+
+        <p class="description">
+          à votre espace de gestion hospitalière
+        </p>
+
+        <div id="message"
+             class="message"
+             role="alert"
+             aria-live="polite"></div>
+
+        <!-- FORMULAIRE -->
+
+        <form id="loginForm">
+
+          <div class="form-group">
+            <label for="username">
+              Nom d'utilisateur
+            </label>
+
+            <div class="input-box">
+              <svg class="input-icon"
+                   viewBox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="1.8">
+                <circle cx="12" cy="7" r="4"/>
+                <path d="M4 21v-2a8 8 0 0 1 16 0v2"/>
+              </svg>
+
+              <input
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Saisissez votre nom d'utilisateur"
+                autocomplete="username"
+                required
+              >
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">
+              Mot de passe
+            </label>
+
+            <div class="input-box">
+              <svg class="input-icon"
+                   viewBox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="1.8">
+                <rect x="4" y="10"
+                      width="16" height="11" rx="2"/>
+                <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+                <path d="M12 15v2"/>
+              </svg>
+
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Saisissez votre mot de passe"
+                autocomplete="current-password"
+                required
+              >
+
+              <button
+                type="button"
+                class="password-toggle"
+                id="togglePassword"
+                aria-label="Afficher le mot de passe"
+              >👁</button>
+            </div>
+          </div>
+
+          <div class="form-options">
+            <label class="remember">
+              <input type="checkbox" id="rememberMe">
+              Se souvenir de moi
+            </label>
+
+            <a href="#"
+               class="forgot"
+               id="forgotPassword">
+              Mot de passe oublié ?
+            </a>
+          </div>
+
+          <button type="submit"
+                  class="login-btn"
+                  id="loginButton">
+            Se connecter →
+          </button>
+
+        </form>
+
+        <div class="login-footer">
+          <strong>HÔPITAL AL-SHIFA • DJIBOUTI</strong>
+          <small>Accès réservé au personnel autorisé</small>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+<!-- =========================================
+       PARTIE 5 - JAVASCRIPT
+  ========================================= -->
+
+  <script>
+
+    /* =========================================
+       1. CONFIGURATION API
+    ========================================= */
+
+    const API_URL = "http://localhost:3000/api";
+
+
+    /* =========================================
+       2. RECUPERATION DES ELEMENTS HTML
+    ========================================= */
+
+    const loginForm =
+      document.getElementById("loginForm");
+
+    const usernameInput =
+      document.getElementById("username");
+
+    const passwordInput =
+      document.getElementById("password");
+
+    const rememberMe =
+      document.getElementById("rememberMe");
+
+    const loginButton =
+      document.getElementById("loginButton");
+
+    const togglePassword =
+      document.getElementById("togglePassword");
+
+    const message =
+      document.getElementById("message");
+
+    const forgotPassword =
+      document.getElementById("forgotPassword");
+
+
+    /* =========================================
+       3. AFFICHER / MASQUER MOT DE PASSE
+    ========================================= */
+
+    togglePassword.addEventListener("click", () => {
+
+      const estMasque =
+        passwordInput.type === "password";
+
+      passwordInput.type =
+        estMasque ? "text" : "password";
+
+      togglePassword.textContent =
+        estMasque ? "🙈" : "👁";
+
+      togglePassword.setAttribute(
+        "aria-label",
+        estMasque
+          ? "Masquer le mot de passe"
+          : "Afficher le mot de passe"
+      );
+
+    });
+
+
+    /* =========================================
+       4. SE SOUVENIR DE MOI
+    ========================================= */
+
+    const ancienUsername =
+      localStorage.getItem("alshifa_username");
+
+    if (ancienUsername) {
+
+      usernameInput.value = ancienUsername;
+
+      rememberMe.checked = true;
+
+    }
+
+
+    /* =========================================
+       5. AFFICHER LES MESSAGES
+    ========================================= */
+
+    function afficherMessage(
+      texte,
+      type = "error"
+    ) {
+
+      message.className = "message " + type;
+
+      message.textContent = texte;
+
+    }
+
+
+    function effacerMessage() {
+
+      message.className = "message";
+
+      message.textContent = "";
+
+    }
+
+
+    /* =========================================
+       6. MOT DE PASSE OUBLIE
+    ========================================= */
+
+    forgotPassword.addEventListener(
+      "click",
+      function(event) {
+
+        event.preventDefault();
+
+        afficherMessage(
+          "Veuillez contacter l'administrateur pour réinitialiser votre mot de passe."
+        );
+
+      }
+    );
+
+
+    /* =========================================
+       7. NORMALISATION DU ROLE
+    ========================================= */
+
+    function normaliserRole(valeur) {
+
+      return String(valeur || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim();
+
+    }
+
+
+    /* =========================================
+       8. REDIRECTION SELON LE ROLE
+    ========================================= */
+
+    function obtenirPageRole(utilisateur) {
+
+      const role = normaliserRole(
+        utilisateur.role ||
+        utilisateur.nom_role ||
+        utilisateur.libelle_role
+      );
+
+      const idRole = Number(
+        utilisateur.id_role
+      );
+
+
+      // ADMINISTRATEUR
+
+      if (
+        role.includes("administrateur") ||
+        role.includes("admin") ||
+        (!role && idRole === 1)
+      ) {
+
+        return "/src/pages/dashboard.html";
+
+      }
+
+
+      // MEDECIN
+
+      if (
+        role.includes("medecin") ||
+        (!role && idRole === 2)
+      ) {
+
+        return "/src/pages/medecin-dashboard.html";
+
+      }
+
+
+      // RECEPTIONNISTE
+
+      if (
+        role.includes("reception") ||
+        (!role && idRole === 3)
+      ) {
+
+        return "/src/pages/reception-dashboard.html";
+
+      }
+
+
+      // CAISSIER
+
+      if (
+        role.includes("caissier") ||
+        (!role && idRole === 4)
+      ) {
+
+        return "/src/pages/caissier-dashboard.html";
+
+      }
+
+
+      // INFIRMIER
+
+      if (
+        role.includes("infirmier") ||
+        (!role && idRole === 5)
+      ) {
+
+        return "/src/pages/infirmier-dashboard.html";
+
+      }
+
+
+      return null;
+
+    }
+
+
+    /* =========================================
+       9. CONNEXION AU BACKEND
+    ========================================= */
+
+    loginForm.addEventListener(
+      "submit",
+      async function(event) {
+
+        event.preventDefault();
+
+        effacerMessage();
+
+
+        // RECUPERER LES IDENTIFIANTS
+
+        const username =
+          usernameInput.value.trim();
+
+        const password =
+          passwordInput.value;
+
+
+        // VERIFIER LES CHAMPS
+
+        if (!username || !password) {
+
+          afficherMessage(
+            "Veuillez remplir tous les champs."
+          );
+
+          return;
+
+        }
+
+
+        // DESACTIVER LE BOUTON
+
+        loginButton.disabled = true;
+
+        loginButton.textContent =
+          "Connexion en cours...";
+
+
+        try {
+
+          /* ENVOYER LA REQUETE AU BACKEND */
+
+          const response = await fetch(
+            API_URL + "/auth/login",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type": "application/json"
+              },
+
+              body: JSON.stringify({
+                nom_utilisateur: username,
+                mot_de_passe: password
+              })
+            }
+          );
+
+
+          /* LIRE LA REPONSE */
+
+          const data = await response.json();
+
+
+          /* VERIFIER LES ERREURS */
+
+          if (!response.ok) {
+
+            throw new Error(
+              data.message ||
+              data.error ||
+              "Nom d'utilisateur ou mot de passe incorrect."
+            );
+
+          }
+
+
+          /* RECUPERER LE TOKEN ET L'UTILISATEUR */
+
+          const token = data.token;
+
+          const utilisateur = data.utilisateur;
+
+
+          if (!token || !utilisateur) {
+
+            throw new Error(
+              "Réponse du serveur invalide."
+            );
+
+          }
+
+
+          /* DETERMINER LA DESTINATION */
+
+          const destination =
+            obtenirPageRole(utilisateur);
+
+
+          if (!destination) {
+
+            throw new Error(
+              "Rôle utilisateur non reconnu. Contactez l'administrateur."
+            );
+
+          }
+
+
+          /* ENREGISTRER LA SESSION */
+
+          localStorage.setItem(
+            "alshifa_token",
+            token
+          );
+
+          localStorage.setItem(
+            "alshifa_user",
+            JSON.stringify(utilisateur)
+          );
+
+
+          /* MEMORISER LE NOM SI DEMANDE */
+
+          if (rememberMe.checked) {
+
+            localStorage.setItem(
+              "alshifa_username",
+              username
+            );
+
+          } else {
+
+            localStorage.removeItem(
+              "alshifa_username"
+            );
+
+          }
+
+
+          /* MESSAGE DE SUCCES */
+
+          afficherMessage(
+            "Connexion réussie. Redirection...",
+            "success"
+          );
+
+
+          /* REDIRECTION AUTOMATIQUE */
+
+          window.location.assign(destination);
+
+
+        } catch (error) {
+
+          console.error(
+            "Erreur de connexion :",
+            error
+          );
+
+          afficherMessage(
+            error.message ||
+            "Impossible de se connecter au serveur."
+          );
+
+
+        } finally {
+
+          loginButton.disabled = false;
+
+          loginButton.textContent =
+            "Se connecter →";
+
+        }
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>

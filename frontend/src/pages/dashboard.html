@@ -1,0 +1,2553 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Tableau de bord administrateur - Al-Shifa
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="../css/style.css"
+  >
+
+
+  <style>
+
+    /* =====================================================
+       IMAGE D'ARRIERE-PLAN DU BANDEAU
+    ===================================================== */
+
+    .doctor-hero {
+
+      position: relative;
+      overflow: hidden;
+      color: white;
+
+      background-image:
+        linear-gradient(
+          90deg,
+          rgba(166, 54, 5, 0.95) 0%,
+          rgba(194, 65, 12, 0.82) 30%,
+          rgba(194, 65, 12, 0.35) 58%,
+          rgba(0, 0, 0, 0.08) 100%
+        ),
+        url("../assets/hopital-al-shifa-interieur.png");
+
+      background-size: cover;
+      background-position: 65% center;
+      background-repeat: no-repeat;
+
+    }
+
+    .doctor-hero small,
+    .doctor-hero h1,
+    .doctor-hero p {
+      position: relative;
+      z-index: 2;
+      color: white;
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+  <div class="app">
+
+    <div id="sidebar"></div>
+
+
+    <main class="main">
+
+      <div id="topbar"></div>
+
+
+      <section class="doctor-dashboard">
+
+
+        <!-- =================================================
+             BIENVENUE
+        ================================================== -->
+
+        <div class="doctor-hero">
+
+          <small>
+            ADMINISTRATION • HÔPITAL AL-SHIFA
+          </small>
+
+          <h1 id="adminWelcome">
+            Bonjour Administrateur 👋
+          </h1>
+
+          <p>
+            Supervisez l'activité générale de l'hôpital.
+          </p>
+
+        </div>
+
+
+
+        <!-- =================================================
+             STATISTIQUES GENERALES 1
+        ================================================== -->
+
+        <section class="doctor-kpis">
+
+
+          <div class="doctor-kpi">
+
+            <div class="doctor-kpi-icon">
+              👥
+            </div>
+
+            <div>
+
+              <span>
+                Patients
+              </span>
+
+              <strong id="patientsCount">
+                0
+              </strong>
+
+            </div>
+
+          </div>
+
+
+
+          <div class="doctor-kpi">
+
+            <div class="doctor-kpi-icon">
+              🩺
+            </div>
+
+            <div>
+
+              <span>
+                Médecins
+              </span>
+
+              <strong id="medecinsCount">
+                0
+              </strong>
+
+            </div>
+
+          </div>
+
+
+
+          <div class="doctor-kpi">
+
+            <div class="doctor-kpi-icon">
+              📅
+            </div>
+
+            <div>
+
+              <span>
+                Rendez-vous
+              </span>
+
+              <strong id="rdvCount">
+                0
+              </strong>
+
+            </div>
+
+          </div>
+
+
+
+          <div class="doctor-kpi">
+
+            <div class="doctor-kpi-icon">
+              🛏️
+            </div>
+
+            <div>
+
+              <span>
+                Hospitalisations
+              </span>
+
+              <strong id="hospitalisationsCount">
+                0
+              </strong>
+
+            </div>
+
+          </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             STATISTIQUES GENERALES 2
+        ================================================== -->
+
+        <section
+          class="doctor-kpis"
+          style="margin-top:20px;"
+        >
+
+
+          <div class="doctor-kpi">
+
+            <div class="doctor-kpi-icon">
+              🩺
+            </div>
+
+            <div>
+
+              <span>
+                Consultations
+              </span>
+
+              <strong id="consultationsCount">
+                0
+              </strong>
+
+            </div>
+
+          </div>
+
+
+
+          <div class="doctor-kpi">
+
+            <div class="doctor-kpi-icon">
+              🧾
+            </div>
+
+            <div>
+
+              <span>
+                Factures
+              </span>
+
+              <strong id="facturesCount">
+                0
+              </strong>
+
+            </div>
+
+          </div>
+
+
+
+          <div class="doctor-kpi">
+
+            <div class="doctor-kpi-icon">
+              💳
+            </div>
+
+            <div>
+
+              <span>
+                Paiements
+              </span>
+
+              <strong id="paiementsCount">
+                0
+              </strong>
+
+            </div>
+
+          </div>
+
+
+
+          <div class="doctor-kpi">
+
+            <div class="doctor-kpi-icon">
+              👤
+            </div>
+
+            <div>
+
+              <span>
+                Utilisateurs
+              </span>
+
+              <strong id="utilisateursCount">
+                0
+              </strong>
+
+            </div>
+
+          </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             ACTIVITE + ACTIONS
+        ================================================== -->
+
+        <section class="doctor-grid">
+
+
+          <div class="doctor-panel">
+
+            <h2>
+              📊 Activité générale
+            </h2>
+
+
+            <div id="activiteList">
+
+              <p>
+                Chargement...
+              </p>
+
+            </div>
+
+          </div>
+
+
+
+          <div class="doctor-panel">
+
+            <h2>
+              ⚡ Actions rapides
+            </h2>
+
+
+            <div class="doctor-actions">
+
+
+              <a
+                href="patients.html"
+                class="doctor-action"
+              >
+                👥 Patients
+              </a>
+
+
+              <a
+                href="medecins.html"
+                class="doctor-action"
+              >
+                🩺 Médecins
+              </a>
+
+
+              <a
+                href="rendez-vous.html"
+                class="doctor-action"
+              >
+                📅 Rendez-vous
+              </a>
+
+
+              <a
+                href="hospitalisation.html"
+                class="doctor-action"
+              >
+                🛏️ Hospitalisations
+              </a>
+
+
+              <a
+                href="facture.html"
+                class="doctor-action"
+              >
+                🧾 Facturation
+              </a>
+
+
+              <a
+                href="paiement.html"
+                class="doctor-action"
+              >
+                💳 Paiements
+              </a>
+
+
+              <a
+                href="utilisateurs.html"
+                class="doctor-action"
+              >
+                👤 Utilisateurs
+              </a>
+
+
+              <a
+                href="profil.html"
+                class="doctor-action"
+              >
+                ⚙️ Mon profil
+              </a>
+
+
+            </div>
+
+          </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             STATISTIQUES MENSUELLES
+        ================================================== -->
+
+        <section
+          class="doctor-panel"
+          style="margin-top:20px;"
+        >
+
+
+          <div
+            style="
+              display:flex;
+              justify-content:space-between;
+              align-items:center;
+              gap:20px;
+              flex-wrap:wrap;
+              margin-bottom:25px;
+            "
+          >
+
+
+            <div>
+
+              <h2 style="margin:0;">
+                📆 Statistiques mensuelles
+              </h2>
+
+              <p
+                style="
+                  margin:7px 0 0;
+                  color:#64748b;
+                "
+              >
+                Sélectionnez un mois pour consulter son activité.
+              </p>
+
+            </div>
+
+
+
+            <select
+              id="monthFilter"
+              style="
+                padding:12px 18px;
+                border:1px solid #fed7aa;
+                border-radius:12px;
+                background:#fff7ed;
+                color:#9a3412;
+                font-weight:700;
+                font-size:14px;
+                outline:none;
+                cursor:pointer;
+              "
+            >
+            </select>
+
+
+          </div>
+
+
+
+          <div
+            style="
+              display:grid;
+              grid-template-columns:repeat(3,1fr);
+              gap:16px;
+            "
+          >
+
+
+            <div class="doctor-kpi">
+
+              <div class="doctor-kpi-icon">
+                🩺
+              </div>
+
+              <div>
+
+                <span>
+                  Consultations
+                </span>
+
+                <strong id="monthConsultations">
+                  0
+                </strong>
+
+              </div>
+
+            </div>
+
+
+
+            <div class="doctor-kpi">
+
+              <div class="doctor-kpi-icon">
+                📅
+              </div>
+
+              <div>
+
+                <span>
+                  Rendez-vous
+                </span>
+
+                <strong id="monthRdv">
+                  0
+                </strong>
+
+              </div>
+
+            </div>
+
+
+
+            <div class="doctor-kpi">
+
+              <div class="doctor-kpi-icon">
+                🛏️
+              </div>
+
+              <div>
+
+                <span>
+                  Hospitalisations
+                </span>
+
+                <strong id="monthHospitalisations">
+                  0
+                </strong>
+
+              </div>
+
+            </div>
+
+
+
+            <div class="doctor-kpi">
+
+              <div class="doctor-kpi-icon">
+                🧾
+              </div>
+
+              <div>
+
+                <span>
+                  Factures
+                </span>
+
+                <strong id="monthFactures">
+                  0
+                </strong>
+
+              </div>
+
+            </div>
+
+
+
+            <div class="doctor-kpi">
+
+              <div class="doctor-kpi-icon">
+                💳
+              </div>
+
+              <div>
+
+                <span>
+                  Paiements
+                </span>
+
+                <strong id="monthPaiements">
+                  0
+                </strong>
+
+              </div>
+
+            </div>
+
+
+
+            <div class="doctor-kpi">
+
+              <div class="doctor-kpi-icon">
+                💰
+              </div>
+
+              <div>
+
+                <span>
+                  Montant encaissé
+                </span>
+
+                <strong id="monthMontant">
+                  0 FDJ
+                </strong>
+
+              </div>
+
+            </div>
+
+
+          </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             ANALYSES
+        ================================================== -->
+
+        <section
+          style="
+            display:grid;
+            grid-template-columns:2fr 1fr;
+            gap:20px;
+            margin-top:20px;
+          "
+        >
+
+
+          <!-- EVOLUTION CONSULTATIONS -->
+
+          <div class="doctor-panel">
+
+            <h2>
+              📈 Évolution des consultations
+            </h2>
+
+            <p
+              style="
+                color:#64748b;
+                margin-bottom:20px;
+              "
+            >
+              Analyse des consultations sur les six derniers mois.
+            </p>
+
+
+            <div id="consultationsChart">
+
+              Chargement...
+
+            </div>
+
+          </div>
+
+
+
+          <!-- HOSPITALISATIONS -->
+
+          <div class="doctor-panel">
+
+            <h2>
+              🛏️ Répartition des hospitalisations
+            </h2>
+
+
+            <div id="hospitalisationsRepartition">
+
+              Chargement...
+
+            </div>
+
+          </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             RENDEZ-VOUS DU JOUR
+        ================================================== -->
+
+        <section
+          class="doctor-panel"
+          style="margin-top:20px;"
+        >
+
+          <h2>
+            📅 Rendez-vous du jour
+          </h2>
+
+
+          <div id="adminTodayAppointments">
+
+            Chargement...
+
+          </div>
+
+        </section>
+
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       JAVASCRIPT
+  ====================================================== -->
+
+  <script type="module">
+
+
+    import {
+      afficherLayout
+    } from "../js/layout.js";
+
+
+    import {
+      secureFetch,
+      getUtilisateurConnecte
+    } from "../js/secure-api.js";
+
+
+    afficherLayout(
+      "Tableau de bord"
+    );
+
+
+    const API_URL =
+      "http://localhost:3000/api";
+
+
+
+    /* =====================================================
+       UTILISATEUR
+    ===================================================== */
+
+    const utilisateur =
+      getUtilisateurConnecte();
+
+
+    if (!utilisateur) {
+
+      window.location.replace(
+        "/"
+      );
+
+    }
+
+
+
+    const adminWelcome =
+      document.getElementById(
+        "adminWelcome"
+      );
+
+
+    const nomComplet =
+      `${utilisateur?.prenom || ""} ${utilisateur?.nom || ""}`
+        .trim();
+
+
+    if (nomComplet) {
+
+      adminWelcome.textContent =
+        `Bonjour ${nomComplet} 👋`;
+
+    }
+
+
+
+    const role =
+      String(
+        utilisateur?.role || ""
+      )
+        .toLowerCase()
+        .trim();
+
+
+    if (
+      !role.includes("admin")
+      &&
+      !role.includes("administrateur")
+    ) {
+
+      window.location.replace(
+        "/"
+      );
+
+    }
+
+
+
+    /* =====================================================
+       ELEMENTS
+    ===================================================== */
+
+    const patientsCount =
+      document.getElementById(
+        "patientsCount"
+      );
+
+
+    const medecinsCount =
+      document.getElementById(
+        "medecinsCount"
+      );
+
+
+    const rdvCount =
+      document.getElementById(
+        "rdvCount"
+      );
+
+
+    const hospitalisationsCount =
+      document.getElementById(
+        "hospitalisationsCount"
+      );
+
+
+    const consultationsCount =
+      document.getElementById(
+        "consultationsCount"
+      );
+
+
+    const facturesCount =
+      document.getElementById(
+        "facturesCount"
+      );
+
+
+    const paiementsCount =
+      document.getElementById(
+        "paiementsCount"
+      );
+
+
+    const utilisateursCount =
+      document.getElementById(
+        "utilisateursCount"
+      );
+
+
+    const activiteList =
+      document.getElementById(
+        "activiteList"
+      );
+
+
+    const consultationsChart =
+      document.getElementById(
+        "consultationsChart"
+      );
+
+
+    const hospitalisationsRepartition =
+      document.getElementById(
+        "hospitalisationsRepartition"
+      );
+
+
+    const adminTodayAppointments =
+      document.getElementById(
+        "adminTodayAppointments"
+      );
+
+
+
+    /* =====================================================
+       ELEMENTS MOIS
+    ===================================================== */
+
+    const monthFilter =
+      document.getElementById(
+        "monthFilter"
+      );
+
+
+    const monthConsultations =
+      document.getElementById(
+        "monthConsultations"
+      );
+
+
+    const monthRdv =
+      document.getElementById(
+        "monthRdv"
+      );
+
+
+    const monthHospitalisations =
+      document.getElementById(
+        "monthHospitalisations"
+      );
+
+
+    const monthFactures =
+      document.getElementById(
+        "monthFactures"
+      );
+
+
+    const monthPaiements =
+      document.getElementById(
+        "monthPaiements"
+      );
+
+
+    const monthMontant =
+      document.getElementById(
+        "monthMontant"
+      );
+
+
+
+    /* =====================================================
+       GENERER LES MOIS AUTOMATIQUEMENT
+    ===================================================== */
+
+    function genererListeMois() {
+
+      monthFilter.innerHTML =
+        "";
+
+
+      const maintenant =
+        new Date();
+
+
+      /*
+        12 mois avant
+        jusqu'à
+        12 mois après le mois actuel.
+      */
+
+      for (
+        let i = -12;
+        i <= 12;
+        i++
+      ) {
+
+        const date =
+          new Date(
+            maintenant.getFullYear(),
+            maintenant.getMonth() + i,
+            1
+          );
+
+
+        const annee =
+          date.getFullYear();
+
+
+        const numeroMois =
+          String(
+            date.getMonth() + 1
+          ).padStart(
+            2,
+            "0"
+          );
+
+
+        const valeur =
+          `${annee}-${numeroMois}`;
+
+
+        const libelle =
+          date.toLocaleDateString(
+            "fr-FR",
+            {
+              month: "long",
+              year: "numeric"
+            }
+          );
+
+
+        const option =
+          document.createElement(
+            "option"
+          );
+
+
+        option.value =
+          valeur;
+
+
+        option.textContent =
+          libelle.charAt(0).toUpperCase()
+          +
+          libelle.slice(1);
+
+
+        monthFilter.appendChild(
+          option
+        );
+
+      }
+
+
+
+      /* =================================================
+         SELECTIONNER LE MOIS ACTUEL
+      ================================================= */
+
+      const moisActuel =
+        `${maintenant.getFullYear()}-${String(
+          maintenant.getMonth() + 1
+        ).padStart(
+          2,
+          "0"
+        )}`;
+
+
+      monthFilter.value =
+        moisActuel;
+
+    }
+
+
+
+    /* =====================================================
+       EXTRAIRE LISTE
+    ===================================================== */
+
+    function extraireListe(
+      data,
+      noms = []
+    ) {
+
+      if (
+        Array.isArray(data)
+      ) {
+
+        return data;
+
+      }
+
+
+      for (
+        const nom of noms
+      ) {
+
+        if (
+          Array.isArray(
+            data?.[nom]
+          )
+        ) {
+
+          return data[nom];
+
+        }
+
+      }
+
+
+      return [];
+
+    }
+
+
+
+    /* =====================================================
+       DATE CORRESPOND AU MOIS
+    ===================================================== */
+
+    function dateCorrespondAuMois(
+      date,
+      mois
+    ) {
+
+      if (!date) {
+
+        return false;
+
+      }
+
+
+      return String(
+        date
+      ).substring(
+        0,
+        7
+      ) === mois;
+
+    }
+
+
+
+    /* =====================================================
+       STATISTIQUES MENSUELLES
+    ===================================================== */
+
+    function afficherStatistiquesMensuelles(
+      mois,
+      consultations,
+      rendezVous,
+      hospitalisations,
+      factures,
+      paiements
+    ) {
+
+
+      const consultationsMois =
+        consultations.filter(
+          c =>
+            dateCorrespondAuMois(
+              c.date_consultation
+              ||
+              c.date
+              ||
+              c.created_at,
+              mois
+            )
+        );
+
+
+
+      const rdvMois =
+        rendezVous.filter(
+          r =>
+            dateCorrespondAuMois(
+              r.date_rendez_vous
+              ||
+              r.date_rdv
+              ||
+              r.date,
+              mois
+            )
+        );
+
+
+
+      const hospitalisationsMois =
+        hospitalisations.filter(
+          h =>
+            dateCorrespondAuMois(
+              h.date_entree
+              ||
+              h.date_hospitalisation
+              ||
+              h.created_at,
+              mois
+            )
+        );
+
+
+
+      const facturesMois =
+        factures.filter(
+          f =>
+            dateCorrespondAuMois(
+              f.date_facture
+              ||
+              f.date
+              ||
+              f.created_at,
+              mois
+            )
+        );
+
+
+
+      const paiementsMois =
+        paiements.filter(
+          p =>
+            dateCorrespondAuMois(
+              p.date_paiement
+              ||
+              p.date
+              ||
+              p.created_at,
+              mois
+            )
+        );
+
+
+
+      const totalMontant =
+        paiementsMois.reduce(
+          (
+            total,
+            paiement
+          ) => {
+
+            const montant =
+              Number(
+                paiement.montant
+                ||
+                paiement.montant_paye
+                ||
+                paiement.montant_paiement
+                ||
+                0
+              );
+
+
+            return total + montant;
+
+          },
+          0
+        );
+
+
+
+      monthConsultations.textContent =
+        consultationsMois.length;
+
+
+      monthRdv.textContent =
+        rdvMois.length;
+
+
+      monthHospitalisations.textContent =
+        hospitalisationsMois.length;
+
+
+      monthFactures.textContent =
+        facturesMois.length;
+
+
+      monthPaiements.textContent =
+        paiementsMois.length;
+
+
+      monthMontant.textContent =
+        `${totalMontant.toLocaleString(
+          "fr-FR"
+        )} FDJ`;
+
+    }
+
+
+
+    /* =====================================================
+       EVOLUTION CONSULTATIONS
+    ===================================================== */
+
+    function afficherEvolutionConsultations(
+      consultations
+    ) {
+
+      const maintenant =
+        new Date();
+
+
+      const mois =
+        [];
+
+
+      for (
+        let i = 5;
+        i >= 0;
+        i--
+      ) {
+
+        const date =
+          new Date(
+            maintenant.getFullYear(),
+            maintenant.getMonth() - i,
+            1
+          );
+
+
+        mois.push({
+
+          annee:
+            date.getFullYear(),
+
+          mois:
+            date.getMonth(),
+
+          label:
+            date.toLocaleDateString(
+              "fr-FR",
+              {
+                month: "short"
+              }
+            ),
+
+          total:
+            0
+
+        });
+
+      }
+
+
+
+      consultations.forEach(
+        consultation => {
+
+          const valeur =
+            consultation.date_consultation
+            ||
+            consultation.date
+            ||
+            consultation.created_at;
+
+
+          if (!valeur) {
+
+            return;
+
+          }
+
+
+          const date =
+            new Date(
+              valeur
+            );
+
+
+          if (
+            Number.isNaN(
+              date.getTime()
+            )
+          ) {
+
+            return;
+
+          }
+
+
+          const element =
+            mois.find(
+              m =>
+                m.annee === date.getFullYear()
+                &&
+                m.mois === date.getMonth()
+            );
+
+
+          if (element) {
+
+            element.total++;
+
+          }
+
+        }
+      );
+
+
+
+      const total =
+        mois.reduce(
+          (
+            somme,
+            item
+          ) =>
+            somme + item.total,
+          0
+        );
+
+
+
+      const actif =
+        mois.reduce(
+          (
+            meilleur,
+            item
+          ) =>
+            item.total > meilleur.total
+              ? item
+              : meilleur,
+          mois[0]
+        );
+
+
+
+      const dernier =
+        mois[
+          mois.length - 1
+        ];
+
+
+      const precedent =
+        mois[
+          mois.length - 2
+        ];
+
+
+
+      let evolution =
+        0;
+
+
+      if (
+        precedent.total > 0
+      ) {
+
+        evolution =
+          Math.round(
+            (
+              (
+                dernier.total
+                -
+                precedent.total
+              )
+              /
+              precedent.total
+            )
+            *
+            100
+          );
+
+      }
+
+      else if (
+        dernier.total > 0
+      ) {
+
+        evolution =
+          100;
+
+      }
+
+
+
+      const largeur =
+        700;
+
+
+      const hauteur =
+        220;
+
+
+      const margeX =
+        45;
+
+
+      const margeTop =
+        25;
+
+
+      const margeBas =
+        35;
+
+
+
+      const maximum =
+        Math.max(
+          ...mois.map(
+            m => m.total
+          ),
+          1
+        );
+
+
+
+      const espace =
+        (
+          largeur
+          -
+          margeX * 2
+        )
+        /
+        (
+          mois.length - 1
+        );
+
+
+
+      const points =
+        mois.map(
+          (
+            item,
+            index
+          ) => {
+
+            const x =
+              margeX
+              +
+              index * espace;
+
+
+            const zone =
+              hauteur
+              -
+              margeTop
+              -
+              margeBas;
+
+
+            const y =
+              margeTop
+              +
+              zone
+              -
+              (
+                item.total
+                /
+                maximum
+              )
+              *
+              zone;
+
+
+            return {
+              ...item,
+              x,
+              y
+            };
+
+          }
+        );
+
+
+
+      const ligne =
+        points
+          .map(
+            p =>
+              `${p.x},${p.y}`
+          )
+          .join(" ");
+
+
+
+      consultationsChart.innerHTML =
+        `
+
+          <div
+            style="
+              display:grid;
+              grid-template-columns:repeat(3,1fr);
+              gap:12px;
+              margin-bottom:25px;
+            "
+          >
+
+
+            <div
+              style="
+                padding:16px;
+                border-radius:14px;
+                background:#fff7ed;
+              "
+            >
+
+              <small
+                style="
+                  color:#9a3412;
+                  font-weight:700;
+                "
+              >
+                Total 6 mois
+              </small>
+
+              <div
+                style="
+                  font-size:28px;
+                  font-weight:800;
+                  margin-top:7px;
+                "
+              >
+                ${total}
+              </div>
+
+            </div>
+
+
+
+            <div
+              style="
+                padding:16px;
+                border-radius:14px;
+                background:#eff6ff;
+              "
+            >
+
+              <small
+                style="
+                  color:#1d4ed8;
+                  font-weight:700;
+                "
+              >
+                Mois le plus actif
+              </small>
+
+              <div
+                style="
+                  font-size:22px;
+                  font-weight:800;
+                  margin-top:7px;
+                  text-transform:capitalize;
+                "
+              >
+                ${actif.label}
+              </div>
+
+              <small>
+                ${actif.total}
+                consultation(s)
+              </small>
+
+            </div>
+
+
+
+            <div
+              style="
+                padding:16px;
+                border-radius:14px;
+                background:
+                  ${
+                    evolution >= 0
+                      ? "#f0fdf4"
+                      : "#fef2f2"
+                  };
+              "
+            >
+
+              <small
+                style="
+                  font-weight:700;
+                "
+              >
+                Évolution
+              </small>
+
+              <div
+                style="
+                  font-size:28px;
+                  font-weight:800;
+                  margin-top:7px;
+                  color:
+                    ${
+                      evolution >= 0
+                        ? "#15803d"
+                        : "#dc2626"
+                    };
+                "
+              >
+
+                ${
+                  evolution >= 0
+                    ? "↗"
+                    : "↘"
+                }
+
+                ${Math.abs(evolution)}%
+
+              </div>
+
+              <small>
+                vs mois précédent
+              </small>
+
+            </div>
+
+
+          </div>
+
+
+
+          <svg
+            viewBox="0 0 ${largeur} ${hauteur}"
+            style="
+              width:100%;
+              height:260px;
+            "
+          >
+
+
+            <line
+              x1="${margeX}"
+              y1="${hauteur - margeBas}"
+              x2="${largeur - margeX}"
+              y2="${hauteur - margeBas}"
+              stroke="#e2e8f0"
+            />
+
+
+            <polygon
+              points="
+                ${margeX},${hauteur - margeBas}
+                ${ligne}
+                ${largeur - margeX},${hauteur - margeBas}
+              "
+              fill="rgba(249,115,22,0.10)"
+            />
+
+
+            <polyline
+              points="${ligne}"
+              fill="none"
+              stroke="#f97316"
+              stroke-width="4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+
+
+            ${
+              points.map(
+                p => `
+
+                  <circle
+                    cx="${p.x}"
+                    cy="${p.y}"
+                    r="6"
+                    fill="white"
+                    stroke="#f97316"
+                    stroke-width="4"
+                  />
+
+
+                  <text
+                    x="${p.x}"
+                    y="${p.y - 14}"
+                    text-anchor="middle"
+                    font-size="14"
+                    font-weight="700"
+                  >
+
+                    ${p.total}
+
+                  </text>
+
+
+                  <text
+                    x="${p.x}"
+                    y="${hauteur - 8}"
+                    text-anchor="middle"
+                    font-size="13"
+                    fill="#64748b"
+                  >
+
+                    ${p.label}
+
+                  </text>
+
+                `
+              ).join("")
+            }
+
+
+          </svg>
+
+        `;
+
+    }
+
+
+
+    /* =====================================================
+       HOSPITALISATIONS
+    ===================================================== */
+
+    function afficherRepartitionHospitalisations(
+      hospitalisations
+    ) {
+
+      const enCours =
+        hospitalisations.filter(
+          h =>
+            !h.date_sortie
+        );
+
+
+      const sorties =
+        hospitalisations.filter(
+          h =>
+            h.date_sortie
+        );
+
+
+      const total =
+        hospitalisations.length;
+
+
+      const pcEnCours =
+        total
+          ? Math.round(
+              enCours.length
+              *
+              100
+              /
+              total
+            )
+          : 0;
+
+
+      const pcSorties =
+        total
+          ? Math.round(
+              sorties.length
+              *
+              100
+              /
+              total
+            )
+          : 0;
+
+
+
+      hospitalisationsRepartition.innerHTML =
+        `
+
+          <div
+            style="
+              display:flex;
+              flex-direction:column;
+              gap:18px;
+              margin-top:20px;
+            "
+          >
+
+
+            <div
+              style="
+                padding:20px;
+                border-radius:16px;
+                background:#fff1df;
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+              "
+            >
+
+              <div>
+
+                <small>
+                  Total hospitalisations
+                </small>
+
+                <div
+                  style="
+                    font-size:30px;
+                    font-weight:800;
+                  "
+                >
+                  ${total}
+                </div>
+
+              </div>
+
+
+              <div
+                style="
+                  font-size:30px;
+                "
+              >
+                🛏️
+              </div>
+
+            </div>
+
+
+
+            <div
+              style="
+                padding:18px;
+                border:1px solid #fed7aa;
+                border-radius:15px;
+              "
+            >
+
+              <div
+                style="
+                  display:flex;
+                  justify-content:space-between;
+                "
+              >
+
+                <strong>
+                  🟠 En cours
+                </strong>
+
+                <strong>
+                  ${enCours.length}
+                </strong>
+
+              </div>
+
+
+              <div
+                style="
+                  margin-top:12px;
+                  height:10px;
+                  background:#ffedd5;
+                  border-radius:20px;
+                  overflow:hidden;
+                "
+              >
+
+                <div
+                  style="
+                    width:${pcEnCours}%;
+                    height:100%;
+                    background:#f97316;
+                  "
+                ></div>
+
+              </div>
+
+
+              <div
+                style="
+                  text-align:right;
+                  margin-top:7px;
+                "
+              >
+                ${pcEnCours}%
+              </div>
+
+            </div>
+
+
+
+            <div
+              style="
+                padding:18px;
+                border:1px solid #bbf7d0;
+                border-radius:15px;
+              "
+            >
+
+              <div
+                style="
+                  display:flex;
+                  justify-content:space-between;
+                "
+              >
+
+                <strong>
+                  🟢 Sorties
+                </strong>
+
+                <strong>
+                  ${sorties.length}
+                </strong>
+
+              </div>
+
+
+              <div
+                style="
+                  margin-top:12px;
+                  height:10px;
+                  background:#dcfce7;
+                  border-radius:20px;
+                  overflow:hidden;
+                "
+              >
+
+                <div
+                  style="
+                    width:${pcSorties}%;
+                    height:100%;
+                    background:#22c55e;
+                  "
+                ></div>
+
+              </div>
+
+
+              <div
+                style="
+                  text-align:right;
+                  margin-top:7px;
+                "
+              >
+                ${pcSorties}%
+              </div>
+
+            </div>
+
+
+          </div>
+
+        `;
+
+    }
+
+
+
+    /* =====================================================
+       RENDEZ-VOUS DU JOUR
+    ===================================================== */
+
+    function afficherRendezVousDuJour(
+      rendezVous
+    ) {
+
+      const maintenant =
+        new Date();
+
+
+      const dateJour =
+        `${maintenant.getFullYear()}-${String(
+          maintenant.getMonth() + 1
+        ).padStart(
+          2,
+          "0"
+        )}-${String(
+          maintenant.getDate()
+        ).padStart(
+          2,
+          "0"
+        )}`;
+
+
+
+      const liste =
+        rendezVous.filter(
+          r => {
+
+            const date =
+              r.date_rendez_vous
+              ||
+              r.date_rdv
+              ||
+              r.date;
+
+
+            return (
+              date
+              &&
+              String(
+                date
+              ).substring(
+                0,
+                10
+              )
+              ===
+              dateJour
+            );
+
+          }
+        );
+
+
+
+      if (
+        liste.length === 0
+      ) {
+
+        adminTodayAppointments.innerHTML =
+          `
+
+            <div
+              style="
+                text-align:center;
+                padding:40px;
+                color:#64748b;
+              "
+            >
+
+              <div
+                style="
+                  font-size:40px;
+                  margin-bottom:10px;
+                "
+              >
+                📅
+              </div>
+
+              Aucun rendez-vous aujourd'hui
+
+            </div>
+
+          `;
+
+
+        return;
+
+      }
+
+
+
+      adminTodayAppointments.innerHTML =
+        liste
+          .map(
+            r => {
+
+              const patient =
+                `${r.prenom_patient || ""} ${r.nom_patient || ""}`
+                  .trim()
+                ||
+                "Patient";
+
+
+              const heure =
+                r.heure_rendez_vous
+                ||
+                r.heure
+                ||
+                "--:--";
+
+
+              return `
+
+                <div class="doctor-appointment">
+
+                  <span class="doctor-time">
+                    ${String(heure).substring(0,5)}
+                  </span>
+
+                  <div class="doctor-patient">
+
+                    <strong>
+                      ${patient}
+                    </strong>
+
+                    <small>
+                      ${r.statut || "En attente"}
+                    </small>
+
+                  </div>
+
+                </div>
+
+              `;
+
+            }
+          )
+          .join("");
+
+    }
+
+
+
+    /* =====================================================
+       CHARGEMENT
+    ===================================================== */
+
+    async function chargerDashboardAdmin() {
+
+      try {
+
+
+        const [
+          patientsResponse,
+          medecinsResponse,
+          rdvResponse,
+          hospitalisationsResponse,
+          consultationsResponse,
+          facturesResponse,
+          paiementsResponse,
+          utilisateursResponse
+        ] =
+          await Promise.all([
+
+            secureFetch(
+              `${API_URL}/access/patients`
+            ),
+
+            secureFetch(
+              `${API_URL}/medecins`
+            ),
+
+            secureFetch(
+              `${API_URL}/access/rendez-vous`
+            ),
+
+            secureFetch(
+              `${API_URL}/hospitalisations`
+            ),
+
+            secureFetch(
+              `${API_URL}/access/consultations`
+            ),
+
+            secureFetch(
+              `${API_URL}/factures`
+            ),
+
+            secureFetch(
+              `${API_URL}/paiements`
+            ),
+
+            secureFetch(
+              `${API_URL}/utilisateurs`
+            )
+
+          ]);
+
+
+
+        const [
+          patientsData,
+          medecinsData,
+          rdvData,
+          hospitalisationsData,
+          consultationsData,
+          facturesData,
+          paiementsData,
+          utilisateursData
+        ] =
+          await Promise.all([
+
+            patientsResponse.json(),
+
+            medecinsResponse.json(),
+
+            rdvResponse.json(),
+
+            hospitalisationsResponse.json(),
+
+            consultationsResponse.json(),
+
+            facturesResponse.json(),
+
+            paiementsResponse.json(),
+
+            utilisateursResponse.json()
+
+          ]);
+
+
+
+        const patients =
+          extraireListe(
+            patientsData,
+            ["patients"]
+          );
+
+
+        const medecins =
+          extraireListe(
+            medecinsData,
+            ["medecins"]
+          );
+
+
+        const rendezVous =
+          extraireListe(
+            rdvData,
+            [
+              "rendez_vous",
+              "rendezVous"
+            ]
+          );
+
+
+        const hospitalisations =
+          extraireListe(
+            hospitalisationsData,
+            ["hospitalisations"]
+          );
+
+
+        const consultations =
+          extraireListe(
+            consultationsData,
+            ["consultations"]
+          );
+
+
+        const factures =
+          extraireListe(
+            facturesData,
+            ["factures"]
+          );
+
+
+        const paiements =
+          extraireListe(
+            paiementsData,
+            ["paiements"]
+          );
+
+
+        const utilisateurs =
+          extraireListe(
+            utilisateursData,
+            ["utilisateurs"]
+          );
+
+
+
+        /* =================================================
+           COMPTEURS
+        ================================================= */
+
+        patientsCount.textContent =
+          patients.length;
+
+
+        medecinsCount.textContent =
+          medecins.length;
+
+
+        rdvCount.textContent =
+          rendezVous.length;
+
+
+        hospitalisationsCount.textContent =
+          hospitalisations.length;
+
+
+        consultationsCount.textContent =
+          consultations.length;
+
+
+        facturesCount.textContent =
+          factures.length;
+
+
+        paiementsCount.textContent =
+          paiements.length;
+
+
+        utilisateursCount.textContent =
+          utilisateurs.length;
+
+
+
+        /* =================================================
+           ACTIVITE
+        ================================================= */
+
+        activiteList.innerHTML =
+          `
+
+            <div class="doctor-appointment">
+
+              <span class="doctor-time">
+                👥
+              </span>
+
+              <div class="doctor-patient">
+
+                <strong>
+                  ${patients.length} patients
+                </strong>
+
+                <small>
+                  enregistrés
+                </small>
+
+              </div>
+
+            </div>
+
+
+
+            <div class="doctor-appointment">
+
+              <span class="doctor-time">
+                🩺
+              </span>
+
+              <div class="doctor-patient">
+
+                <strong>
+                  ${medecins.length} médecins
+                </strong>
+
+                <small>
+                  enregistrés
+                </small>
+
+              </div>
+
+            </div>
+
+
+
+            <div class="doctor-appointment">
+
+              <span class="doctor-time">
+                📅
+              </span>
+
+              <div class="doctor-patient">
+
+                <strong>
+                  ${rendezVous.length} rendez-vous
+                </strong>
+
+                <small>
+                  enregistrés
+                </small>
+
+              </div>
+
+            </div>
+
+
+
+            <div class="doctor-appointment">
+
+              <span class="doctor-time">
+                🛏️
+              </span>
+
+              <div class="doctor-patient">
+
+                <strong>
+                  ${hospitalisations.length} hospitalisations
+                </strong>
+
+                <small>
+                  enregistrées
+                </small>
+
+              </div>
+
+            </div>
+
+
+
+            <div class="doctor-appointment">
+
+              <span class="doctor-time">
+                💳
+              </span>
+
+              <div class="doctor-patient">
+
+                <strong>
+                  ${paiements.length} paiements
+                </strong>
+
+                <small>
+                  enregistrés
+                </small>
+
+              </div>
+
+            </div>
+
+          `;
+
+
+
+        /* =================================================
+           ANALYSES
+        ================================================= */
+
+        afficherEvolutionConsultations(
+          consultations
+        );
+
+
+        afficherRepartitionHospitalisations(
+          hospitalisations
+        );
+
+
+        afficherRendezVousDuJour(
+          rendezVous
+        );
+
+
+
+        /* =================================================
+           MOIS ACTUEL
+        ================================================= */
+
+        afficherStatistiquesMensuelles(
+          monthFilter.value,
+          consultations,
+          rendezVous,
+          hospitalisations,
+          factures,
+          paiements
+        );
+
+
+
+        /* =================================================
+           CHANGEMENT DE MOIS
+        ================================================= */
+
+        monthFilter.addEventListener(
+          "change",
+          () => {
+
+            afficherStatistiquesMensuelles(
+
+              monthFilter.value,
+
+              consultations,
+
+              rendezVous,
+
+              hospitalisations,
+
+              factures,
+
+              paiements
+
+            );
+
+          }
+        );
+
+
+      }
+
+      catch (error) {
+
+
+        console.error(
+          "Erreur dashboard admin :",
+          error
+        );
+
+
+        activiteList.innerHTML =
+          `
+
+            <div
+              style="
+                padding:25px;
+                background:#fee2e2;
+                color:#991b1b;
+                border-radius:12px;
+              "
+            >
+
+              Impossible de charger les données.
+
+              <br><br>
+
+              ${error.message || ""}
+
+            </div>
+
+          `;
+
+      }
+
+    }
+
+
+
+    /* =====================================================
+       DEMARRAGE
+    ===================================================== */
+
+    genererListeMois();
+
+    chargerDashboardAdmin();
+
+
+  </script>
+
+
+</body>
+
+</html>

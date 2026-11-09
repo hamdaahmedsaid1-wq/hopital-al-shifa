@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Suivi hospitalisation - Al-Shifa</title>
+
+  <link
+    rel="stylesheet"
+    href="../css/style.css"
+  >
+</head>
+
+<body>
+
+  <div class="app">
+
+    <div id="sidebar"></div>
+
+    <main class="main">
+
+      <div id="topbar"></div>
+
+      <section class="content">
+
+        <div class="suivi-page">
+
+
+          <!-- EN-TETE -->
+
+          <div class="suivi-header">
+
+            <div>
+
+              <p class="suivi-small-title">
+                Hospitalisation
+              </p>
+
+              <h1>
+                Suivi hospitalisation
+              </h1>
+
+              <p>
+                Suivre l'évolution des patients hospitalisés
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <!-- SELECTION -->
+
+          <div class="suivi-card">
+
+            <div class="suivi-card-header">
+
+              <div class="suivi-icon">
+                🩺
+              </div>
+
+              <div>
+
+                <h2>
+                  Patient hospitalisé
+                </h2>
+
+                <p>
+                  Sélectionnez une hospitalisation en cours
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <div class="suivi-grid">
+
+              <div class="form-group full-width">
+
+                <label for="hospitalisationSelect">
+                  Hospitalisation *
+                </label>
+
+                <select
+                  id="hospitalisationSelect"
+                  required
+                >
+
+                  <option value="">
+                    Sélectionner une hospitalisation
+                  </option>
+
+                </select>
+
+              </div>
+
+            </div>
+
+
+            <!-- INFORMATIONS -->
+
+            <div
+              class="suivi-patient-box"
+              id="patientBox"
+              style="display: none;"
+            >
+
+              <div class="suivi-patient-item">
+
+                <span>
+                  Patient
+                </span>
+
+                <strong id="patientNom">
+                  -
+                </strong>
+
+              </div>
+
+
+              <div class="suivi-patient-item">
+
+                <span>
+                  Chambre
+                </span>
+
+                <strong id="patientChambre">
+                  -
+                </strong>
+
+              </div>
+
+
+              <div class="suivi-patient-item">
+
+                <span>
+                  Lit
+                </span>
+
+                <strong id="patientLit">
+                  -
+                </strong>
+
+              </div>
+
+
+              <div class="suivi-patient-item">
+
+                <span>
+                  Date d'entrée
+                </span>
+
+                <strong id="patientDateEntree">
+                  -
+                </strong>
+
+              </div>
+
+
+              <div class="suivi-patient-item important">
+
+                <span>
+                  Statut
+                </span>
+
+                <strong id="patientStatut">
+                  En cours
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <!-- FORMULAIRE -->
+
+            <form id="suiviForm">
+
+              <div class="suivi-section-title">
+                Nouveau suivi
+              </div>
+
+
+              <div class="suivi-grid">
+
+                <div class="form-group">
+
+                  <label for="dateSuivi">
+                    Date du suivi *
+                  </label>
+
+                  <input
+                    type="date"
+                    id="dateSuivi"
+                    required
+                  >
+
+                </div>
+
+
+                <div class="form-group">
+
+                  <label for="heureSuivi">
+                    Heure
+                  </label>
+
+                  <input
+                    type="time"
+                    id="heureSuivi"
+                  >
+
+                </div>
+
+
+                <div class="form-group">
+
+                  <label for="temperature">
+                    Température (°C)
+                  </label>
+
+                  <input
+                    type="number"
+                    id="temperature"
+                    step="0.1"
+                    placeholder="Ex : 37.2"
+                  >
+
+                </div>
+
+
+                <div class="form-group">
+
+                  <label for="tension">
+                    Tension artérielle
+                  </label>
+
+                  <input
+                    type="text"
+                    id="tension"
+                    placeholder="Ex : 120/80"
+                  >
+
+                </div>
+
+
+                <div class="form-group">
+
+                  <label for="frequenceCardiaque">
+                    Fréquence cardiaque
+                  </label>
+
+                  <input
+                    type="number"
+                    id="frequenceCardiaque"
+                    placeholder="Battements/min"
+                  >
+
+                </div>
+
+
+                <div class="form-group">
+
+                  <label for="saturation">
+                    Saturation O₂ (%)
+                  </label>
+
+                  <input
+                    type="number"
+                    id="saturation"
+                    min="0"
+                    max="100"
+                    placeholder="Ex : 98"
+                  >
+
+                </div>
+
+
+                <div class="form-group full-width">
+
+                  <label for="etatPatient">
+                    État du patient *
+                  </label>
+
+                  <select
+                    id="etatPatient"
+                    required
+                  >
+
+                    <option value="">
+                      Sélectionner
+                    </option>
+
+                    <option value="stable">
+                      Stable
+                    </option>
+
+                    <option value="amelioration">
+                      En amélioration
+                    </option>
+
+                    <option value="surveillance">
+                      Sous surveillance
+                    </option>
+
+                    <option value="critique">
+                      Critique
+                    </option>
+
+                  </select>
+
+                </div>
+
+
+                <div class="form-group full-width">
+
+                  <label for="observationSuivi">
+                    Observations médicales *
+                  </label>
+
+                  <textarea
+                    id="observationSuivi"
+                    rows="5"
+                    placeholder="Décrire l'état du patient, les soins effectués, les remarques..."
+                    required
+                  ></textarea>
+
+                </div>
+
+              </div>
+
+
+              <div
+                id="suiviMessage"
+                style="display: none;"
+              >
+              </div>
+
+
+              <div class="suivi-actions">
+
+                <button
+                  type="button"
+                  class="suivi-cancel-button"
+                  id="annulerBtn"
+                >
+                  Annuler
+                </button>
+
+
+                <button
+                  type="submit"
+                  class="suivi-save-button"
+                  id="enregistrerBtn"
+                >
+                  Enregistrer le suivi
+                </button>
+
+              </div>
+
+            </form>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+  <script type="module">
+
+  import { afficherLayout } from "../js/layout.js";
+
+  afficherLayout("Suivi hospitalisation");
+
+
+  const HOSPITALISATIONS_API =
+    "http://localhost:3000/api/hospitalisations";
+
+
+  const SUIVIS_API =
+    "http://localhost:3000/api/suivis-hospitalisation";
+
+
+  const hospitalisationSelect =
+    document.getElementById(
+      "hospitalisationSelect"
+    );
+
+
+  const patientBox =
+    document.getElementById(
+      "patientBox"
+    );
+
+
+  const patientNom =
+    document.getElementById(
+      "patientNom"
+    );
+
+
+  const patientChambre =
+    document.getElementById(
+      "patientChambre"
+    );
+
+
+  const patientLit =
+    document.getElementById(
+      "patientLit"
+    );
+
+
+  const patientDateEntree =
+    document.getElementById(
+      "patientDateEntree"
+    );
+
+
+  const patientStatut =
+    document.getElementById(
+      "patientStatut"
+    );
+
+
+  const suiviForm =
+    document.getElementById(
+      "suiviForm"
+    );
+
+
+  const dateSuivi =
+    document.getElementById(
+      "dateSuivi"
+    );
+
+
+  const heureSuivi =
+    document.getElementById(
+      "heureSuivi"
+    );
+
+
+  const temperature =
+    document.getElementById(
+      "temperature"
+    );
+
+
+  const tension =
+    document.getElementById(
+      "tension"
+    );
+
+
+  const frequenceCardiaque =
+    document.getElementById(
+      "frequenceCardiaque"
+    );
+
+
+  const saturation =
+    document.getElementById(
+      "saturation"
+    );
+
+
+  const etatPatient =
+    document.getElementById(
+      "etatPatient"
+    );
+
+
+  const observationSuivi =
+    document.getElementById(
+      "observationSuivi"
+    );
+
+
+  const messageBox =
+    document.getElementById(
+      "suiviMessage"
+    );
+
+
+  const enregistrerBtn =
+    document.getElementById(
+      "enregistrerBtn"
+    );
+
+
+  let hospitalisationsData = [];
+
+  let hospitalisationCourante = null;
+
+
+  /* DATE ET HEURE */
+
+  const maintenant =
+    new Date();
+
+
+  dateSuivi.value =
+    maintenant
+      .toISOString()
+      .split("T")[0];
+
+
+  heureSuivi.value =
+    String(
+      maintenant.getHours()
+    ).padStart(2, "0")
+    + ":"
+    + String(
+      maintenant.getMinutes()
+    ).padStart(2, "0");
+
+
+  /* CHARGER HOSPITALISATIONS */
+
+  async function chargerHospitalisations() {
+
+    try {
+
+      const response =
+        await fetch(
+          HOSPITALISATIONS_API
+        );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Impossible de charger les hospitalisations."
+        );
+
+      }
+
+
+      const data =
+        await response.json();
+
+
+      hospitalisationsData =
+        Array.isArray(data)
+          ? data
+          : data.hospitalisations || [];
+
+
+      hospitalisationSelect.innerHTML =
+        '<option value="">Sélectionner une hospitalisation</option>';
+
+
+      hospitalisationsData.forEach(
+        function(hospitalisation) {
+
+          const id =
+            hospitalisation.id_hospitalisation ??
+            hospitalisation.id;
+
+
+          const patient =
+            (
+              (
+                hospitalisation.prenom_patient ||
+                hospitalisation.prenom ||
+                ""
+              )
+              + " "
+              +
+              (
+                hospitalisation.nom_patient ||
+                hospitalisation.nom ||
+                ""
+              )
+            ).trim();
+
+
+          const option =
+            document.createElement(
+              "option"
+            );
+
+
+          option.value =
+            id;
+
+
+          option.textContent =
+            patient
+              ? patient
+              : "Hospitalisation #" + id;
+
+
+          hospitalisationSelect.appendChild(
+            option
+          );
+
+        }
+      );
+
+    }
+
+    catch (error) {
+
+      console.error(
+        error
+      );
+
+
+      afficherMessage(
+        error.message,
+        "error"
+      );
+
+    }
+
+  }
+
+
+  /* AFFICHER HOSPITALISATION */
+
+  function afficherHospitalisation(id) {
+
+    hospitalisationCourante =
+      hospitalisationsData.find(
+        function(hospitalisation) {
+
+          const currentId =
+            hospitalisation.id_hospitalisation ??
+            hospitalisation.id;
+
+
+          return String(
+            currentId
+          ) === String(
+            id
+          );
+
+        }
+      );
+
+
+    if (!hospitalisationCourante) {
+
+      patientBox.style.display =
+        "none";
+
+      return;
+
+    }
+
+
+    const nomPatient =
+      (
+        (
+          hospitalisationCourante.prenom_patient ||
+          hospitalisationCourante.prenom ||
+          ""
+        )
+        + " "
+        +
+        (
+          hospitalisationCourante.nom_patient ||
+          hospitalisationCourante.nom ||
+          ""
+        )
+      ).trim();
+
+
+    patientNom.textContent =
+      nomPatient ||
+      "Patient";
+
+
+    patientChambre.textContent =
+      hospitalisationCourante.numero_chambre ??
+      hospitalisationCourante.chambre ??
+      "-";
+
+
+    patientLit.textContent =
+      hospitalisationCourante.numero_lit ??
+      hospitalisationCourante.lit ??
+      "-";
+
+
+    const dateEntree =
+      hospitalisationCourante.date_entree;
+
+
+    if (dateEntree) {
+
+      const date =
+        new Date(
+          dateEntree
+        );
+
+
+      patientDateEntree.textContent =
+        date.toLocaleDateString(
+          "fr-FR"
+        );
+
+    }
+
+    else {
+
+      patientDateEntree.textContent =
+        "-";
+
+    }
+
+
+    patientStatut.textContent =
+      hospitalisationCourante.statut ??
+      "En cours";
+
+
+    patientBox.style.display =
+      "grid";
+
+  }
+
+
+  hospitalisationSelect.addEventListener(
+    "change",
+    function() {
+
+      afficherHospitalisation(
+        hospitalisationSelect.value
+      );
+
+    }
+  );
+
+
+  /* ENREGISTRER SUIVI */
+
+  suiviForm.addEventListener(
+    "submit",
+    async function(event) {
+
+      event.preventDefault();
+
+
+      if (!hospitalisationCourante) {
+
+        afficherMessage(
+          "Veuillez sélectionner une hospitalisation.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      const suivi = {
+
+        id_hospitalisation:
+          hospitalisationCourante.id_hospitalisation ??
+          hospitalisationCourante.id,
+
+        date_suivi:
+          dateSuivi.value,
+
+        heure_suivi:
+          heureSuivi.value,
+
+        temperature:
+          temperature.value
+            ? Number(temperature.value)
+            : null,
+
+        tension:
+          tension.value.trim(),
+
+        frequence_cardiaque:
+          frequenceCardiaque.value
+            ? Number(
+                frequenceCardiaque.value
+              )
+            : null,
+
+        saturation:
+          saturation.value
+            ? Number(
+                saturation.value
+              )
+            : null,
+
+        etat_patient:
+          etatPatient.value,
+
+        observation:
+          observationSuivi.value.trim()
+
+      };
+
+
+      try {
+
+        enregistrerBtn.disabled =
+          true;
+
+
+        enregistrerBtn.textContent =
+          "Enregistrement...";
+
+
+        const response =
+          await fetch(
+            SUIVIS_API,
+            {
+
+              method:
+                "POST",
+
+              headers: {
+
+                "Content-Type":
+                  "application/json"
+
+              },
+
+              body:
+                JSON.stringify(
+                  suivi
+                )
+
+            }
+          );
+
+
+        let data = {};
+
+
+        try {
+
+          data =
+            await response.json();
+
+        }
+
+        catch {
+
+          data = {};
+
+        }
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            data.message ||
+            "Impossible d'enregistrer le suivi."
+          );
+
+        }
+
+
+        afficherMessage(
+          "Suivi enregistré avec succès.",
+          "success"
+        );
+
+
+        observationSuivi.value =
+          "";
+
+
+        temperature.value =
+          "";
+
+
+        tension.value =
+          "";
+
+
+        frequenceCardiaque.value =
+          "";
+
+
+        saturation.value =
+          "";
+
+
+        etatPatient.value =
+          "";
+
+      }
+
+      catch (error) {
+
+        console.error(
+          error
+        );
+
+
+        afficherMessage(
+          error.message,
+          "error"
+        );
+
+      }
+
+      finally {
+
+        enregistrerBtn.disabled =
+          false;
+
+
+        enregistrerBtn.textContent =
+          "Enregistrer le suivi";
+
+      }
+
+    }
+  );
+
+
+  /* MESSAGE */
+
+  function afficherMessage(
+    texte,
+    type
+  ) {
+
+    messageBox.textContent =
+      texte;
+
+
+    messageBox.className =
+      "suivi-message "
+      + type;
+
+
+    messageBox.style.display =
+      "block";
+
+  }
+
+
+  /* ANNULER */
+
+  document
+    .getElementById(
+      "annulerBtn"
+    )
+    .addEventListener(
+      "click",
+      function() {
+
+        suiviForm.reset();
+
+
+        dateSuivi.value =
+          maintenant
+            .toISOString()
+            .split("T")[0];
+
+
+        heureSuivi.value =
+          String(
+            maintenant.getHours()
+          ).padStart(2, "0")
+          + ":"
+          + String(
+            maintenant.getMinutes()
+          ).padStart(2, "0");
+
+
+        messageBox.style.display =
+          "none";
+
+      }
+    );
+
+
+  chargerHospitalisations();
+
+</script>
+
+</body>
+
+</html>

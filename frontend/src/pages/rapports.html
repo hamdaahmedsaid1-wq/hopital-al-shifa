@@ -1,0 +1,970 @@
+§§<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Rapports - Al-Shifa</title>
+
+  <link
+    rel="stylesheet"
+    href="../css/style.css"
+  >
+</head>
+
+
+<body>
+
+  <div class="app">
+
+    <!-- SIDEBAR -->
+    <div id="sidebar"></div>
+
+
+    <!-- CONTENU PRINCIPAL -->
+    <main class="main">
+
+      <!-- TOPBAR -->
+      <div id="topbar"></div>
+
+
+      <section class="content">
+
+        <div class="rapports-page">
+
+
+          <!-- ======================================
+               EN-TETE
+          ======================================= -->
+
+          <div class="rapports-header">
+
+            <div>
+
+              <div class="rapports-small-title">
+                Analyse hospitalière
+              </div>
+
+              <h1>
+                Rapports & statistiques
+              </h1>
+
+              <p>
+                Suivez l'activité et les performances
+                de l'Hôpital Al-Shifa.
+              </p>
+
+            </div>
+
+
+            <button
+              type="button"
+              class="rapport-export-button"
+              id="printButton"
+            >
+              🖨 Imprimer le rapport
+            </button>
+
+          </div>
+
+
+
+          <!-- ======================================
+               FILTRES
+          ======================================= -->
+
+          <div class="rapport-card">
+
+            <div class="rapport-card-header">
+
+              <div>
+
+                <h2>
+                  Filtrer les données
+                </h2>
+
+                <p>
+                  Sélectionnez une période et un service.
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <div class="rapport-card-body">
+
+              <div class="rapports-filters">
+
+
+                <!-- DATE DEBUT -->
+
+                <div class="form-group">
+
+                  <label for="dateDebut">
+                    Date de début
+                  </label>
+
+                  <input
+                    type="date"
+                    id="dateDebut"
+                  >
+
+                </div>
+
+
+                <!-- DATE FIN -->
+
+                <div class="form-group">
+
+                  <label for="dateFin">
+                    Date de fin
+                  </label>
+
+                  <input
+                    type="date"
+                    id="dateFin"
+                  >
+
+                </div>
+
+
+                <!-- SERVICE -->
+
+                <div class="form-group">
+
+                  <label for="service">
+                    Service
+                  </label>
+
+                  <select id="service">
+
+                    <option value="tous">
+                      Tous les services
+                    </option>
+
+                    <option value="cardiologie">
+                      Cardiologie
+                    </option>
+
+                    <option value="pediatrie">
+                      Pédiatrie
+                    </option>
+
+                    <option value="orthopedie">
+                      Orthopédie
+                    </option>
+
+                    <option value="medecine">
+                      Médecine générale
+                    </option>
+
+                  </select>
+
+                </div>
+
+
+                <!-- TYPE RAPPORT -->
+
+                <div class="form-group">
+
+                  <label for="typeRapport">
+                    Type de rapport
+                  </label>
+
+                  <select id="typeRapport">
+
+                    <option value="general">
+                      Rapport général
+                    </option>
+
+                    <option value="patients">
+                      Patients
+                    </option>
+
+                    <option value="consultations">
+                      Consultations
+                    </option>
+
+                    <option value="hospitalisations">
+                      Hospitalisations
+                    </option>
+
+                    <option value="finances">
+                      Finances
+                    </option>
+
+                  </select>
+
+                </div>
+
+              </div>
+
+
+              <button
+                type="button"
+                class="rapport-generate-button"
+                id="filterButton"
+              >
+                🔍 Appliquer le filtre
+              </button>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- ======================================
+               STATISTIQUES
+          ======================================= -->
+
+          <div class="rapports-stats">
+
+
+            <!-- PATIENTS -->
+
+            <div class="rapport-stat-card">
+
+              <div class="rapport-stat-icon">
+                👥
+              </div>
+
+              <div>
+
+                <span>
+                  Patients
+                </span>
+
+                <strong>
+                  128
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <!-- RENDEZ-VOUS -->
+
+            <div class="rapport-stat-card">
+
+              <div class="rapport-stat-icon">
+                📅
+              </div>
+
+              <div>
+
+                <span>
+                  Rendez-vous
+                </span>
+
+                <strong>
+                  84
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <!-- CONSULTATIONS -->
+
+            <div class="rapport-stat-card">
+
+              <div class="rapport-stat-icon">
+                ✚
+              </div>
+
+              <div>
+
+                <span>
+                  Consultations
+                </span>
+
+                <strong>
+                  96
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <!-- HOSPITALISATIONS -->
+
+            <div class="rapport-stat-card">
+
+              <div class="rapport-stat-icon">
+                🏥
+              </div>
+
+              <div>
+
+                <span>
+                  Hospitalisations
+                </span>
+
+                <strong>
+                  24
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <!-- FACTURES -->
+
+            <div class="rapport-stat-card">
+
+              <div class="rapport-stat-icon">
+                💳
+              </div>
+
+              <div>
+
+                <span>
+                  Factures
+                </span>
+
+                <strong>
+                  75
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <!-- RECETTES -->
+
+            <div class="rapport-stat-card">
+
+              <div class="rapport-stat-icon">
+                💰
+              </div>
+
+              <div>
+
+                <span>
+                  Recettes
+                </span>
+
+                <strong>
+                  2 450 000
+                </strong>
+
+                <span>
+                  FDJ
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- ======================================
+               GRAPHIQUES
+          ======================================= -->
+
+          <div class="rapports-grid">
+
+
+            <!-- CONSULTATIONS PAR MOIS -->
+
+            <div class="rapport-card">
+
+              <div class="rapport-card-header">
+
+                <div>
+
+                  <h2>
+                    Consultations par mois
+                  </h2>
+
+                  <p>
+                    Évolution du nombre de consultations
+                  </p>
+
+                </div>
+
+                <span>
+                  📊
+                </span>
+
+              </div>
+
+
+              <div class="rapport-card-body">
+
+
+                <div class="fake-chart">
+
+
+                  <div class="chart-column">
+
+                    <div
+                      class="chart-bar"
+                      style="height:35%;"
+                    ></div>
+
+                    <span>Jan</span>
+
+                  </div>
+
+
+                  <div class="chart-column">
+
+                    <div
+                      class="chart-bar"
+                      style="height:48%;"
+                    ></div>
+
+                    <span>Fév</span>
+
+                  </div>
+
+
+                  <div class="chart-column">
+
+                    <div
+                      class="chart-bar"
+                      style="height:58%;"
+                    ></div>
+
+                    <span>Mar</span>
+
+                  </div>
+
+
+                  <div class="chart-column">
+
+                    <div
+                      class="chart-bar"
+                      style="height:65%;"
+                    ></div>
+
+                    <span>Avr</span>
+
+                  </div>
+
+
+                  <div class="chart-column">
+
+                    <div
+                      class="chart-bar"
+                      style="height:55%;"
+                    ></div>
+
+                    <span>Mai</span>
+
+                  </div>
+
+
+                  <div class="chart-column">
+
+                    <div
+                      class="chart-bar"
+                      style="height:78%;"
+                    ></div>
+
+                    <span>Juin</span>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+
+            <!-- HOSPITALISATIONS PAR SERVICE -->
+
+            <div class="rapport-card">
+
+              <div class="rapport-card-header">
+
+                <div>
+
+                  <h2>
+                    Hospitalisations par service
+                  </h2>
+
+                  <p>
+                    Répartition actuelle
+                  </p>
+
+                </div>
+
+                <span>
+                  🏥
+                </span>
+
+              </div>
+
+
+              <div class="rapport-card-body">
+
+                <div class="report-list">
+
+
+                  <div class="report-item">
+
+                    <div class="report-item-left">
+
+                      <div class="report-item-icon">
+                        ❤️
+                      </div>
+
+                      <div>
+
+                        <strong>
+                          Cardiologie
+                        </strong>
+
+                        <p>
+                          8 patients hospitalisés
+                        </p>
+
+                      </div>
+
+                    </div>
+
+                    <span class="report-item-action">
+                      33 %
+                    </span>
+
+                  </div>
+
+
+
+                  <div class="report-item">
+
+                    <div class="report-item-left">
+
+                      <div class="report-item-icon">
+                        👶
+                      </div>
+
+                      <div>
+
+                        <strong>
+                          Pédiatrie
+                        </strong>
+
+                        <p>
+                          6 patients hospitalisés
+                        </p>
+
+                      </div>
+
+                    </div>
+
+                    <span class="report-item-action">
+                      25 %
+                    </span>
+
+                  </div>
+
+
+
+                  <div class="report-item">
+
+                    <div class="report-item-left">
+
+                      <div class="report-item-icon">
+                        🦴
+                      </div>
+
+                      <div>
+
+                        <strong>
+                          Orthopédie
+                        </strong>
+
+                        <p>
+                          5 patients hospitalisés
+                        </p>
+
+                      </div>
+
+                    </div>
+
+                    <span class="report-item-action">
+                      21 %
+                    </span>
+
+                  </div>
+
+
+
+                  <div class="report-item">
+
+                    <div class="report-item-left">
+
+                      <div class="report-item-icon">
+                        🩺
+                      </div>
+
+                      <div>
+
+                        <strong>
+                          Médecine générale
+                        </strong>
+
+                        <p>
+                          5 patients hospitalisés
+                        </p>
+
+                      </div>
+
+                    </div>
+
+                    <span class="report-item-action">
+                      21 %
+                    </span>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- ======================================
+               ACTIVITE RECENTE
+          ======================================= -->
+
+          <div class="rapport-card">
+
+            <div class="rapport-card-header">
+
+              <div>
+
+                <h2>
+                  Activité récente
+                </h2>
+
+                <p>
+                  Résumé de l'activité hospitalière
+                  des derniers jours.
+                </p>
+
+              </div>
+
+              <span>
+                📋
+              </span>
+
+            </div>
+
+
+            <div class="rapport-card-body">
+
+              <div class="table-container">
+
+                <table>
+
+                  <thead>
+
+                    <tr>
+
+                      <th>
+                        Date
+                      </th>
+
+                      <th>
+                        Patients
+                      </th>
+
+                      <th>
+                        Consultations
+                      </th>
+
+                      <th>
+                        Hospitalisations
+                      </th>
+
+                      <th>
+                        Facturation
+                      </th>
+
+                    </tr>
+
+                  </thead>
+
+
+                  <tbody>
+
+                    <tr>
+
+                      <td>
+                        08/10/2026
+                      </td>
+
+                      <td>
+                        15
+                      </td>
+
+                      <td>
+                        12
+                      </td>
+
+                      <td>
+                        3
+                      </td>
+
+                      <td>
+                        <strong>
+                          145 000 FDJ
+                        </strong>
+                      </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                      <td>
+                        07/10/2026
+                      </td>
+
+                      <td>
+                        18
+                      </td>
+
+                      <td>
+                        14
+                      </td>
+
+                      <td>
+                        2
+                      </td>
+
+                      <td>
+                        <strong>
+                          180 000 FDJ
+                        </strong>
+                      </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                      <td>
+                        06/10/2026
+                      </td>
+
+                      <td>
+                        13
+                      </td>
+
+                      <td>
+                        10
+                      </td>
+
+                      <td>
+                        4
+                      </td>
+
+                      <td>
+                        <strong>
+                          120 000 FDJ
+                        </strong>
+                      </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                      <td>
+                        05/10/2026
+                      </td>
+
+                      <td>
+                        20
+                      </td>
+
+                      <td>
+                        16
+                      </td>
+
+                      <td>
+                        3
+                      </td>
+
+                      <td>
+                        <strong>
+                          205 000 FDJ
+                        </strong>
+                      </td>
+
+                    </tr>
+
+                  </tbody>
+
+                </table>
+
+              </div>
+
+
+              <div class="rapport-actions">
+
+                <button
+                  type="button"
+                  class="rapport-print-button"
+                  id="printBottomButton"
+                >
+                  🖨 Imprimer
+                </button>
+
+
+                <button
+                  type="button"
+                  class="rapport-export-button"
+                  id="exportButton"
+                >
+                  ⬇ Exporter PDF
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+
+  <!-- ======================================
+       JAVASCRIPT
+  ======================================= -->
+
+  <script type="module">
+
+    import {
+      afficherLayout
+    } from "../js/layout.js";
+
+
+    afficherLayout(
+      "Rapports"
+    );
+
+
+    const filterButton =
+      document.getElementById(
+        "filterButton"
+      );
+
+
+    const printButton =
+      document.getElementById(
+        "printButton"
+      );
+
+
+    const printBottomButton =
+      document.getElementById(
+        "printBottomButton"
+      );
+
+
+    const exportButton =
+      document.getElementById(
+        "exportButton"
+      );
+
+
+    filterButton.addEventListener(
+      "click",
+      function () {
+
+        const dateDebut =
+          document.getElementById(
+            "dateDebut"
+          ).value;
+
+        const dateFin =
+          document.getElementById(
+            "dateFin"
+          ).value;
+
+        const service =
+          document.getElementById(
+            "service"
+          ).value;
+
+        console.log(
+          dateDebut,
+          dateFin,
+          service
+        );
+
+        alert(
+          "Filtre appliqué avec succès."
+        );
+
+      }
+    );
+
+
+    printButton.addEventListener(
+      "click",
+      function () {
+
+        window.print();
+
+      }
+    );
+
+
+    printBottomButton.addEventListener(
+      "click",
+      function () {
+
+        window.print();
+
+      }
+    );
+
+
+    exportButton.addEventListener(
+      "click",
+      function () {
+
+        window.print();
+
+      }
+    );
+
+  </script>
+
+</body>
+
+</html>
