@@ -2,32 +2,29 @@ const express = require("express");
 
 const router = express.Router();
 
-const controller =
-  require("../controllers/factureController");
+const controller = require(
+  "../controllers/factureController"
+);
 
+// Récupérer toutes les factures
+router.get("/", controller.getFactures);
+
+// Statistiques
 router.get(
-  "/",
-  controller.getFactures
+  "/statistiques",
+  controller.getStatistiques
 );
 
-router.get(
-  "/:id",
-  controller.getFactureById
-);
+// Consulter une facture
+router.get("/:id", controller.getFactureById);
 
-router.post(
-  "/",
-  controller.createFacture
-);
+// Créer une facture
+router.post("/", controller.createFacture);
 
-router.put(
-  "/:id",
-  controller.updateFacture
-);
+// Modifier une facture
+router.put("/:id", controller.updateFacture);
 
-router.delete(
-  "/:id",
-  controller.deleteFacture
-);
+// Supprimer une facture
+router.delete("/:id", controller.deleteFacture);
 
 module.exports = router;

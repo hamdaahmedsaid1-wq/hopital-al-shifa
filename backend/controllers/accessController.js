@@ -4,24 +4,6 @@ const db = require("../config/database");
    FONCTIONS UTILITAIRES
 ========================================================= */
 
-async function trouverMedecin(idUtilisateur) {
-  const [medecins] = await db.query(
-    `
-    SELECT
-      id_medecin,
-      nom,
-      prenom,
-      id_utilisateur
-    FROM medecin
-    WHERE id_utilisateur = ?
-    LIMIT 1
-    `,
-    [idUtilisateur]
-  );
-
-  return medecins[0] || null;
-}
-
 function erreurServeur(res, titre, error) {
   console.error(titre, error);
 
@@ -30,13 +12,71 @@ function erreurServeur(res, titre, error) {
   });
 }
 
+function identifiantValide(valeur) {
+  const id = Number(valeur);
+
+  return Number.isInteger(id) && id > 0;
+}
+
+function getIdUtilisateur(req) {
+  return Number(req.user?.id_utilisateur);
+}
+
+function getIdRole(req) {
+  return Number(req.user?.id_role);
+}
+
+async function trouverMedecin(idUtilisateur) {
+  const [medecins] = await db.query(
+    `
+      SELECT
+        id_medecin,
+        nom,
+        prenom,
+        id_utilisateur
+      FROM medecin
+      WHERE id_utilisateur = ?
+      LIMIT 1
+    `,
+    [idUtilisateur]
+  );
+
+  return medecins[0] || null;
+}
+
+async function patientAutorise(idPatient, idMedecin) {
+  const [patients] = await db.query(
+    `
+      SELECT DISTINCT p.id_patient
+      FROM patient p
+
+      LEFT JOIN rendez_vous rv
+        ON rv.id_patient = p.id_patient
+
+      LEFT JOIN consultation c
+        ON c.id_patient = p.id_patient
+
+      WHERE p.id_patient = ?
+        AND (
+          rv.id_medecin = ?
+          OR c.id_medecin = ?
+        )
+    `,
+    [idPatient, idMedecin, idMedecin]
+  );
+
+  return patients.length > 0;
+}
+
 /* =========================================================
-   UTILISATEUR CONNECTE
+   UTILISATEUR CONNECTÉ
 ========================================================= */
 
 exports.getMe = async (req, res) => {
   try {
-    if (!req.user || !req.user.id_utilisateur) {
+    const idUtilisateur = getIdUtilisateur(req);
+
+    if (!identifiantValide(idUtilisateur)) {
       return res.status(401).json({
         message: "Utilisateur non authentifié."
       });
@@ -44,26 +84,50 @@ exports.getMe = async (req, res) => {
 
     const [utilisateurs] = await db.query(
       `
-      SELECT
-        id_utilisateur,
-        nom,
-        prenom,
-        email,
-        id_role
-      FROM utilisateur
-      WHERE id_utilisateur = ?
-      LIMIT 1
+        SELECT *
+        FROM utilisateur
+        WHERE id_utilisateur = ?
+        LIMIT 1
       `,
-      [req.user.id_utilisateur]
+      [idUtilisateur]
     );
 
-    if (utilisateurs.length === 0) {
+    if (!utilisateurs.length) {
       return res.status(404).json({
         message: "Utilisateur introuvable."
       });
     }
 
-    return res.json(utilisateurs[0]);
+    const utilisateur = { ...utilisateurs[0] };
+
+    // Supprimer les informations sensibles.
+    delete utilisateur.mot_de_passe;
+    delete utilisateur.password;
+    delete utilisateur.password_hash;
+    delete utilisateur.token;
+    delete utilisateur.refresh_token;
+
+    const idRole = Number(
+      utilisateur.id_role ?? req.user.id_role
+    );
+
+    let medecin = null;
+
+    if (idRole === 2) {
+      medecin = await trouverMedecin(idUtilisateur);
+
+      if (!medecin) {
+        return res.status(403).json({
+          message:
+            "Aucun médecin n'est associé à ce compte."
+        });
+      }
+    }
+
+    return res.status(200).json({
+      ...utilisateur,
+      medecin
+    });
 
   } catch (error) {
     return erreurServeur(res, "Erreur getMe :", error);
@@ -76,21 +140,25 @@ exports.getMe = async (req, res) => {
 
 exports.getPatients = async (req, res) => {
   try {
-    const idRole = Number(req.user.id_role);
+    const idRole = getIdRole(req);
 
+    // Administrateur et réceptionniste
     if (idRole === 1 || idRole === 3) {
-      const [patients] = await db.query(`
-        SELECT *
-        FROM patient
-        ORDER BY nom ASC, prenom ASC
-      `);
+      const [patients] = await db.query(
+        `
+          SELECT *
+          FROM patient
+          ORDER BY nom ASC, prenom ASC
+        `
+      );
 
-      return res.json(patients);
+      return res.status(200).json(patients);
     }
 
+    // Médecin
     if (idRole === 2) {
       const medecin = await trouverMedecin(
-        req.user.id_utilisateur
+        getIdUtilisateur(req)
       );
 
       if (!medecin) {
@@ -101,20 +169,24 @@ exports.getPatients = async (req, res) => {
 
       const [patients] = await db.query(
         `
-        SELECT DISTINCT p.*
-        FROM patient p
-        LEFT JOIN rendez_vous rv
-          ON rv.id_patient = p.id_patient
-        LEFT JOIN consultation c
-          ON c.id_patient = p.id_patient
-        WHERE rv.id_medecin = ?
-           OR c.id_medecin = ?
-        ORDER BY p.nom ASC, p.prenom ASC
+          SELECT DISTINCT p.*
+          FROM patient p
+
+          LEFT JOIN rendez_vous rv
+            ON rv.id_patient = p.id_patient
+
+          LEFT JOIN consultation c
+            ON c.id_patient = p.id_patient
+
+          WHERE rv.id_medecin = ?
+             OR c.id_medecin = ?
+
+          ORDER BY p.nom ASC, p.prenom ASC
         `,
         [medecin.id_medecin, medecin.id_medecin]
       );
 
-      return res.json(patients);
+      return res.status(200).json(patients);
     }
 
     return res.status(403).json({
@@ -122,31 +194,37 @@ exports.getPatients = async (req, res) => {
     });
 
   } catch (error) {
-    return erreurServeur(res, "Erreur getPatients :", error);
+    return erreurServeur(
+      res,
+      "Erreur getPatients :",
+      error
+    );
   }
 };
 
 /* =========================================================
-   DOSSIER PATIENT
+   DOSSIER D'UN PATIENT
 ========================================================= */
 
 exports.getPatientById = async (req, res) => {
   try {
     const idPatient = Number(req.params.id);
-    const idRole = Number(req.user.id_role);
+    const idRole = getIdRole(req);
 
-    if (!Number.isInteger(idPatient) || idPatient <= 0) {
+    if (!identifiantValide(idPatient)) {
       return res.status(400).json({
         message: "Identifiant patient invalide."
       });
     }
 
+    // Administrateur et réceptionniste
     if (idRole === 1 || idRole === 3) {
       const [patients] = await db.query(
         `
-        SELECT *
-        FROM patient
-        WHERE id_patient = ?
+          SELECT *
+          FROM patient
+          WHERE id_patient = ?
+          LIMIT 1
         `,
         [idPatient]
       );
@@ -157,12 +235,13 @@ exports.getPatientById = async (req, res) => {
         });
       }
 
-      return res.json(patients[0]);
+      return res.status(200).json(patients[0]);
     }
 
+    // Médecin
     if (idRole === 2) {
       const medecin = await trouverMedecin(
-        req.user.id_utilisateur
+        getIdUtilisateur(req)
       );
 
       if (!medecin) {
@@ -171,34 +250,34 @@ exports.getPatientById = async (req, res) => {
         });
       }
 
-      const [patients] = await db.query(
-        `
-        SELECT DISTINCT p.*
-        FROM patient p
-        LEFT JOIN rendez_vous rv
-          ON rv.id_patient = p.id_patient
-        LEFT JOIN consultation c
-          ON c.id_patient = p.id_patient
-        WHERE p.id_patient = ?
-          AND (
-            rv.id_medecin = ?
-            OR c.id_medecin = ?
-          )
-        `,
-        [
-          idPatient,
-          medecin.id_medecin,
-          medecin.id_medecin
-        ]
+      const autorise = await patientAutorise(
+        idPatient,
+        medecin.id_medecin
       );
 
-      if (!patients.length) {
+      if (!autorise) {
         return res.status(403).json({
           message: "Accès à ce patient non autorisé."
         });
       }
 
-      return res.json(patients[0]);
+      const [patients] = await db.query(
+        `
+          SELECT *
+          FROM patient
+          WHERE id_patient = ?
+          LIMIT 1
+        `,
+        [idPatient]
+      );
+
+      if (!patients.length) {
+        return res.status(404).json({
+          message: "Patient introuvable."
+        });
+      }
+
+      return res.status(200).json(patients[0]);
     }
 
     return res.status(403).json({
@@ -206,18 +285,21 @@ exports.getPatientById = async (req, res) => {
     });
 
   } catch (error) {
-    return erreurServeur(res, "Erreur getPatientById :", error);
+    return erreurServeur(
+      res,
+      "Erreur getPatientById :",
+      error
+    );
   }
 };
 
 /* =========================================================
-   RENDEZ-VOUS
-   CORRECTION DU FORMAT DES DATES
+   LISTE DES RENDEZ-VOUS
 ========================================================= */
 
 exports.getRendezVous = async (req, res) => {
   try {
-    const idRole = Number(req.user.id_role);
+    const idRole = getIdRole(req);
 
     const requeteBase = `
       SELECT
@@ -253,20 +335,22 @@ exports.getRendezVous = async (req, res) => {
         ON m.id_medecin = rv.id_medecin
     `;
 
-    // ADMINISTRATEUR ET RECEPTIONNISTE
+    // Administrateur et réceptionniste
     if (idRole === 1 || idRole === 3) {
-      const [rendezVous] = await db.query(`
-        ${requeteBase}
-        ORDER BY rv.date_rdv DESC, rv.heure_rdv ASC
-      `);
+      const [rendezVous] = await db.query(
+        `
+          ${requeteBase}
+          ORDER BY rv.date_rdv DESC, rv.heure_rdv ASC
+        `
+      );
 
-      return res.json(rendezVous);
+      return res.status(200).json(rendezVous);
     }
 
-    // MEDECIN
+    // Médecin
     if (idRole === 2) {
       const medecin = await trouverMedecin(
-        req.user.id_utilisateur
+        getIdUtilisateur(req)
       );
 
       if (!medecin) {
@@ -277,14 +361,14 @@ exports.getRendezVous = async (req, res) => {
 
       const [rendezVous] = await db.query(
         `
-        ${requeteBase}
-        WHERE rv.id_medecin = ?
-        ORDER BY rv.date_rdv DESC, rv.heure_rdv ASC
+          ${requeteBase}
+          WHERE rv.id_medecin = ?
+          ORDER BY rv.date_rdv DESC, rv.heure_rdv ASC
         `,
         [medecin.id_medecin]
       );
 
-      return res.json(rendezVous);
+      return res.status(200).json(rendezVous);
     }
 
     return res.status(403).json({
@@ -292,7 +376,11 @@ exports.getRendezVous = async (req, res) => {
     });
 
   } catch (error) {
-    return erreurServeur(res, "Erreur getRendezVous :", error);
+    return erreurServeur(
+      res,
+      "Erreur getRendezVous :",
+      error
+    );
   }
 };
 
@@ -302,34 +390,43 @@ exports.getRendezVous = async (req, res) => {
 
 exports.getConsultations = async (req, res) => {
   try {
-    const idRole = Number(req.user.id_role);
+    const idRole = getIdRole(req);
 
     const requeteBase = `
       SELECT
         c.*,
+
         p.nom AS nom_patient,
         p.prenom AS prenom_patient,
+
         m.nom AS nom_medecin,
         m.prenom AS prenom_medecin
+
       FROM consultation c
-      JOIN patient p
+
+      INNER JOIN patient p
         ON c.id_patient = p.id_patient
-      JOIN medecin m
+
+      INNER JOIN medecin m
         ON c.id_medecin = m.id_medecin
     `;
 
+    // Administrateur : toutes les consultations
     if (idRole === 1) {
-      const [consultations] = await db.query(`
-        ${requeteBase}
-        ORDER BY c.id_consultation DESC
-      `);
+      const [consultations] = await db.query(
+        `
+          ${requeteBase}
+          ORDER BY c.id_consultation DESC
+        `
+      );
 
-      return res.json(consultations);
+      return res.status(200).json(consultations);
     }
 
+    // Médecin : uniquement ses consultations
     if (idRole === 2) {
       const medecin = await trouverMedecin(
-        req.user.id_utilisateur
+        getIdUtilisateur(req)
       );
 
       if (!medecin) {
@@ -340,14 +437,14 @@ exports.getConsultations = async (req, res) => {
 
       const [consultations] = await db.query(
         `
-        ${requeteBase}
-        WHERE c.id_medecin = ?
-        ORDER BY c.id_consultation DESC
+          ${requeteBase}
+          WHERE c.id_medecin = ?
+          ORDER BY c.id_consultation DESC
         `,
         [medecin.id_medecin]
       );
 
-      return res.json(consultations);
+      return res.status(200).json(consultations);
     }
 
     return res.status(403).json({
@@ -355,17 +452,21 @@ exports.getConsultations = async (req, res) => {
     });
 
   } catch (error) {
-    return erreurServeur(res, "Erreur getConsultations :", error);
+    return erreurServeur(
+      res,
+      "Erreur getConsultations :",
+      error
+    );
   }
 };
 
 /* =========================================================
-   CREATION CONSULTATION
+   CRÉATION D'UNE CONSULTATION
 ========================================================= */
 
 exports.createConsultation = async (req, res) => {
   try {
-    const idRole = Number(req.user.id_role);
+    const idRole = getIdRole(req);
 
     const {
       id_patient,
@@ -378,22 +479,36 @@ exports.createConsultation = async (req, res) => {
       observations
     } = req.body;
 
+    const idPatient = Number(id_patient);
+
     if (
-      !id_patient ||
+      !identifiantValide(idPatient) ||
       !date_consultation ||
-      !motif ||
-      !diagnostic
+      !String(motif || "").trim() ||
+      !String(diagnostic || "").trim()
     ) {
       return res.status(400).json({
-        message: "Champs obligatoires manquants."
+        message:
+          "Patient, date, motif et diagnostic sont obligatoires."
+      });
+    }
+
+    if (
+      !/^\d{4}-\d{2}-\d{2}$/.test(
+        String(date_consultation)
+      )
+    ) {
+      return res.status(400).json({
+        message: "Format de date invalide."
       });
     }
 
     let medecinId;
 
+    // Médecin connecté
     if (idRole === 2) {
       const medecin = await trouverMedecin(
-        req.user.id_utilisateur
+        getIdUtilisateur(req)
       );
 
       if (!medecin) {
@@ -402,35 +517,26 @@ exports.createConsultation = async (req, res) => {
         });
       }
 
+      // L'identité du médecin provient du compte connecté.
       medecinId = medecin.id_medecin;
 
-      const [patientsAutorises] = await db.query(
-        `
-        SELECT DISTINCT p.id_patient
-        FROM patient p
-        LEFT JOIN rendez_vous rv
-          ON rv.id_patient = p.id_patient
-        LEFT JOIN consultation c
-          ON c.id_patient = p.id_patient
-        WHERE p.id_patient = ?
-          AND (
-            rv.id_medecin = ?
-            OR c.id_medecin = ?
-          )
-        `,
-        [id_patient, medecinId, medecinId]
+      const autorise = await patientAutorise(
+        idPatient,
+        medecinId
       );
 
-      if (!patientsAutorises.length) {
+      if (!autorise) {
         return res.status(403).json({
-          message: "Patient non autorisé pour ce médecin."
+          message:
+            "Ce patient n'est pas autorisé pour ce médecin."
         });
       }
 
     } else if (idRole === 1) {
+      // Administrateur
       medecinId = Number(id_medecin);
 
-      if (!Number.isInteger(medecinId) || medecinId <= 0) {
+      if (!identifiantValide(medecinId)) {
         return res.status(400).json({
           message: "Veuillez sélectionner un médecin."
         });
@@ -438,31 +544,67 @@ exports.createConsultation = async (req, res) => {
 
     } else {
       return res.status(403).json({
-        message: "Création de consultation non autorisée."
+        message:
+          "Création de consultation non autorisée."
       });
     }
 
+    // Vérifier que le patient existe
+    const [patients] = await db.query(
+      `
+        SELECT id_patient
+        FROM patient
+        WHERE id_patient = ?
+        LIMIT 1
+      `,
+      [idPatient]
+    );
+
+    if (!patients.length) {
+      return res.status(404).json({
+        message: "Patient introuvable."
+      });
+    }
+
+    // Vérifier que le médecin existe
+    const [medecins] = await db.query(
+      `
+        SELECT id_medecin
+        FROM medecin
+        WHERE id_medecin = ?
+        LIMIT 1
+      `,
+      [medecinId]
+    );
+
+    if (!medecins.length) {
+      return res.status(404).json({
+        message: "Médecin introuvable."
+      });
+    }
+
+    // Enregistrement
     const [result] = await db.query(
       `
-      INSERT INTO consultation (
-        id_patient,
-        id_medecin,
-        date_consultation,
-        motif,
-        symptomes,
-        diagnostic,
-        traitement,
-        observations
-      )
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO consultation (
+          id_patient,
+          id_medecin,
+          date_consultation,
+          motif,
+          symptomes,
+          diagnostic,
+          traitement,
+          observations
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       `,
       [
-        id_patient,
+        idPatient,
         medecinId,
         date_consultation,
-        motif,
+        String(motif).trim(),
         symptomes || null,
-        diagnostic,
+        String(diagnostic).trim(),
         traitement || null,
         observations || null
       ]
@@ -474,22 +616,23 @@ exports.createConsultation = async (req, res) => {
     });
 
   } catch (error) {
-    return erreurServeur(res, "Erreur createConsultation :", error);
+    return erreurServeur(
+      res,
+      "Erreur createConsultation :",
+      error
+    );
   }
 };
 
 /* =========================================================
    LISTE DES ORDONNANCES
-   HOPITAL AL-SHIFA
 ========================================================= */
 
 exports.getOrdonnances = async (req, res) => {
-
   try {
+    const idRole = getIdRole(req);
 
-    const idRole = Number(req.user.id_role);
-
-    const sql = `
+    const requeteBase = `
       SELECT
         o.id_ordonnance,
         o.date_ordonnance,
@@ -519,22 +662,22 @@ exports.getOrdonnances = async (req, res) => {
         ON c.id_medecin = m.id_medecin
     `;
 
-    // ADMINISTRATEUR
+    // Administrateur
     if (idRole === 1) {
-
-      const [ordonnances] = await db.query(`
-        ${sql}
-        ORDER BY o.id_ordonnance DESC
-      `);
+      const [ordonnances] = await db.query(
+        `
+          ${requeteBase}
+          ORDER BY o.id_ordonnance DESC
+        `
+      );
 
       return res.status(200).json(ordonnances);
     }
 
-    // MEDECIN
+    // Médecin
     if (idRole === 2) {
-
       const medecin = await trouverMedecin(
-        req.user.id_utilisateur
+        getIdUtilisateur(req)
       );
 
       if (!medecin) {
@@ -545,9 +688,9 @@ exports.getOrdonnances = async (req, res) => {
 
       const [ordonnances] = await db.query(
         `
-        ${sql}
-        WHERE c.id_medecin = ?
-        ORDER BY o.id_ordonnance DESC
+          ${requeteBase}
+          WHERE c.id_medecin = ?
+          ORDER BY o.id_ordonnance DESC
         `,
         [medecin.id_medecin]
       );
@@ -560,29 +703,26 @@ exports.getOrdonnances = async (req, res) => {
     });
 
   } catch (error) {
-
-    console.error("Erreur getOrdonnances :", error);
-
-    return res.status(500).json({
-      message: "Erreur lors du chargement des ordonnances."
-    });
-
+    return erreurServeur(
+      res,
+      "Erreur getOrdonnances :",
+      error
+    );
   }
-
 };
+
 /* =========================================================
-   CREATION D'UNE ORDONNANCE
+   CRÉATION D'UNE ORDONNANCE
 ========================================================= */
 
 exports.createOrdonnance = async (req, res) => {
-
   try {
-
-    const idRole = Number(req.user.id_role);
+    const idRole = getIdRole(req);
 
     if (idRole !== 1 && idRole !== 2) {
       return res.status(403).json({
-        message: "Création d'ordonnance non autorisée."
+        message:
+          "Création d'ordonnance non autorisée."
       });
     }
 
@@ -597,10 +737,9 @@ exports.createOrdonnance = async (req, res) => {
     const idConsultation = Number(id_consultation);
 
     if (
-      !Number.isInteger(idConsultation) ||
-      idConsultation <= 0 ||
+      !identifiantValide(idConsultation) ||
       !date_ordonnance ||
-      !prescription?.trim()
+      !String(prescription || "").trim()
     ) {
       return res.status(400).json({
         message:
@@ -608,19 +747,20 @@ exports.createOrdonnance = async (req, res) => {
       });
     }
 
-    // Vérifier que la consultation existe
+    // Vérifier la consultation
     const [consultations] = await db.query(
       `
-      SELECT
-        id_consultation,
-        id_medecin
-      FROM consultation
-      WHERE id_consultation = ?
+        SELECT
+          id_consultation,
+          id_medecin
+        FROM consultation
+        WHERE id_consultation = ?
+        LIMIT 1
       `,
       [idConsultation]
     );
 
-    if (consultations.length === 0) {
+    if (!consultations.length) {
       return res.status(404).json({
         message: "Consultation introuvable."
       });
@@ -628,9 +768,8 @@ exports.createOrdonnance = async (req, res) => {
 
     // Vérifier les droits du médecin
     if (idRole === 2) {
-
       const medecin = await trouverMedecin(
-        req.user.id_utilisateur
+        getIdUtilisateur(req)
       );
 
       if (
@@ -645,41 +784,41 @@ exports.createOrdonnance = async (req, res) => {
       }
     }
 
-    // Vérifier qu'une ordonnance n'existe pas déjà
+    // Vérifier si une ordonnance existe déjà
     const [existantes] = await db.query(
       `
-      SELECT id_ordonnance
-      FROM ordonnance
-      WHERE id_consultation = ?
-      LIMIT 1
+        SELECT id_ordonnance
+        FROM ordonnance
+        WHERE id_consultation = ?
+        LIMIT 1
       `,
       [idConsultation]
     );
 
-    if (existantes.length > 0) {
+    if (existantes.length) {
       return res.status(409).json({
         message:
           "Une ordonnance existe déjà pour cette consultation."
       });
     }
 
-    // Enregistrer l'ordonnance
+    // Enregistrer
     const [result] = await db.query(
       `
-      INSERT INTO ordonnance (
-        id_consultation,
-        date_ordonnance,
-        motif,
-        prescription,
-        instructions
-      )
-      VALUES (?, ?, ?, ?, ?)
+        INSERT INTO ordonnance (
+          id_consultation,
+          date_ordonnance,
+          motif,
+          prescription,
+          instructions
+        )
+        VALUES (?, ?, ?, ?, ?)
       `,
       [
         idConsultation,
         date_ordonnance,
         motif || null,
-        prescription.trim(),
+        String(prescription).trim(),
         instructions || null
       ]
     );
@@ -690,18 +829,16 @@ exports.createOrdonnance = async (req, res) => {
     });
 
   } catch (error) {
-
-    console.error("Erreur createOrdonnance :", error);
-
-    return res.status(500).json({
-      message: "Erreur lors de la création de l'ordonnance."
-    });
+    return erreurServeur(
+      res,
+      "Erreur createOrdonnance :",
+      error
+    );
   }
 };
 
 /* =========================================================
    DASHBOARD INFIRMIER
-   VERSION TEMPORAIRE
 ========================================================= */
 
 exports.getInfirmierDashboard = async (req, res) => {
@@ -709,11 +846,12 @@ exports.getInfirmierDashboard = async (req, res) => {
     return res.status(501).json({
       message: "Dashboard infirmier à restaurer."
     });
-  } catch (error) {
-    console.error("Erreur dashboard infirmier :", error);
 
-    return res.status(500).json({
-      message: "Erreur serveur."
-    });
+  } catch (error) {
+    return erreurServeur(
+      res,
+      "Erreur getInfirmierDashboard :",
+      error
+    );
   }
 };

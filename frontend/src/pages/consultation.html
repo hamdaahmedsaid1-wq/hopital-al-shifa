@@ -1,1721 +1,1947 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consultations | Hôpital Al-Shifa</title>
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <link rel="stylesheet" href="../css/style.css">
 
-  <title>
-    Consultation - Al-Shifa
-  </title>
+  <style>
+    :root {
+      --orange: #ff7900;
+      --orange-dark: #e65e00;
+      --navy: #102d50;
+      --muted: #718096;
+      --border: #e5eaf0;
+    }
 
-  <link
-    rel="stylesheet"
-    href="../css/style.css"
-  >
+    * {
+      box-sizing: border-box;
+    }
 
+    .consultation-page {
+      padding: 28px;
+      max-width: 1500px;
+      margin: auto;
+      color: var(--navy);
+    }
+
+    .consultation-header,
+    .consultation-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 25px;
+    }
+
+    .consultation-header h1 {
+      margin: 0 0 8px;
+      font-size: 27px;
+    }
+
+    .consultation-header p,
+    .consultation-card-header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .btn {
+      border: none;
+      padding: 12px 18px;
+      border-radius: 9px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .btn-orange {
+      background: linear-gradient(135deg, #ff9000, #ff6500);
+      color: white;
+    }
+
+    .btn-light {
+      background: #fff5ec;
+      color: var(--orange-dark);
+      border: 1px solid #ffd3b1;
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .consultation-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-bottom: 25px;
+    }
+
+    .consultation-stat,
+    .consultation-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 23px;
+      box-shadow: 0 4px 16px rgba(15, 40, 70, 0.04);
+    }
+
+    .consultation-stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    .consultation-stat strong {
+      color: var(--orange-dark);
+      font-size: 30px;
+    }
+
+    .consultation-card-header h2 {
+      margin: 0 0 8px;
+      font-size: 19px;
+    }
+
+    .consultation-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .consultation-tools input {
+      padding: 11px 13px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      font-size: 13px;
+    }
+
+    .consultation-table-wrap {
+      overflow-x: auto;
+    }
+
+    .consultation-table {
+      width: 100%;
+      min-width: 680px;
+      border-collapse: collapse;
+    }
+
+    .consultation-table th {
+      background: #fff5ec;
+      color: #c34b00;
+      padding: 14px;
+      text-align: left;
+      font-size: 12px;
+    }
+
+    .consultation-table td {
+      padding: 15px 14px;
+      border-bottom: 1px solid #edf0f4;
+      font-size: 13px;
+    }
+
+    .consultation-table tbody tr:hover {
+      background: #fffaf6;
+    }
+
+    .consultation-modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(15, 35, 60, 0.55);
+      z-index: 99999;
+      padding: 20px;
+    }
+
+    .consultation-modal.active {
+      display: flex;
+    }
+
+    .consultation-modal-box {
+      width: 100%;
+      max-width: 760px;
+      max-height: 92vh;
+      overflow-y: auto;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.2);
+    }
+
+    .consultation-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 24px 28px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .consultation-modal-header h2 {
+      margin: 0 0 8px;
+      font-size: 23px;
+    }
+
+    .consultation-modal-header p {
+      color: var(--muted);
+      font-size: 12px;
+      margin: 0;
+    }
+
+    .consultation-close {
+      border: none;
+      background: #f1f5f9;
+      border-radius: 9px;
+      width: 36px;
+      height: 36px;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .consultation-modal-body {
+      padding: 24px 28px;
+    }
+
+    .consultation-section {
+      color: var(--orange-dark);
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding-bottom: 10px;
+      margin: 8px 0 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .consultation-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 17px;
+      margin-bottom: 25px;
+    }
+
+    .consultation-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .consultation-field.full {
+      grid-column: 1 / -1;
+    }
+
+    .consultation-field label {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .consultation-field input,
+    .consultation-field select,
+    .consultation-field textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #dce4ed;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .consultation-field input:focus,
+    .consultation-field select:focus,
+    .consultation-field textarea:focus {
+      border-color: var(--orange);
+    }
+
+    .consultation-field textarea {
+      min-height: 85px;
+      resize: vertical;
+    }
+
+    .consultation-modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 20px 28px;
+      border-top: 1px solid var(--border);
+    }
+
+    .consultation-message {
+      display: none;
+      padding: 12px 15px;
+      border-radius: 9px;
+      font-size: 13px;
+      margin-bottom: 15px;
+    }
+
+    .consultation-message.error {
+      display: block;
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .consultation-message.success {
+      display: block;
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .consultation-message.info {
+      display: block;
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    body.consultation-modal-open {
+      overflow: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .consultation-page {
+        padding: 15px;
+      }
+
+      .consultation-stats,
+      .consultation-form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .consultation-modal-header,
+      .consultation-modal-body,
+      .consultation-modal-footer {
+        padding: 18px;
+      }
+    }
+    /* ==========================================================
+   HÔPITAL AL-SHIFA — DESIGN PROFESSIONNEL CONSULTATIONS
+   ========================================================== */
+
+:root {
+  --orange: #f97316;
+  --orange-dark: #ea580c;
+  --navy: #142d4e;
+  --muted: #718096;
+  --border: #e8edf3;
+}
+
+/* PAGE */
+
+.consultation-page {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 28px 30px;
+  color: var(--navy);
+}
+
+/* EN-TÊTE */
+
+.consultation-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.consultation-header h1 {
+  margin: 0 0 7px;
+  font-size: 27px;
+  font-weight: 800;
+  color: #142d4e;
+}
+
+.consultation-header p {
+  margin: 0;
+  font-size: 13px;
+  color: #8290a3;
+}
+
+/* BOUTONS */
+
+.consultation-page .btn,
+.consultation-modal .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 17px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+  white-space: nowrap;
+}
+
+.consultation-page .btn-orange,
+.consultation-modal .btn-orange {
+  border: none;
+  background: linear-gradient(135deg, #ff8c20, #f46b10);
+  color: white;
+  box-shadow: 0 5px 14px rgba(249, 115, 22, 0.17);
+}
+
+.consultation-page .btn-orange:hover,
+.consultation-modal .btn-orange:hover {
+  background: #ea580c;
+  transform: translateY(-1px);
+}
+
+.consultation-page .btn-light,
+.consultation-modal .btn-light {
+  border: 1px solid #e2e8f0;
+  background: white;
+  color: #475569;
+}
+
+.consultation-page .btn-light:hover,
+.consultation-modal .btn-light:hover {
+  background: #fff7ed;
+  color: #ea580c;
+  border-color: #fed7aa;
+}
+
+/* CARTES STATISTIQUES */
+
+.consultation-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.consultation-stat {
+  position: relative;
+  overflow: hidden;
+  min-height: 130px;
+  padding: 25px;
+  background: #ffffff;
+  border: 1px solid #e8edf3;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px rgba(15, 35, 65, 0.035);
+}
+
+.consultation-stat::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 4px;
+  background: #f97316;
+}
+
+.consultation-stat:nth-child(2)::before {
+  background: #2563eb;
+}
+
+.consultation-stat:nth-child(3)::before {
+  background: #10b981;
+}
+
+.consultation-stat span {
+  display: block;
+  margin-bottom: 13px;
+  color: #718096;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.consultation-stat strong {
+  display: block;
+  font-size: 34px;
+  font-weight: 800;
+  color: #142d4e;
+}
+
+/* HISTORIQUE */
+
+.consultation-card {
+  padding: 26px;
+  background: #ffffff;
+  border: 1px solid #e8edf3;
+  border-radius: 16px;
+  box-shadow: 0 5px 22px rgba(15, 35, 65, 0.04);
+}
+
+/* TITRE AU-DESSUS DES FILTRES */
+
+.consultation-card-header {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  flex-wrap: nowrap !important;
+  gap: 21px !important;
+  width: 100%;
+  margin-bottom: 22px;
+}
+
+.consultation-card-header > div:first-child {
+  width: 100%;
+}
+
+.consultation-card-header h2 {
+  margin: 0 0 8px;
+  font-size: 19px;
+  font-weight: 800;
+  color: #142d4e;
+}
+
+.consultation-card-header p {
+  margin: 0;
+  font-size: 13px;
+  color: #8290a3;
+}
+
+/* BARRE DE FILTRES HORIZONTALE */
+
+.consultation-tools {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 12px !important;
+  width: 100%;
+  padding: 15px;
+  background: #f8fafc;
+  border: 1px solid #edf1f5;
+  border-radius: 12px;
+}
+
+/* RECHERCHE */
+
+#rechercheConsultation {
+  flex: 1 1 auto !important;
+  width: auto !important;
+  min-width: 180px !important;
+  max-width: none !important;
+  height: 44px;
+  padding: 0 15px;
+  background: white;
+  border: 1px solid #dfe6ee;
+  border-radius: 9px;
+  font-size: 13px;
+  outline: none;
+}
+
+/* DATE */
+
+#filtreDate {
+  flex: 0 0 175px !important;
+  width: 175px !important;
+  min-width: 0 !important;
+  height: 44px;
+  padding: 0 12px;
+  background: white;
+  border: 1px solid #dfe6ee;
+  border-radius: 9px;
+  font-size: 13px;
+  outline: none;
+}
+
+#rechercheConsultation:focus,
+#filtreDate:focus {
+  border-color: #f97316;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.09);
+}
+
+/* BOUTONS DES FILTRES */
+
+#btnReinitialiserFiltres,
+#btnActualiser {
+  flex: 0 0 auto !important;
+  width: auto !important;
+  min-width: auto !important;
+  height: 44px;
+  padding: 0 15px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  color: #475569;
+  border-radius: 9px;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+#btnActualiser {
+  background: #fff7ed;
+  border-color: #fed7aa;
+  color: #ea580c;
+}
+
+#btnReinitialiserFiltres:hover,
+#btnActualiser:hover {
+  background: #ffedd5;
+  border-color: #fdba74;
+  color: #c2410c;
+}
+
+/* TABLEAU */
+
+.consultation-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #edf1f5;
+  border-radius: 12px;
+}
+
+.consultation-table {
+  width: 100%;
+  min-width: 680px;
+  border-collapse: collapse;
+}
+
+.consultation-table th {
+  padding: 17px 18px;
+  background: #fff7ed;
+  color: #c2410c;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.consultation-table td {
+  padding: 17px 18px;
+  border-bottom: 1px solid #edf1f5;
+  color: #334155;
+  font-size: 13px;
+}
+
+.consultation-table tbody tr {
+  transition: background 0.2s;
+}
+
+.consultation-table tbody tr:hover {
+  background: #fffaf5;
+}
+
+.consultation-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* MODALES */
+
+.consultation-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(15, 35, 60, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 99999;
+}
+
+.consultation-modal.active {
+  display: flex;
+}
+
+.consultation-modal-box {
+  width: 100%;
+  max-width: 780px;
+  max-height: 92vh;
+  overflow-y: auto;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 25px 80px rgba(15, 35, 60, 0.25);
+}
+
+.consultation-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 25px 28px;
+  border-bottom: 1px solid #edf1f5;
+}
+
+.consultation-modal-header h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  color: #142d4e;
+}
+
+.consultation-modal-header p {
+  color: #8290a3;
+  font-size: 13px;
+}
+
+.consultation-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 10px;
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 23px;
+  cursor: pointer;
+}
+
+.consultation-close:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.consultation-modal-body {
+  padding: 25px 28px;
+}
+
+.consultation-section {
+  margin: 8px 0 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #edf1f5;
+  color: #ea580c;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.consultation-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 25px;
+}
+
+.consultation-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.consultation-field.full {
+  grid-column: 1 / -1;
+}
+
+.consultation-field label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #142d4e;
+}
+
+.consultation-field input,
+.consultation-field select,
+.consultation-field textarea {
+  width: 100%;
+  padding: 12px 13px;
+  border: 1px solid #dfe6ee;
+  border-radius: 9px;
+  background: white;
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+}
+
+.consultation-field input:focus,
+.consultation-field select:focus,
+.consultation-field textarea:focus {
+  border-color: #f97316;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.09);
+}
+
+.consultation-field textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.consultation-field select:disabled {
+  background: #f1f5f9;
+}
+
+.consultation-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px 28px;
+  border-top: 1px solid #edf1f5;
+}
+
+/* MESSAGES */
+
+.consultation-message {
+  display: none;
+  padding: 13px 16px;
+  margin-bottom: 17px;
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+.consultation-message.error {
+  display: block;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+}
+
+.consultation-message.success {
+  display: block;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #15803d;
+}
+
+.consultation-message.info {
+  display: block;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1d4ed8;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1050px) {
+  .consultation-tools {
+    flex-wrap: wrap !important;
+  }
+
+  #rechercheConsultation {
+    flex: 1 1 100% !important;
+  }
+
+  #filtreDate {
+    flex: 1 1 180px !important;
+    width: auto !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .consultation-page {
+    padding: 16px;
+  }
+
+  .consultation-header {
+    align-items: flex-start;
+  }
+
+  .consultation-header h1 {
+    font-size: 23px;
+  }
+
+  .consultation-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .consultation-card {
+    padding: 16px;
+  }
+
+  .consultation-tools {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  #rechercheConsultation,
+  #filtreDate,
+  #btnReinitialiserFiltres,
+  #btnActualiser {
+    width: 100% !important;
+    flex: 0 0 auto !important;
+  }
+
+  .consultation-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .consultation-modal-header,
+  .consultation-modal-body,
+  .consultation-modal-footer {
+    padding: 18px;
+  }
+}
+  </style>
 </head>
 
 <body>
 
   <div class="app">
-
-    <!-- SIDEBAR -->
     <div id="sidebar"></div>
 
-
     <main class="main">
-
-      <!-- TOPBAR -->
       <div id="topbar"></div>
 
-
       <section class="content">
+        <div class="consultation-page">
 
-        <div class="ordonnance-page">
-
-
-          <!-- RETOUR -->
-
-          <a
-            href="patients.html"
-            class="patient-back-link"
-          >
-            ← Retour aux patients
-          </a>
-
-
-          <!-- TITRE -->
-
-          <div class="ordonnance-header">
-
+          <div class="consultation-header">
             <div>
+              <h1>Gestion des consultations</h1>
+              <p>Consultez et gérez les dossiers médicaux.</p>
+            </div>
 
-              <p class="ordonnance-small-title">
-                Consultation médicale
-              </p>
+            <button
+              type="button"
+              class="btn btn-orange"
+              id="btnNouvelleConsultation"
+            >
+              + Nouvelle consultation
+            </button>
+          </div>
 
-              <h1>
-                Nouvelle consultation
-              </h1>
+          <div class="consultation-stats">
 
-              <p>
-                Enregistrer une consultation et une prescription médicale
-              </p>
+            <div class="consultation-stat">
+              <span>Consultations aujourd'hui</span>
+              <strong id="totalAujourdhui">0</strong>
+            </div>
 
+            <div class="consultation-stat">
+              <span>Total des consultations</span>
+              <strong id="totalConsultations">0</strong>
+            </div>
+
+            <div class="consultation-stat">
+              <span>Patients consultés aujourd'hui</span>
+              <strong id="totalPatients">0</strong>
             </div>
 
           </div>
-          <!-- =================================================
-               CARTE CONSULTATION
-          ================================================== -->
 
-          <div class="ordonnance-card">
+          <div class="consultation-card">
 
-
-            <div class="ordonnance-card-header">
-
-              <div class="ordonnance-icon">
-                🩺
-              </div>
-
+            <div class="consultation-card-header">
               <div>
-
-                <h2>
-                  Informations de la consultation
-                </h2>
-
-                <p>
-                  Complétez les informations médicales du patient
-                </p>
-
+                <h2>🩺 Historique des consultations</h2>
+                <p>Consultations médicales enregistrées.</p>
               </div>
 
+              <div class="consultation-tools">
+                <input
+                  type="search"
+                  id="rechercheConsultation"
+                  placeholder="Rechercher un patient..."
+                >
+
+                <input
+                  type="date"
+                  id="filtreDate"
+                  title="Filtrer par date"
+                >
+
+                <button
+                  class="btn btn-light"
+                  id="btnReinitialiserFiltres"
+                >
+                  Réinitialiser
+                </button>
+
+                <button
+                  class="btn btn-light"
+                  id="btnActualiser"
+                >
+                  ↻ Actualiser
+                </button>
+              </div>
             </div>
-
-
-
-            <!-- =================================================
-                 PATIENT SELECTIONNE
-            ================================================== -->
 
             <div
-              class="selected-patient-box"
-              id="selectedPatientBox"
-              style="display: none;"
-            >
+              id="messageListe"
+              class="consultation-message"
+              role="status"
+            ></div>
 
-              <div
-                class="selected-patient-avatar"
-                id="selectedPatientAvatar"
-              >
-                P
-              </div>
+            <div class="consultation-table-wrap">
+              <table class="consultation-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Patient</th>
+                    <th>Médecin</th>
+                    <th>Diagnostic</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
 
-              <div>
-
-                <strong id="selectedPatientName">
-                  Patient
-                </strong>
-
-                <span id="selectedPatientInfo">
-                  Patient sélectionné
-                </span>
-
-              </div>
-
+                <tbody id="tableConsultations">
+                  <tr>
+                    <td colspan="5">Chargement...</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
-
-
-            <!-- =================================================
-                 FORMULAIRE CONSULTATION
-            ================================================== -->
-
-            <form id="consultationForm">
-
-
-              <!-- PATIENT ET MEDECIN -->
-
-              <div class="ordonnance-section-title">
-                Patient et médecin
-              </div>
-
-
-              <div class="ordonnance-grid">
-
-
-                <!-- PATIENT -->
-
-                <div class="form-group">
-
-                  <label for="patientSelect">
-                    Patient *
-                  </label>
-
-                  <select
-                    id="patientSelect"
-                    required
-                  >
-
-                    <option value="">
-                      Chargement des patients...
-                    </option>
-
-                  </select>
-
-                </div>
-
-
-
-                <!-- MEDECIN -->
-
-                <div class="form-group">
-
-                  <label for="medecinSelect">
-                    Médecin *
-                  </label>
-
-                  <select
-                    id="medecinSelect"
-                    required
-                  >
-
-                    <option value="">
-                      Chargement...
-                    </option>
-
-                  </select>
-
-                </div>
-
-              </div>
-
-
-
-              <!-- =================================================
-                   CONSULTATION
-              ================================================== -->
-
-              <div class="ordonnance-section-title">
-                Consultation
-              </div>
-
-
-              <div class="ordonnance-grid">
-
-
-                <!-- DATE -->
-
-                <div class="form-group">
-
-                  <label for="dateConsultation">
-                    Date de consultation *
-                  </label>
-
-                  <input
-                    type="date"
-                    id="dateConsultation"
-                    required
-                  >
-
-                </div>
-
-
-
-                <!-- DIAGNOSTIC -->
-
-                <div class="form-group">
-
-                  <label for="diagnostic">
-                    Diagnostic *
-                  </label>
-
-                  <input
-                    type="text"
-                    id="diagnostic"
-                    placeholder="Ex : Infection respiratoire"
-                    required
-                  >
-
-                </div>
-
-
-
-                <!-- OBSERVATIONS -->
-
-                <div class="form-group full-width">
-
-                  <label for="observations">
-                    Observations
-                  </label>
-
-                  <textarea
-                    id="observations"
-                    rows="4"
-                    placeholder="Observations médicales, remarques, suivi recommandé..."
-                  ></textarea>
-
-                </div>
-
-
-              </div>
-              <!-- =================================================
-                   PRESCRIPTION / ORDONNANCE
-              ================================================== -->
-
-              <div class="ordonnance-section-title">
-                Prescription
-              </div>
-
-
-              <div class="ordonnance-grid">
-
-
-                <!-- DATE ORDONNANCE -->
-
-                <div class="form-group">
-
-                  <label for="dateOrdonnance">
-                    Date *
-                  </label>
-
-                  <input
-                    type="date"
-                    id="dateOrdonnance"
-                    required
-                  >
-
-                </div>
-
-
-
-                <!-- MOTIF / TITRE -->
-
-                <div class="form-group">
-
-                  <label for="titreOrdonnance">
-                    Motif / titre
-                  </label>
-
-                  <input
-                    type="text"
-                    id="titreOrdonnance"
-                    placeholder="Ex : traitement après consultation"
-                  >
-
-                </div>
-
-
-
-                <!-- PRESCRIPTION -->
-
-                <div class="form-group full-width">
-
-                  <label for="prescription">
-                    Prescription *
-                  </label>
-
-                  <textarea
-                    id="prescription"
-                    rows="6"
-                    placeholder="Ex : Paracétamol 500 mg, 1 comprimé matin et soir pendant 5 jours..."
-                    required
-                  ></textarea>
-
-                </div>
-
-
-
-                <!-- INSTRUCTIONS -->
-
-                <div class="form-group full-width">
-
-                  <label for="instructions">
-                    Instructions
-                  </label>
-
-                  <textarea
-                    id="instructions"
-                    rows="4"
-                    placeholder="Précautions, recommandations, conseils..."
-                  ></textarea>
-
-                </div>
-
-
-              </div>
-
-
-
-              <!-- =================================================
-                   MESSAGE
-              ================================================== -->
-
-              <div
-                id="consultationMessage"
-                style="display: none;"
-              >
-              </div>
-
-
-
-              <!-- =================================================
-                   ACTIONS
-              ================================================== -->
-
-              <div class="ordonnance-actions">
-
-
-                <button
-                  type="button"
-                  class="ordonnance-cancel-button"
-                  id="cancelButton"
-                >
-                  Annuler
-                </button>
-
-
-                <button
-                  type="submit"
-                  class="ordonnance-save-button"
-                  id="saveButton"
-                >
-                  Enregistrer la consultation
-                </button>
-
-
-              </div>
-
-
-            </form>
-
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- NOUVELLE CONSULTATION -->
+
+  <div
+    class="consultation-modal"
+    id="modalConsultation"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="titreModalConsultation"
+    aria-hidden="true"
+  >
+    <div class="consultation-modal-box">
+
+      <div class="consultation-modal-header">
+        <div>
+          <h2 id="titreModalConsultation">
+            Nouvelle consultation
+          </h2>
+          <p>Enregistrer une consultation médicale.</p>
+        </div>
+
+        <button
+          type="button"
+          class="consultation-close"
+          id="fermerModal"
+          aria-label="Fermer"
+        >
+          ×
+        </button>
+      </div>
+
+      <form id="consultationForm">
+
+        <div class="consultation-modal-body">
+
+          <div class="consultation-section">
+            Patient et médecin
+          </div>
+
+          <div class="consultation-form-grid">
+
+            <div class="consultation-field">
+              <label for="patientSelect">Patient *</label>
+              <select id="patientSelect" required>
+                <option value="">Sélectionner un patient</option>
+              </select>
+            </div>
+
+            <div class="consultation-field">
+              <label for="medecinSelect">Médecin *</label>
+              <select id="medecinSelect" required>
+                <option value="">Sélectionner un médecin</option>
+              </select>
+            </div>
 
           </div>
 
+          <div class="consultation-section">
+            Informations médicales
+          </div>
+
+          <div class="consultation-form-grid">
+
+            <div class="consultation-field">
+              <label for="dateConsultation">
+                Date de consultation *
+              </label>
+              <input
+                type="date"
+                id="dateConsultation"
+                required
+              >
+            </div>
+
+            <div class="consultation-field">
+              <label for="motifConsultation">
+                Motif de consultation *
+              </label>
+              <input
+                type="text"
+                id="motifConsultation"
+                placeholder="Ex : Fièvre, douleurs..."
+                required
+              >
+            </div>
+
+            <div class="consultation-field full">
+              <label for="diagnostic">Diagnostic *</label>
+              <input
+                type="text"
+                id="diagnostic"
+                placeholder="Ex : Infection respiratoire"
+                required
+              >
+            </div>
+
+            <div class="consultation-field full">
+              <label for="observations">
+                Observations médicales
+              </label>
+              <textarea
+                id="observations"
+                placeholder="Symptômes, observations, suivi..."
+              ></textarea>
+            </div>
+
+          </div>
+
+          <div class="consultation-section">
+            Prescription médicale (facultative)
+          </div>
+
+          <div class="consultation-form-grid">
+
+            <div class="consultation-field">
+              <label for="dateOrdonnance">
+                Date de l'ordonnance
+              </label>
+              <input
+                type="date"
+                id="dateOrdonnance"
+              >
+            </div>
+
+            <div class="consultation-field">
+              <label for="titreOrdonnance">
+                Motif / titre
+              </label>
+              <input
+                type="text"
+                id="titreOrdonnance"
+                placeholder="Ex : Traitement médical"
+              >
+            </div>
+
+            <div class="consultation-field full">
+              <label for="prescription">
+                Prescription
+              </label>
+              <textarea
+                id="prescription"
+                placeholder="Médicaments et posologie..."
+              ></textarea>
+            </div>
+
+            <div class="consultation-field full">
+              <label for="instructions">
+                Instructions
+              </label>
+              <textarea
+                id="instructions"
+                placeholder="Précautions et recommandations..."
+              ></textarea>
+            </div>
+
+          </div>
+
+          <div
+            id="messageConsultation"
+            class="consultation-message"
+            role="status"
+          ></div>
 
         </div>
 
+        <div class="consultation-modal-footer">
 
-      </section>
+          <button
+            type="button"
+            class="btn btn-light"
+            id="btnAnnuler"
+          >
+            Annuler
+          </button>
 
+          <button
+            type="submit"
+            class="btn btn-orange"
+            id="btnEnregistrer"
+          >
+            Enregistrer la consultation
+          </button>
 
-    </main>
+        </div>
 
-
+      </form>
+    </div>
   </div>
+
+  <!-- DÉTAILS CONSULTATION -->
+
+  <div
+    class="consultation-modal"
+    id="modalDetails"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="titreDetails"
+    aria-hidden="true"
+  >
+    <div class="consultation-modal-box">
+
+      <div class="consultation-modal-header">
+        <div>
+          <h2 id="titreDetails">
+            Détails de la consultation
+          </h2>
+          <p>Informations médicales enregistrées.</p>
+        </div>
+
+        <button
+          type="button"
+          class="consultation-close"
+          id="fermerDetails"
+          aria-label="Fermer"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="consultation-modal-body">
+
+        <div class="consultation-form-grid">
+
+          <div class="consultation-field">
+            <label>Patient</label>
+            <div id="detailPatient">-</div>
+          </div>
+
+          <div class="consultation-field">
+            <label>Médecin</label>
+            <div id="detailMedecin">-</div>
+          </div>
+
+          <div class="consultation-field">
+            <label>Date</label>
+            <div id="detailDate">-</div>
+          </div>
+
+          <div class="consultation-field">
+            <label>Motif</label>
+            <div id="detailMotif">-</div>
+          </div>
+
+          <div class="consultation-field full">
+            <label>Diagnostic</label>
+            <div id="detailDiagnostic">-</div>
+          </div>
+
+          <div class="consultation-field full">
+            <label>Observations</label>
+            <div
+              id="detailObservations"
+              style="white-space: pre-wrap"
+            >-</div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="consultation-modal-footer">
+        <button
+          type="button"
+          class="btn btn-light"
+          id="btnFermerDetails"
+        >
+          Fermer
+        </button>
+      </div>
+
+    </div>
+  </div>
+
   <script type="module">
-
-
-    /* =====================================================
-       IMPORTS
-    ===================================================== */
 
     import {
       afficherLayout
     } from "../js/layout.js";
-
 
     import {
       secureFetch,
       getUtilisateurConnecte
     } from "../js/secure-api.js";
 
+    afficherLayout("Consultations");
 
-    afficherLayout(
-      "Consultation"
-    );
+    const API = "http://localhost:3000/api";
 
+    const utilisateur = getUtilisateurConnecte();
 
+    const roleValeur =
+      typeof utilisateur?.role === "object"
+        ? utilisateur.role.nom_role || utilisateur.role.nom
+        : utilisateur?.role || utilisateur?.nom_role || "";
 
-    /* =====================================================
-       API
-    ===================================================== */
+    const role = String(roleValeur)
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
 
-    const API_URL =
-      "http://localhost:3000/api";
-
-
-
-    /* =====================================================
-       UTILISATEUR CONNECTE
-    ===================================================== */
-
-    const utilisateur =
-      getUtilisateurConnecte();
-
-
-    const role =
-      String(
-        utilisateur?.role || ""
-      )
-        .toLowerCase()
-        .trim();
-
+    const idRole = Number(utilisateur?.id_role);
 
     const estAdmin =
-      role.includes("administrateur")
-      ||
-      role.includes("admin");
-
+      role.includes("admin") || idRole === 1;
 
     const estMedecin =
-      role.includes("médecin")
-      ||
-      role.includes("medecin");
+      role.includes("medecin") || idRole === 2;
 
+    const accesAutorise = estAdmin || estMedecin;
 
-    /*
-      Seuls administrateur
-      et médecin peuvent accéder
-      à cette page.
-    */
+    let consultations = [];
+    let patients = [];
+    let medecinConnecteId = null;
+    let formulaireDisponible = false;
+    let consultationEnregistree = false;
 
-    if (
-      !estAdmin
-      &&
-      !estMedecin
-    ) {
+    const $ = id => document.getElementById(id);
 
-      window.location.replace(
-        "dashboard.html"
-      );
+    const modal = $("modalConsultation");
+    const modalDetails = $("modalDetails");
 
+    const form = $("consultationForm");
+
+    const patientSelect = $("patientSelect");
+    const medecinSelect = $("medecinSelect");
+
+    const dateConsultation = $("dateConsultation");
+    const motifConsultation = $("motifConsultation");
+    const diagnostic = $("diagnostic");
+    const observations = $("observations");
+
+    const dateOrdonnance = $("dateOrdonnance");
+    const titreOrdonnance = $("titreOrdonnance");
+    const prescription = $("prescription");
+    const instructions = $("instructions");
+
+    const btnEnregistrer = $("btnEnregistrer");
+
+    function aujourdHui() {
+      const d = new Date();
+
+      return [
+        d.getFullYear(),
+        String(d.getMonth() + 1).padStart(2, "0"),
+        String(d.getDate()).padStart(2, "0")
+      ].join("-");
     }
 
+    function normaliserDate(date) {
+      if (!date) return "";
 
-
-    /* =====================================================
-       PARAMETRE PATIENT DANS L'URL
-    ===================================================== */
-
-    const params =
-      new URLSearchParams(
-        window.location.search
-      );
-
-
-    const patientUrlId =
-      params.get(
-        "patient"
-      );
-
-
-
-    /* =====================================================
-       ELEMENTS HTML
-    ===================================================== */
-
-    const consultationForm =
-      document.getElementById(
-        "consultationForm"
-      );
-
-
-    const patientSelect =
-      document.getElementById(
-        "patientSelect"
-      );
-
-
-    const medecinSelect =
-      document.getElementById(
-        "medecinSelect"
-      );
-
-
-    const dateConsultation =
-      document.getElementById(
-        "dateConsultation"
-      );
-
-
-    const diagnostic =
-      document.getElementById(
-        "diagnostic"
-      );
-
-
-    const observations =
-      document.getElementById(
-        "observations"
-      );
-
-
-    const dateOrdonnance =
-      document.getElementById(
-        "dateOrdonnance"
-      );
-
-
-    const titreOrdonnance =
-      document.getElementById(
-        "titreOrdonnance"
-      );
-
-
-    const prescription =
-      document.getElementById(
-        "prescription"
-      );
-
-
-    const instructions =
-      document.getElementById(
-        "instructions"
-      );
-
-
-    const saveButton =
-      document.getElementById(
-        "saveButton"
-      );
-
-
-    const cancelButton =
-      document.getElementById(
-        "cancelButton"
-      );
-
-
-    const messageBox =
-      document.getElementById(
-        "consultationMessage"
-      );
-
-
-    const selectedPatientBox =
-      document.getElementById(
-        "selectedPatientBox"
-      );
-
-
-    const selectedPatientAvatar =
-      document.getElementById(
-        "selectedPatientAvatar"
-      );
-
-
-    const selectedPatientName =
-      document.getElementById(
-        "selectedPatientName"
-      );
-
-
-    const selectedPatientInfo =
-      document.getElementById(
-        "selectedPatientInfo"
-      );
-
-
-    let patientsData =
-      [];
-
-
-
-    /* =====================================================
-       AFFICHER MESSAGE
-    ===================================================== */
-
-    function afficherMessage(
-      message,
-      type = "error"
-    ) {
-
-      messageBox.style.display =
-        "block";
-
-
-      messageBox.textContent =
-        message;
-
-
-      if (
-        type === "success"
-      ) {
-
-        messageBox.style.background =
-          "#dcfce7";
-
-        messageBox.style.color =
-          "#166534";
-
-        messageBox.style.border =
-          "1px solid #86efac";
-
+      if (date instanceof Date) {
+        return [
+          date.getFullYear(),
+          String(date.getMonth() + 1).padStart(2, "0"),
+          String(date.getDate()).padStart(2, "0")
+        ].join("-");
       }
 
-      else {
+      return String(date).substring(0, 10);
+    }
 
-        messageBox.style.background =
-          "#fee2e2";
+    function formaterDate(date) {
+      const valeur = normaliserDate(date);
 
-        messageBox.style.color =
-          "#991b1b";
+      if (!valeur) return "-";
 
-        messageBox.style.border =
-          "1px solid #fecaca";
+      const parties = valeur.split("-");
 
+      if (parties.length !== 3) return valeur;
+
+      return `${parties[2]}/${parties[1]}/${parties[0]}`;
+    }
+
+    function message(element, texte, type = "error") {
+      element.textContent = texte;
+      element.className = `consultation-message ${type}`;
+    }
+
+    function effacerMessage(element) {
+      element.textContent = "";
+      element.className = "consultation-message";
+    }
+
+    async function api(url, options = {}) {
+      const response = await secureFetch(url, options);
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(
+          `${data.message || "Erreur serveur"} ` +
+          `(HTTP ${response.status})`
+        );
       }
 
-
-      messageBox.style.padding =
-        "12px 15px";
-
-
-      messageBox.style.borderRadius =
-        "10px";
-
-
-      messageBox.style.marginTop =
-        "20px";
-
+      return data;
     }
 
+    function extraireListe(data, cle) {
+      if (Array.isArray(data)) return data;
+      if (Array.isArray(data?.[cle])) return data[cle];
+      if (Array.isArray(data?.data)) return data.data;
 
-
-    /* =====================================================
-       MASQUER MESSAGE
-    ===================================================== */
-
-    function masquerMessage() {
-
-      messageBox.style.display =
-        "none";
-
-      messageBox.textContent =
-        "";
-
+      return [];
     }
 
+    function ouvrirModal(element) {
+      element.classList.add("active");
+      element.setAttribute("aria-hidden", "false");
+      document.body.classList.add("consultation-modal-open");
 
-
-    /* =====================================================
-       DATE DU JOUR
-    ===================================================== */
-
-    function getToday() {
-
-      const aujourdHui =
-        new Date();
-
-
-      const annee =
-        aujourdHui.getFullYear();
-
-
-      const mois =
-        String(
-          aujourdHui.getMonth() + 1
-        )
-          .padStart(
-            2,
-            "0"
-          );
-
-
-      const jour =
-        String(
-          aujourdHui.getDate()
-        )
-          .padStart(
-            2,
-            "0"
-          );
-
-
-      return (
-        `${annee}-${mois}-${jour}`
-      );
-
+      element.querySelector(".consultation-close")?.focus();
     }
 
+    function fermerModal(element) {
+      element.classList.remove("active");
+      element.setAttribute("aria-hidden", "true");
 
-    dateConsultation.value =
-      getToday();
+      if (!document.querySelector(".consultation-modal.active")) {
+        document.body.classList.remove("consultation-modal-open");
+      }
+    }
 
+    $("fermerModal").onclick = () => fermerModal(modal);
+    $("btnAnnuler").onclick = () => fermerModal(modal);
 
-    dateOrdonnance.value =
-      getToday();
-      /* =====================================================
-       CHARGER LES PATIENTS
-    ===================================================== */
+    $("fermerDetails").onclick = () => fermerModal(modalDetails);
+    $("btnFermerDetails").onclick = () => fermerModal(modalDetails);
+
+    [modal, modalDetails].forEach(element => {
+      element.addEventListener("click", event => {
+        if (event.target === element) {
+          fermerModal(element);
+        }
+      });
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        document.querySelectorAll(".consultation-modal.active")
+          .forEach(fermerModal);
+      }
+    });
+
+    function reinitialiserFormulaire() {
+      form.reset();
+
+      dateConsultation.value = aujourdHui();
+      dateOrdonnance.value = aujourdHui();
+
+      consultationEnregistree = false;
+
+      effacerMessage($("messageConsultation"));
+
+      btnEnregistrer.disabled = !formulaireDisponible;
+      btnEnregistrer.textContent = "Enregistrer la consultation";
+
+      if (estMedecin && medecinConnecteId) {
+        medecinSelect.value = String(medecinConnecteId);
+      }
+    }
 
     async function chargerPatients() {
+      const data = await api(`${API}/access/patients`);
 
-      try {
+      patients = extraireListe(data, "patients");
 
-        const response =
-          await secureFetch(
-            `${API_URL}/access/patients`
-          );
+      patientSelect.innerHTML =
+        '<option value="">Sélectionner un patient</option>';
 
+      patients.forEach(patient => {
+        const option = document.createElement("option");
 
-        if (!response.ok) {
+        option.value = patient.id_patient;
 
-          const erreur =
-            await response
-              .json()
-              .catch(
-                () => ({})
-              );
+        option.textContent =
+          `${patient.prenom || ""} ${patient.nom || ""}`.trim();
 
-
-          throw new Error(
-            erreur.message
-            ||
-            "Impossible de charger les patients."
-          );
-
-        }
-
-
-        const data =
-          await response.json();
-
-
-        patientsData =
-          Array.isArray(data)
-            ? data
-            : (
-                data.patients
-                ||
-                []
-              );
-
-
-        patientSelect.innerHTML =
-          '<option value="">Sélectionner un patient</option>';
-
-
-        patientsData.forEach(
-          function(patient) {
-
-            const option =
-              document.createElement(
-                "option"
-              );
-
-
-            option.value =
-              patient.id_patient;
-
-
-            option.textContent =
-              (
-                (patient.prenom || "")
-                +
-                " "
-                +
-                (patient.nom || "")
-              )
-                .trim();
-
-
-            patientSelect.appendChild(
-              option
-            );
-
-          }
-        );
-
-
-        /* =============================================
-           PATIENT RECU DANS L'URL
-        ============================================= */
-
-        if (patientUrlId) {
-
-          const patientAutorise =
-            patientsData.some(
-              patient =>
-                String(
-                  patient.id_patient
-                )
-                ===
-                String(
-                  patientUrlId
-                )
-            );
-
-
-          if (patientAutorise) {
-
-            patientSelect.value =
-              String(
-                patientUrlId
-              );
-
-
-            afficherPatientSelectionne(
-              patientUrlId
-            );
-
-          }
-
-          else {
-
-            afficherMessage(
-              "Vous n'avez pas accès à ce patient.",
-              "error"
-            );
-
-          }
-
-        }
-
-
-      }
-
-      catch (error) {
-
-        console.error(
-          "Erreur patients :",
-          error
-        );
-
-
-        patientSelect.innerHTML =
-          '<option value="">Impossible de charger les patients</option>';
-
-
-        afficherMessage(
-          error.message,
-          "error"
-        );
-
-      }
-
+        patientSelect.appendChild(option);
+      });
     }
-
-
-
-    /* =====================================================
-       AFFICHER LE PATIENT SELECTIONNE
-    ===================================================== */
-
-    function afficherPatientSelectionne(
-      id
-    ) {
-
-      const patient =
-        patientsData.find(
-          function(patient) {
-
-            return (
-              String(
-                patient.id_patient
-              )
-              ===
-              String(
-                id
-              )
-            );
-
-          }
-        );
-
-
-      if (!patient) {
-
-        selectedPatientBox.style.display =
-          "none";
-
-        return;
-
-      }
-
-
-      const nom =
-        patient.nom || "";
-
-
-      const prenom =
-        patient.prenom || "";
-
-
-      const initiales =
-        (
-          prenom.charAt(0)
-          +
-          nom.charAt(0)
-        )
-          .toUpperCase();
-
-
-      selectedPatientAvatar.textContent =
-        initiales || "P";
-
-
-      selectedPatientName.textContent =
-        (
-          prenom
-          +
-          " "
-          +
-          nom
-        )
-          .trim();
-
-
-      selectedPatientInfo.textContent =
-        "Patient #"
-        +
-        patient.id_patient;
-
-
-      selectedPatientBox.style.display =
-        "flex";
-
-    }
-
-
-
-    /* =====================================================
-       CHANGEMENT DE PATIENT
-    ===================================================== */
-
-    patientSelect.addEventListener(
-
-      "change",
-
-      function() {
-
-        afficherPatientSelectionne(
-          patientSelect.value
-        );
-
-
-        masquerMessage();
-
-      }
-
-    );
-    /* =====================================================
-       CHARGER LE MEDECIN
-    ===================================================== */
 
     async function chargerMedecins() {
-
-
-      /* =================================================
-         CAS 1 : MEDECIN CONNECTE
-      ================================================= */
-
-      if (estMedecin) {
-
-        try {
-
-          const response =
-            await secureFetch(
-              `${API_URL}/access/me`
-            );
-
-
-          if (!response.ok) {
-
-            const erreur =
-              await response
-                .json()
-                .catch(
-                  () => ({})
-                );
-
-
-            throw new Error(
-              erreur.message
-              ||
-              "Impossible d'identifier le médecin."
-            );
-
-          }
-
-
-          const data =
-            await response.json();
-
-
-          const medecin =
-            data.medecin;
-
-
-          if (!medecin) {
-
-            throw new Error(
-              "Aucun médecin n'est associé à ce compte."
-            );
-
-          }
-
-
-          medecinSelect.innerHTML =
-            "";
-
-
-          const option =
-            document.createElement(
-              "option"
-            );
-
-
-          option.value =
-            medecin.id_medecin;
-
-
-          option.textContent =
-            "Dr. "
-            +
-            (
-              (medecin.prenom || "")
-              +
-              " "
-              +
-              (medecin.nom || "")
-            )
-              .trim();
-
-
-          option.selected =
-            true;
-
-
-          medecinSelect.appendChild(
-            option
-          );
-
-
-          /*
-            Le médecin connecté
-            ne peut pas choisir
-            un autre médecin.
-          */
-
-          medecinSelect.disabled =
-            true;
-
-        }
-
-        catch (error) {
-
-          console.error(
-            "Erreur médecin :",
-            error
-          );
-
-
-          medecinSelect.innerHTML =
-            '<option value="">Médecin introuvable</option>';
-
-
-          afficherMessage(
-            error.message
-            ||
-            "Impossible d'identifier le médecin.",
-            "error"
-          );
-
-        }
-
-
-        return;
-
-      }
-
-
-
-      /* =================================================
-         CAS 2 : ADMINISTRATEUR
-      ================================================= */
-
-      try {
-
-        const response =
-          await secureFetch(
-            `${API_URL}/medecins`
-          );
-
-
-        if (!response.ok) {
-
-          const erreur =
-            await response
-              .json()
-              .catch(
-                () => ({})
-              );
-
-
-          throw new Error(
-            erreur.message
-            ||
-            "Impossible de charger les médecins."
-          );
-
-        }
-
-
-        const data =
-          await response.json();
-
-
-        const medecins =
-          Array.isArray(data)
-            ? data
-            : (
-                data.medecins
-                ||
-                []
-              );
-
-
-        medecinSelect.innerHTML =
-          '<option value="">Sélectionner un médecin</option>';
-
-
-        medecins.forEach(
-
-          function(medecin) {
-
-            const id =
-              medecin.id_medecin
-              ??
-              medecin.id
-              ??
-              medecin.num_medecin;
-
-
-            const option =
-              document.createElement(
-                "option"
-              );
-
-
-            option.value =
-              id;
-
-
-            option.textContent =
-              "Dr. "
-              +
-              (
-                (medecin.prenom || "")
-                +
-                " "
-                +
-                (medecin.nom || "")
-              )
-                .trim();
-
-
-            medecinSelect.appendChild(
-              option
-            );
-
-          }
-
-        );
-
-      }
-
-      catch (error) {
-
-        console.error(
-          "Erreur médecins :",
-          error
-        );
-
-
-        medecinSelect.innerHTML =
-          '<option value="">Impossible de charger les médecins</option>';
-
-
-        afficherMessage(
-          error.message
-          ||
-          "Impossible de charger les médecins.",
-          "error"
-        );
-
-      }
-
-    }
-    /* =====================================================
-       ENREGISTRER CONSULTATION + ORDONNANCE
-    ===================================================== */
-
-    consultationForm.addEventListener(
-
-      "submit",
-
-      async function(event) {
-
-        event.preventDefault();
-
-        masquerMessage();
-
-
-        const idPatient =
-          Number(
-            patientSelect.value
-          );
-
+      medecinSelect.innerHTML =
+        '<option value="">Sélectionner un médecin</option>';
+
+      if (estMedecin && !estAdmin) {
+        const data = await api(`${API}/access/me`);
+
+        const medecin =
+          data.medecin ||
+          data.data?.medecin ||
+          data.utilisateur?.medecin ||
+          null;
 
         const idMedecin =
-          Number(
-            medecinSelect.value
-          );
-
-
-        /* =================================================
-           VERIFICATIONS
-        ================================================= */
-
-        if (!idPatient) {
-
-          afficherMessage(
-            "Veuillez sélectionner un patient.",
-            "error"
-          );
-
-          return;
-
-        }
-
+          medecin?.id_medecin ||
+          data.id_medecin ||
+          data.data?.id_medecin;
 
         if (!idMedecin) {
-
-          afficherMessage(
-            "Veuillez sélectionner un médecin.",
-            "error"
+          throw new Error(
+            "Aucun identifiant médecin trouvé dans /api/access/me."
           );
-
-          return;
-
         }
 
+        medecinConnecteId = Number(idMedecin);
 
-        if (!dateConsultation.value) {
+        const option = document.createElement("option");
 
-          afficherMessage(
-            "Veuillez sélectionner la date de consultation.",
-            "error"
-          );
+        option.value = medecinConnecteId;
 
-          return;
+        option.textContent =
+          `Dr ${medecin?.prenom || ""} ${medecin?.nom || ""}`.trim();
 
+        if (option.textContent === "Dr") {
+          option.textContent = `Médecin n°${medecinConnecteId}`;
         }
 
+        medecinSelect.appendChild(option);
 
-        if (
-          !diagnostic.value.trim()
-        ) {
+        medecinSelect.value = String(medecinConnecteId);
+        medecinSelect.disabled = true;
 
-          afficherMessage(
-            "Veuillez saisir le diagnostic.",
-            "error"
-          );
-
-          return;
-
-        }
-
-
-        if (!dateOrdonnance.value) {
-
-          afficherMessage(
-            "Veuillez sélectionner la date de l'ordonnance.",
-            "error"
-          );
-
-          return;
-
-        }
-
-
-        if (
-          !prescription.value.trim()
-        ) {
-
-          afficherMessage(
-            "Veuillez saisir la prescription.",
-            "error"
-          );
-
-          return;
-
-        }
-
-
-        try {
-
-          saveButton.disabled =
-            true;
-
-
-          saveButton.textContent =
-            "Enregistrement...";
-
-
-          /* =================================================
-             1. CREER LA CONSULTATION
-          ================================================= */
-
-          const consultationData = {
-
-            date_consultation:
-              dateConsultation.value,
-
-            diagnostic:
-              diagnostic.value.trim(),
-
-            observations:
-              observations.value.trim(),
-
-            id_patient:
-              idPatient,
-
-            id_medecin:
-              idMedecin
-
-          };
-
-
-          console.log(
-            "CONSULTATION ENVOYEE :",
-            consultationData
-          );
-
-
-          const consultationResponse =
-            await secureFetch(
-
-              `${API_URL}/consultations`,
-
-              {
-
-                method:
-                  "POST",
-
-                headers: {
-
-                  "Content-Type":
-                    "application/json"
-
-                },
-
-                body:
-                  JSON.stringify(
-                    consultationData
-                  )
-
-              }
-
-            );
-
-
-          const consultationResult =
-            await consultationResponse
-              .json()
-              .catch(
-                () => ({})
-              );
-
-
-          if (
-            !consultationResponse.ok
-          ) {
-
-            throw new Error(
-
-              consultationResult.erreur
-              ||
-              consultationResult.message
-              ||
-              "Erreur lors de l'enregistrement de la consultation."
-
-            );
-
-          }
-
-
-          /* =================================================
-             RECUPERER ID CONSULTATION
-          ================================================= */
-
-          const idConsultation =
-            Number(
-              consultationResult.id_consultation
-            );
-
-
-          if (!idConsultation) {
-
-            throw new Error(
-              "L'identifiant de la consultation n'a pas été retourné."
-            );
-
-          }
-
-
-          console.log(
-            "ID CONSULTATION CREEE :",
-            idConsultation
-          );
-
-
-          /* =================================================
-             2. CREER L'ORDONNANCE
-          ================================================= */
-
-          const ordonnanceData = {
-
-            date_ordonnance:
-              dateOrdonnance.value,
-
-            id_consultation:
-              idConsultation,
-
-            motif:
-              titreOrdonnance
-                .value
-                .trim(),
-
-            prescription:
-              prescription
-                .value
-                .trim(),
-
-            instructions:
-              instructions
-                .value
-                .trim()
-
-          };
-
-
-          console.log(
-            "ORDONNANCE ENVOYEE :",
-            ordonnanceData
-          );
-
-
-          const ordonnanceResponse =
-            await secureFetch(
-
-              `${API_URL}/ordonnances`,
-
-              {
-
-                method:
-                  "POST",
-
-                headers: {
-
-                  "Content-Type":
-                    "application/json"
-
-                },
-
-                body:
-                  JSON.stringify(
-                    ordonnanceData
-                  )
-
-              }
-
-            );
-
-
-          const ordonnanceResult =
-            await ordonnanceResponse
-              .json()
-              .catch(
-                () => ({})
-              );
-
-
-          if (
-            !ordonnanceResponse.ok
-          ) {
-
-            throw new Error(
-
-              ordonnanceResult.erreur
-              ||
-              ordonnanceResult.message
-              ||
-              "La consultation a été créée, mais l'ordonnance n'a pas pu être enregistrée."
-
-            );
-
-          }
-
-
-          /* =================================================
-             SUCCES
-          ================================================= */
-
-          afficherMessage(
-
-            "Consultation et ordonnance enregistrées avec succès.",
-
-            "success"
-
-          );
-
-
-          console.log(
-            "ORDONNANCE CREEE :",
-            ordonnanceResult
-          );
-
-
-          /* =================================================
-             VIDER LES CHAMPS MEDICAUX
-          ================================================= */
-
-          diagnostic.value =
-            "";
-
-
-          observations.value =
-            "";
-
-
-          titreOrdonnance.value =
-            "";
-
-
-          prescription.value =
-            "";
-
-
-          instructions.value =
-            "";
-
-
-          dateConsultation.value =
-            getToday();
-
-
-          dateOrdonnance.value =
-            getToday();
-
-
-        }
-
-        catch (error) {
-
-          console.error(
-            "ERREUR CONSULTATION / ORDONNANCE :",
-            error
-          );
-
-
-          afficherMessage(
-
-            error.message
-            ||
-            "Une erreur est survenue.",
-
-            "error"
-
-          );
-
-        }
-
-        finally {
-
-          saveButton.disabled =
-            false;
-
-
-          saveButton.textContent =
-            "Enregistrer la consultation";
-
-        }
-
+        return;
       }
 
-    );
-    /* =====================================================
-       ANNULER
-    ===================================================== */
+      const data = await api(`${API}/medecins`);
 
-    cancelButton.addEventListener(
+      const medecins = extraireListe(data, "medecins");
 
-      "click",
+      medecins.forEach(medecin => {
+        const option = document.createElement("option");
 
-      function() {
+        option.value = medecin.id_medecin;
 
-        if (patientUrlId) {
+        option.textContent =
+          `Dr ${medecin.prenom || ""} ${medecin.nom || ""}`.trim();
 
-          window.location.href =
-            `patient-detail.html?id=${patientUrlId}`;
-
-        }
-
-        else {
-
-          window.location.href =
-            "patients.html";
-
-        }
-
-      }
-
-    );
-
-
-
-    /* =====================================================
-       INITIALISER LA PAGE
-    ===================================================== */
-
-    async function initialiserPage() {
-
-      try {
-
-        await chargerPatients();
-
-        await chargerMedecins();
-
-      }
-
-      catch (error) {
-
-        console.error(
-          "ERREUR INITIALISATION PAGE :",
-          error
-        );
-
-
-        afficherMessage(
-          "Impossible d'initialiser la page.",
-          "error"
-        );
-
-      }
-
+        medecinSelect.appendChild(option);
+      });
     }
 
+    async function chargerConsultations() {
+      try {
+        const data = await api(`${API}/access/consultations`);
 
+        consultations = extraireListe(data, "consultations");
 
-    /* =====================================================
-       DEMARRAGE
-    ===================================================== */
+        afficherConsultations();
+        actualiserStatistiques();
 
+        return true;
+
+      } catch (error) {
+        console.error(error);
+
+        message(
+          $("messageListe"),
+          "Impossible de charger les consultations : " + error.message
+        );
+
+        return false;
+      }
+    }
+
+    function ajouterCellule(tr, texte) {
+      const td = document.createElement("td");
+
+      td.textContent = String(texte ?? "-");
+
+      tr.appendChild(td);
+
+      return td;
+    }
+
+    function afficherConsultations() {
+      const tbody = $("tableConsultations");
+
+      tbody.innerHTML = "";
+
+      const recherche = $("rechercheConsultation")
+        .value.toLowerCase().trim();
+
+      const dateFiltre = $("filtreDate").value;
+
+      const liste = consultations.filter(c => {
+        const texte = [
+          c.nom_patient,
+          c.prenom_patient,
+          c.nom_medecin,
+          c.prenom_medecin,
+          c.motif,
+          c.diagnostic
+        ].join(" ").toLowerCase();
+
+        const correspondRecherche = texte.includes(recherche);
+
+        const correspondDate =
+          !dateFiltre ||
+          normaliserDate(c.date_consultation) === dateFiltre;
+
+        return correspondRecherche && correspondDate;
+      });
+
+      if (!liste.length) {
+        const tr = document.createElement("tr");
+
+        ajouterCellule(
+          tr,
+          "Aucune consultation trouvée."
+        ).colSpan = 5;
+
+        tbody.appendChild(tr);
+
+        return;
+      }
+
+      liste.forEach(c => {
+        const tr = document.createElement("tr");
+
+        ajouterCellule(
+          tr,
+          formaterDate(c.date_consultation)
+        );
+
+        ajouterCellule(
+          tr,
+          `${c.prenom_patient || ""} ${c.nom_patient || ""}`.trim()
+        );
+
+        ajouterCellule(
+          tr,
+          `Dr ${c.prenom_medecin || ""} ${c.nom_medecin || ""}`.trim()
+        );
+
+        ajouterCellule(
+          tr,
+          c.diagnostic || "-"
+        );
+
+        const td = document.createElement("td");
+
+        const bouton = document.createElement("button");
+
+        bouton.type = "button";
+        bouton.className = "btn btn-orange";
+        bouton.textContent = "Voir détails";
+
+        bouton.onclick = () => afficherDetails(c);
+
+        td.appendChild(bouton);
+        tr.appendChild(td);
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function actualiserStatistiques() {
+      const date = aujourdHui();
+
+      const duJour = consultations.filter(
+        c => normaliserDate(c.date_consultation) === date
+      );
+
+      const patientsUniques = new Set(
+        duJour.map(c => c.id_patient).filter(Boolean)
+      );
+
+      $("totalAujourdhui").textContent = duJour.length;
+
+      $("totalConsultations").textContent = consultations.length;
+
+      $("totalPatients").textContent = patientsUniques.size;
+    }
+
+    function afficherDetails(c) {
+      $("detailPatient").textContent =
+        `${c.prenom_patient || ""} ${c.nom_patient || ""}`.trim();
+
+      $("detailMedecin").textContent =
+        `Dr ${c.prenom_medecin || ""} ${c.nom_medecin || ""}`.trim();
+
+      $("detailDate").textContent =
+        formaterDate(c.date_consultation);
+
+      $("detailMotif").textContent = c.motif || "-";
+
+      $("detailDiagnostic").textContent = c.diagnostic || "-";
+
+      $("detailObservations").textContent =
+        c.observations || "Aucune observation.";
+
+      ouvrirModal(modalDetails);
+    }
+
+    $("btnNouvelleConsultation").onclick = () => {
+      reinitialiserFormulaire();
+
+      ouvrirModal(modal);
+
+      if (!formulaireDisponible) {
+        message(
+          $("messageConsultation"),
+          "Le formulaire n'est pas disponible. Vérifiez " +
+          "le chargement des patients et du médecin."
+        );
+      }
+    };
+
+    $("rechercheConsultation").addEventListener(
+      "input",
+      afficherConsultations
+    );
+
+    $("filtreDate").addEventListener(
+      "change",
+      afficherConsultations
+    );
+
+    $("btnReinitialiserFiltres").onclick = () => {
+      $("rechercheConsultation").value = "";
+      $("filtreDate").value = "";
+
+      afficherConsultations();
+    };
+
+    $("btnActualiser").onclick = chargerConsultations;
+
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+
+      if (!formulaireDisponible || consultationEnregistree) {
+        return;
+      }
+
+      const idPatient = Number(patientSelect.value);
+      const idMedecin = Number(medecinSelect.value);
+
+      const motif = motifConsultation.value.trim();
+      const diagnosticValeur = diagnostic.value.trim();
+
+      const prescriptionValeur = prescription.value.trim();
+      const instructionsValeur = instructions.value.trim();
+      const titreValeur = titreOrdonnance.value.trim();
+
+      if (
+        !idPatient ||
+        !idMedecin ||
+        !dateConsultation.value ||
+        !motif ||
+        !diagnosticValeur
+      ) {
+        message(
+          $("messageConsultation"),
+          "Veuillez remplir tous les champs obligatoires."
+        );
+
+        return;
+      }
+
+      if (
+        estMedecin &&
+        !estAdmin &&
+        idMedecin !== medecinConnecteId
+      ) {
+        message(
+          $("messageConsultation"),
+          "Vous ne pouvez pas sélectionner un autre médecin."
+        );
+
+        return;
+      }
+
+      if (
+        (titreValeur || instructionsValeur) &&
+        !prescriptionValeur
+      ) {
+        message(
+          $("messageConsultation"),
+          "Veuillez saisir la prescription."
+        );
+
+        return;
+      }
+
+      btnEnregistrer.disabled = true;
+      btnEnregistrer.textContent = "Enregistrement...";
+
+      effacerMessage($("messageConsultation"));
+
+      try {
+        const resultat = await api(
+          `${API}/access/consultations`,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+              id_patient: idPatient,
+              id_medecin: idMedecin,
+              date_consultation: dateConsultation.value,
+              motif: motif,
+              diagnostic: diagnosticValeur,
+              observations: observations.value.trim()
+            })
+          }
+        );
+
+        consultationEnregistree = true;
+
+        const idConsultation = Number(
+          resultat.id_consultation ||
+          resultat.consultation?.id_consultation ||
+          resultat.data?.id_consultation
+        );
+
+        if (prescriptionValeur) {
+          if (!idConsultation) {
+            throw new Error(
+              "Consultation créée, mais son identifiant est absent. " +
+              "Ne recréez pas la consultation."
+            );
+          }
+
+          await api(
+            `${API}/access/ordonnances`,
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type": "application/json"
+              },
+
+              body: JSON.stringify({
+                id_consultation: idConsultation,
+                date_ordonnance: dateOrdonnance.value,
+                motif: titreValeur,
+                prescription: prescriptionValeur,
+                instructions: instructionsValeur
+              })
+            }
+          );
+        }
+
+        await chargerConsultations();
+
+        fermerModal(modal);
+
+        message(
+          $("messageListe"),
+          prescriptionValeur
+            ? "Consultation et ordonnance enregistrées avec succès."
+            : "Consultation enregistrée avec succès.",
+          "success"
+        );
+
+      } catch (error) {
+        console.error("Erreur enregistrement :", error);
+
+        message(
+          $("messageConsultation"),
+          consultationEnregistree
+            ? "La consultation a été créée, mais une étape suivante " +
+              "a échoué : " + error.message +
+              ". Ne recréez pas la consultation."
+            : error.message
+        );
+
+      } finally {
+        btnEnregistrer.disabled =
+          consultationEnregistree || !formulaireDisponible;
+
+        btnEnregistrer.textContent =
+          consultationEnregistree
+            ? "Consultation enregistrée"
+            : "Enregistrer la consultation";
+      }
+    });
+
+    async function initialiserPage() {
+      if (!accesAutorise) {
+        $("btnNouvelleConsultation").disabled = true;
+
+        message(
+          $("messageListe"),
+          "Accès réservé aux médecins et administrateurs."
+        );
+
+        return;
+      }
+
+      const resultats = await Promise.allSettled([
+        chargerPatients(),
+        chargerMedecins(),
+        chargerConsultations()
+      ]);
+
+      const erreurs = [];
+
+      if (resultats[0].status === "rejected") {
+        erreurs.push(
+          "Patients : " + resultats[0].reason.message
+        );
+      }
+
+      if (resultats[1].status === "rejected") {
+        erreurs.push(
+          "Médecins : " + resultats[1].reason.message
+        );
+      }
+
+      formulaireDisponible =
+        erreurs.length === 0 &&
+        patients.length > 0 &&
+        medecinSelect.options.length > 1;
+
+      btnEnregistrer.disabled = !formulaireDisponible;
+
+      if (erreurs.length) {
+        message(
+          $("messageListe"),
+          erreurs.join(" | ")
+        );
+      }
+
+      const params = new URLSearchParams(window.location.search);
+
+      const patientId = params.get("patient");
+      const medecinId = params.get("medecin");
+
+      if (formulaireDisponible && patientId) {
+        const patientExiste = patients.some(
+          p => String(p.id_patient) === String(patientId)
+        );
+
+        if (patientExiste) {
+          reinitialiserFormulaire();
+
+          patientSelect.value = String(patientId);
+
+          if (estAdmin && medecinId) {
+            const medecinExiste = Array.from(
+              medecinSelect.options
+            ).some(
+              option => option.value === String(medecinId)
+            );
+
+            if (medecinExiste) {
+              medecinSelect.value = String(medecinId);
+            }
+          }
+
+          ouvrirModal(modal);
+        }
+      }
+    }
+
+    reinitialiserFormulaire();
     initialiserPage();
-
 
   </script>
 
-
 </body>
-
 </html>

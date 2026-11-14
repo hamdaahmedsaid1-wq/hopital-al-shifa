@@ -1,104 +1,92 @@
-const express =
-  require("express");
+const express = require("express");
 
-const router =
-  express.Router();
+const router = express.Router();
 
-const accessAuth =
-  require(
-    "../middlewares/accessAuth"
-  );
+const accessAuth = require(
+  "../middlewares/accessAuth"
+);
 
-const accessController =
-  require(
-    "../controllers/accessController"
-  );
+const accessController = require(
+  "../controllers/accessController"
+);
 
+// =====================================================
+// AUTHENTIFICATION OBLIGATOIRE
+// =====================================================
 
-/* =====================================================
-   UTILISATEUR CONNECTE
-===================================================== */
+router.use(accessAuth);
+
+// =====================================================
+// UTILISATEUR CONNECTÉ
+// =====================================================
 
 router.get(
   "/me",
-  accessAuth,
   accessController.getMe
 );
 
-
-/* =====================================================
-   PATIENTS
-===================================================== */
+// =====================================================
+// PATIENTS
+// =====================================================
 
 router.get(
   "/patients",
-  accessAuth,
   accessController.getPatients
 );
 
 router.get(
   "/patients/:id",
-  accessAuth,
   accessController.getPatientById
 );
 
-
-/* =====================================================
-   RENDEZ-VOUS
-===================================================== */
+// =====================================================
+// RENDEZ-VOUS
+// =====================================================
 
 router.get(
   "/rendez-vous",
-  accessAuth,
   accessController.getRendezVous
 );
 
-
-/* =====================================================
-   CONSULTATIONS
-===================================================== */
+// =====================================================
+// CONSULTATIONS
+// =====================================================
 
 router.get(
   "/consultations",
-  accessAuth,
   accessController.getConsultations
 );
 
 router.post(
   "/consultations",
-  accessAuth,
   accessController.createConsultation
 );
 
-
-/* =====================================================
-   ORDONNANCES
-===================================================== */
+// =====================================================
+// ORDONNANCES
+// =====================================================
 
 router.get(
   "/ordonnances",
-  accessAuth,
   accessController.getOrdonnances
 );
 
 router.post(
   "/ordonnances",
-  accessAuth,
   accessController.createOrdonnance
 );
-// =========================================================
+
+// =====================================================
 // DASHBOARD INFIRMIER
-// =========================================================
+// =====================================================
 
 router.get(
   "/infirmier/dashboard",
-  accessAuth,
   accessController.getInfirmierDashboard
 );
 
-/* =====================================================
-   EXPORT
-===================================================== */
+// =====================================================
+// EXPORTATION
+// =====================================================
 
-module.exports =
-  router;
+module.exports = router;

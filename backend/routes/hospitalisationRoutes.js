@@ -2,27 +2,44 @@ const express = require("express");
 
 const router = express.Router();
 
-const controller =
-  require("../controllers/hospitalisationController");
+const hospitalisationController = require(
+  "../controllers/hospitalisationController"
+);
+
+// ==========================================
+// RÉCUPÉRER TOUTES LES HOSPITALISATIONS
+// ==========================================
 
 router.get(
   "/",
-  controller.getHospitalisations
+  hospitalisationController.getHospitalisations
 );
 
-router.get(
-  "/:id",
-  controller.getHospitalisationById
-);
+// ==========================================
+// CRÉER UNE NOUVELLE HOSPITALISATION
+// ==========================================
 
 router.post(
   "/",
-  controller.createHospitalisation
+  hospitalisationController.createHospitalisation
 );
+
+// ==========================================
+// ENREGISTRER LA SORTIE D'UN PATIENT
+// ==========================================
 
 router.put(
   "/:id/sortie",
-  controller.sortiePatient
+  hospitalisationController.sortiePatient
+);
+
+// ==========================================
+// CONSULTER UNE HOSPITALISATION
+// ==========================================
+
+router.get(
+  "/:id",
+  hospitalisationController.getHospitalisationById
 );
 
 module.exports = router;

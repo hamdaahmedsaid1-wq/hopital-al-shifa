@@ -8,6 +8,7 @@ const app = express();
 // =========================================================
 
 app.use(cors());
+
 app.use(express.json());
 
 // =========================================================
@@ -16,6 +17,7 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
   res.json({
+    success: true,
     message: "API Hôpital Al-Shifa opérationnelle"
   });
 });
@@ -39,7 +41,7 @@ app.use(
 );
 
 // =========================================================
-// 5. MEDECINS
+// 5. MÉDECINS
 // =========================================================
 
 app.use(
@@ -84,7 +86,32 @@ app.use(
 );
 
 // =========================================================
-// 10. SERVICES HOSPITALIERS
+// 10. SUIVIS HOSPITALIERS
+// =========================================================
+
+// Gestion des observations médicales,
+// constantes vitales et évolution des patients.
+
+app.use(
+  "/api/suivis-hospitalisation",
+  require("./routes/suiviHospitalisationRoutes")
+);
+
+// =========================================================
+// 11. SORTIES DES PATIENTS
+// =========================================================
+
+// Enregistrement des sorties médicales,
+// mise à jour des hospitalisations
+// et libération automatique des lits.
+
+app.use(
+  "/api/sorties-patient",
+  require("./routes/sortiePatientRoutes")
+);
+
+// =========================================================
+// 12. SERVICES HOSPITALIERS
 // =========================================================
 
 app.use(
@@ -93,7 +120,7 @@ app.use(
 );
 
 // =========================================================
-// 11. CHAMBRES HOSPITALIERES
+// 13. CHAMBRES HOSPITALIÈRES
 // =========================================================
 
 app.use(
@@ -102,7 +129,7 @@ app.use(
 );
 
 // =========================================================
-// 12. GESTION DES LITS
+// 14. GESTION DES LITS
 // =========================================================
 
 app.use(
@@ -111,7 +138,7 @@ app.use(
 );
 
 // =========================================================
-// 13. FACTURES
+// 15. FACTURES
 // =========================================================
 
 app.use(
@@ -120,7 +147,7 @@ app.use(
 );
 
 // =========================================================
-// 14. PAIEMENTS
+// 16. PAIEMENTS
 // =========================================================
 
 app.use(
@@ -129,7 +156,7 @@ app.use(
 );
 
 // =========================================================
-// 15. UTILISATEURS
+// 17. UTILISATEURS
 // =========================================================
 
 app.use(
@@ -138,7 +165,7 @@ app.use(
 );
 
 // =========================================================
-// 16. ROUTES SECURISEES SELON LE ROLE
+// 18. ROUTES SÉCURISÉES SELON LE RÔLE
 // =========================================================
 
 app.use(
@@ -147,7 +174,7 @@ app.use(
 );
 
 // =========================================================
-// 17. ACCES MEDECIN
+// 19. ACCÈS MÉDECIN
 // =========================================================
 
 app.use(
@@ -156,31 +183,52 @@ app.use(
 );
 
 // =========================================================
-// 18. GESTION DES ERREURS 404
+// 20. GESTION DES ROUTES INTROUVABLES
 // =========================================================
 
-// Cette partie doit être placée après toutes les routes.
+// IMPORTANT :
+// Cette partie doit toujours être placée
+// après toutes les routes de l'application.
 
 app.use((req, res) => {
-  res.status(404).json({
-    message: "Route introuvable"
+  return res.status(404).json({
+    success: false,
+    message: "Route introuvable",
+    methode: req.method,
+    chemin: req.originalUrl
   });
 });
 
 // =========================================================
-// 19. GESTION DES ERREURS SERVEUR
+// 21. GESTION GLOBALE DES ERREURS
 // =========================================================
 
 app.use((err, req, res, next) => {
   console.error("Erreur serveur :", err);
 
-  res.status(500).json({
-    message: "Une erreur interne est survenue."
+  // Erreur de syntaxe JSON
+  if (
+    err instanceof SyntaxError &&
+    err.status === 400 &&
+    "body" in err
+  ) {
+    return res.status(400).json({
+      success: false,
+      message: "Le format JSON envoyé est invalide."
+    });
+  }
+
+  return res.status(err.status || 500).json({
+    success: false,
+    message:
+      err.status && err.status < 500
+        ? err.message
+        : "Une erreur interne est survenue."
   });
 });
 
 // =========================================================
-// 20. EXPORT DE L'APPLICATION
+// 22. EXPORT DE L'APPLICATION
 // =========================================================
 
 module.exports = app;
